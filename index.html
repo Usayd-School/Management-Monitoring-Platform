@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة الإشراف والمراقبة الشاملة | إدارة المدرسة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>لوحة الإشراف والمراقبة الشاملة | مدرسة أُسيد بن حضير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -21,12 +21,17 @@
 
         .navbar { background: var(--dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .navbar h1 { margin: 0; font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 10px; }
-        .refresh-btn { background: var(--primary); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .refresh-btn:hover { background: #4338ca; }
+        
+        .nav-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-action { border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: 'Cairo'; font-size: 13px; }
+        .btn-blue { background: var(--primary); } .btn-blue:hover { background: #4338ca; }
+        .btn-green { background: var(--success); } .btn-green:hover { background: #16a34a; }
+        .btn-red { background: var(--danger); } .btn-red:hover { background: #dc2626; }
+        .btn-purple { background: #7c3aed; } .btn-purple:hover { background: #6d28d9; }
 
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; gap: 25px; }
 
-        /* الكروت الإحصائية الرئيسية */
+        /* الكروت الإحصائية */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .stat-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 5px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
@@ -34,7 +39,7 @@
         .stat-card p { margin: 0; font-size: 24px; font-weight: 900; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .stat-card.accent { border-right: 5px solid var(--primary); }
 
-        /* تقسيم اللوحة إلى أعمدة إشرافية */
+        /* تقسيم اللوحة */
         .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         @media (max-width: 992px) { .main-grid { grid-template-columns: 1fr; } }
 
@@ -47,63 +52,93 @@
         table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; }
         th { background: var(--bg); color: var(--muted); padding: 12px; font-weight: 700; }
         td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 600; }
-        tr:hover { background: #f8fafc; }
+        tr.clickable-row { cursor: pointer; transition: background 0.2s; }
+        tr.clickable-row:hover { background: #f1f5f9; }
 
-        /* الأوسمة والشارات التفاعلية */
+        /* الأوسمة */
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
         .bg-success { background: #dcfce7; color: #166534; }
         .bg-danger { background: #fee2e2; color: #991b1b; }
         .bg-warning { background: #fef3c7; color: #92400e; }
         .bg-info { background: #e0f2fe; color: #0369a1; }
+        .bg-purple { background: #f3e8ff; color: #6b21a8; }
 
         .student-rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
         .student-rank-item:hover { background: #f1f5f9; }
-        .student-rank-item:last-child { border: none; }
         
         .list-scroll { max-height: 350px; overflow-y: auto; padding-right: 5px; }
 
-        /* النوافذ المنبثقة التفاعلية (Modal) */
+        /* نافذة المودال */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--surface); width: 100%; max-width: 650px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: fadeIn 0.3s ease; display: flex; flex-direction: column; max-height: 80vh; }
+        .modal-content { background: var(--surface); width: 100%; max-width: 700px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: fadeIn 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
         .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h2 { margin: 0; font-size: 18px; font-weight: 900; color: var(--dark); }
         .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted); }
         .modal-body { padding: 20px; overflow-y: auto; font-size: 14px; }
+        .modal-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
+        .modal-list-item:hover { background: #f8fafc; }
         
-        .modal-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
-        .modal-list-item:last-child { border: none; }
+        /* واجهة الواتساب المدمجة */
+        .whatsapp-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; transition: all 0.3s ease; }
+        .whatsapp-highlight { transform: scale(1.01); box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); border-color: var(--success); }
+        .inp-msg { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: 'Cairo'; resize: none; font-size: 13px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        @media print {
+            body { background: white; color: black; }
+            .navbar, .btn-action, .whatsapp-box, .refresh-btn { display: none !important; }
+            .panel { box-shadow: none !important; border: none !important; }
+            .list-scroll { max-height: none !important; overflow: visible !important; }
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <h1><span>📊</span> لوحة القيادة والمراقبة الشاملة لإدارة المدرسة</h1>
-    <button class="refresh-btn" onclick="fetchFullSchoolData()">تحديث البيانات المباشرة 🔄</button>
+    <h1><span>📊</span> لوحة القيادة والمراقبة الشاملة | مدرسة أُسيد بن حضير</h1>
+    <div class="nav-actions">
+        <button class="btn-action btn-purple" onclick="toggleFullscreen()">ملء الشاشة 🖥️</button>
+        <button class="btn-action btn-green" onclick="window.print()">طباعة التقرير الشهري 🖨️</button>
+        <button class="btn-action btn-red" onclick="triggerResetSystem()">تصفير السجلات الدورية ⚠️</button>
+        <button class="btn-action btn-blue" onclick="fetchFullSchoolData()">تحديث حيوى 🔄</button>
+    </div>
 </nav>
 
-<div class="container">
+<div class="container" id="dashboardContainer">
     
-    <!-- الكروت الإحصائية الذكية السريعة التفاعلية -->
+    <!-- الكروت الإحصائية الذكية السريعة -->
     <div class="stats-grid">
         <div class="stat-card accent" onclick="showModal('teachers')"><h3>إجمالي المعلمين</h3><p id="countTeachers">0</p></div>
         <div class="stat-card accent" onclick="showModal('students')"><h3>إجمالي الطلاب المسجلين</h3><p id="countStudents">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--success)" onclick="showModal('activeParents')"><h3>أولياء أمور تفاعلوا</h3><p id="countSeenParents" style="color: var(--success)">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--danger)" onclick="showModal('inactiveParents')"><h3>أولياء أمور غائبين 📉</h3><p id="countUnseenParents" style="color: var(--danger)">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--warning)" onclick="showModal('topTeacher')"><h3>المعلم الأكثر تفاعلاً 🌟</h3><p id="topTeacherName" style="color: var(--warning); font-size: 16px; margin-top: 5px;">جاري الحساب...</p></div>
+        <div class="stat-card" style="border-right: 5px solid var(--success)" onclick="showModal('activeParents')"><h3>أولياء أمور تفاعلوا اليوم</h3><p id="countSeenParents" style="color: var(--success)">0</p></div>
+        <div class="stat-card" style="border-right: 5px solid var(--danger)" onclick="showModal('inactiveParents')"><h3>أولياء أمور متغيبين</h3><p id="countUnseenParents" style="color: var(--danger)">0</p></div>
+        <div class="stat-card" style="border-right: 5px solid var(--warning)" onclick="showModal('topTeacher')"><h3>المعلم الأكثر تفاعلاً 🌟</h3><p id="topTeacherName" style="color: var(--warning); font-size: 15px; margin-top: 5px;">جاري الحساب...</p></div>
+    </div>
+
+    <!-- واجهة الإرسال السريع الفورية عبر الواتساب -->
+    <div class="panel whatsapp-box" id="whatsappPanel">
+        <div style="font-weight: 900; color: #166534; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+            <span>💬</span> مركز إشعارات الـ WhatsApp الفوري (انقر على أي اسم لتعبئته تلقائياً)
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; align-items: center;">
+            <input type="text" id="waPhone" class="inp-msg" style="height:42px;" placeholder="رقم الجوال المستهدف">
+            <textarea id="waMessage" class="inp-msg" rows="1" placeholder="اكتب نص الرسالة الإدارية أو انقر اسم شخص لتجهيز الرسالة..."></textarea>
+            <button class="btn-action btn-green" style="height:42px; width:100%" onclick="sendWhatsAppNotification()">إرسال الرسالة الآن 🚀</button>
+        </div>
+        <div id="waStatus" style="font-size: 12px; font-weight: 700; color: var(--muted);">حالة الإرسال: في الانتظار...</div>
     </div>
 
     <div class="main-grid">
         
-        <!-- العمود الأيمن الكبير: المعلمون وسجل الرصد العام -->
+        <!-- العمود الأيمن الكبير -->
         <div style="display: flex; flex-direction: column; gap: 20px;">
             
-            <!-- لوحة متابعة رصد المعلمين الأسبوعي واليومي -->
+            <!-- رادار رصد المعلمين وسجل حضورهم الإلكتروني بالمنظومة -->
             <div class="panel">
                 <div class="panel-header">
-                    <h2>🕵️ رادار رصد المعلمين وحالة التواجد</h2>
-                    <span class="badge bg-info">تحديث لحظي لحصص الأسبوع</span>
+                    <h2>🕵️ رادار رصد ومتابعة المعلمين (اضغط على الصف لإرسال تعميم)</h2>
+                    <span class="badge bg-purple">مراقبة حية وجلسات المعلمين</span>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -112,20 +147,21 @@
                                 <th>المعلم</th>
                                 <th>المادة الموكلة</th>
                                 <th>الفصول المربوطة</th>
-                                <th>حالة الرصد الأسبوعي</th>
+                                <th>آخر ظهور للمعلم</th>
+                                <th>حالة الرصد</th>
                             </tr>
                         </thead>
                         <tbody id="teachersStatusTable">
-                            <tr><td colspan="4" style="text-align:center; color:var(--muted)">جاري سحب بيانات الكادر التعليمي...</td></tr>
+                            <tr><td colspan="5" style="text-align:center; color:var(--muted)">جاري سحب بيانات الكادر التعليمي...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- سجل الرصد الشامل والتحكم والاطلاع لكل حركة -->
+            <!-- سجل الرصد الشامل التاريخي وحذف الحركة الفردية يدويًا -->
             <div class="panel">
                 <div class="panel-header">
-                    <h2>📜 السجل العام للرصد المدرسي (كل التقارير الصادرة)</h2>
+                    <h2>📜 السجل العام للرصد المدرسي والتحكم الفردي في الحذف</h2>
                 </div>
                 <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
                     <table>
@@ -134,9 +170,9 @@
                                 <th>التاريخ والوقت</th>
                                 <th>الطالب</th>
                                 <th>المادة</th>
-                                <th>التقييم الرقمي</th>
+                                <th>التقييم</th>
                                 <th>الواجب</th>
-                                <th>الملاحظة الصادرة لعائلة الطالب</th>
+                                <th>خيارات الإدارة والتعديل</th>
                             </tr>
                         </thead>
                         <tbody id="auditLogsTable">
@@ -148,10 +184,10 @@
 
         </div>
 
-        <!-- العمود الأيسر: لوحات فرز وتصنيف الطلاب المتطورة وأولياء الأمور -->
+        <!-- العمود الأيسر -->
         <div style="display: flex; flex-direction: column; gap: 20px;">
             
-            <!-- لوحة تصنيف صدارة التميز (أفضل الطلاب) والأوسمة -->
+            <!-- لوحة الشرف وأفضل الطلاب -->
             <div class="panel">
                 <div class="panel-header">
                     <h2>🏆 لوحة الشرف وأفضل الطلاب</h2>
@@ -161,7 +197,7 @@
                 </div>
             </div>
 
-            <!-- لوحة فرز وتحذير الطلاب الضعاف أو ذوي الإنذارات -->
+            <!-- قائمة المتابعة الأكاديمية والضعف للتدخل -->
             <div class="panel">
                 <div class="panel-header">
                     <h2>⚠️ قائمة المتابعة الأكاديمية (الطلاب)</h2>
@@ -171,10 +207,10 @@
                 </div>
             </div>
 
-            <!-- مراقبة تفاعل واطلاع أولياء الأمور لتحديد المتغيبين والمتابعين -->
+            <!-- سجل الدخول الشامل والظهور الأخير لأولياء الأمور للفرز الدقيق -->
             <div class="panel">
                 <div class="panel-header">
-                    <h2>📱 رادار تفاعل واطلاع أولياء الأمور</h2>
+                    <h2>📱 رادار دخول وظهور أولياء الأمور اليومي</h2>
                 </div>
                 <div class="list-scroll" id="parentsAuditorList">
                     <div style="text-align:center; color:var(--muted); padding:10px;">تحليل اتصالات أولياء الأمور...</div>
@@ -194,32 +230,27 @@
             <button class="modal-close" onclick="closeModal()">&times;</button>
         </div>
         <div class="modal-body" id="modalBody">
-            <!-- سيتم حقن البيانات هنا ديناميكياً -->
+            <!-- محتوى منبثق ديناميكي -->
         </div>
     </div>
 </div>
 
 <script>
-    // تهيئة الفايربيس للربط مع نفس قاعدة البيانات المشتركة للمشروع
     const firebaseConfig = {
         apiKey: "AIzaSyCIW17B6y6sG_bdUFqF7FWoVIY9ynXv1B4",
         authDomain: "myschoolproject-4ad92.firebaseapp.com",
         databaseURL: "https://myschoolproject-4ad92-default-rtdb.firebaseio.com",
         projectId: "myschoolproject-4ad92"
     };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const database = firebase.database();
 
     const levelNames = { 'exc': 'متميز ✨', 'cre': 'مبدع 🎨', 'vg': 'جيد جداً 👍', 'fa': 'مقبول 🆗', 'we': 'ضعيف ⚠️' };
     
-    // متغيرات عالمية لحفظ الكاش من أجل النوافذ المنبثقة التفاعلية
-    let cachedData = {
-        teachers: [],
-        students: [],
-        activeParents: [],
-        inactiveParents: [],
-        teachersRank: []
-    };
+    let cachedData = { teachers: [], students: [], activeParents: [], inactiveParents: [], teachersRank: [] };
+    let studentsPhoneMap = {}; 
 
     window.onload = function() {
         fetchFullSchoolData();
@@ -238,7 +269,11 @@
                 globalStudents = stdSnap.val() || {};
                 
                 let totalStudentsCount = 0;
+                studentsPhoneMap = {}; 
                 for(let cls in globalStudents) {
+                    for(let sId in globalStudents[cls]) {
+                        studentsPhoneMap[globalStudents[cls][sId].name] = globalStudents[cls][sId].pass || '';
+                    }
                     totalStudentsCount += Object.keys(globalStudents[cls]).length;
                 }
                 document.getElementById('countStudents').innerText = totalStudentsCount;
@@ -252,15 +287,13 @@
     }
 
     function processAndRenderDashboard(teachers, students, evaluations) {
-        // تفريغ الكاش المخصص للمؤشرات
         cachedData = { teachers: [], students: [], activeParents: [], inactiveParents: [], teachersRank: [] };
 
-        // --- أولاً: معالجة وعرض حالة رصد المعلمين ---
         const teachersTable = document.getElementById('teachersStatusTable');
         teachersTable.innerHTML = "";
         
         let activeSubjectsWithReports = new Set();
-        let teacherReportCount = {}; // لحساب الأكثر تفاعلاً
+        let teacherReportCount = {};
 
         for (let cls in evaluations) {
             for (let stdKey in evaluations[cls]) {
@@ -272,35 +305,38 @@
             }
         }
 
+        // رصد الكادر التعليمي
         for (let tId in teachers) {
             const t = teachers[tId];
             const hasSentReports = activeSubjectsWithReports.has(t.subject);
             const statusBadge = hasSentReports 
-                ? `<span class="badge bg-success">✓ قام بالرصد الأسبوعي</span>` 
+                ? `<span class="badge bg-success">✓ قام بالرصد</span>` 
                 : `<span class="badge bg-danger">🚨 متأخر عن الرصد</span>`;
+            
+            const tLastSeen = t.lastLogin ? t.lastLogin : "لم يسجل دخول قريباً";
+            const tPhone = t.phone || '0500000000'; 
 
             teachersTable.innerHTML += `
-                <tr>
+                <tr class="clickable-row" onclick="fillWhatsAppTarget('${tPhone}', 'المعلم أ/ ${t.teacherName}', 'معلم مادة ${t.subject}')">
                     <td><strong>أ/ ${t.teacherName}</strong></td>
                     <td><span class="badge bg-info">${t.subject}</span></td>
                     <td><small style="color:var(--muted)">${t.className}</small></td>
+                    <td><span class="badge bg-purple">${tLastSeen}</span></td>
                     <td>${statusBadge}</td>
                 </tr>
             `;
-
-            // تخزين كاش المعلمين
-            cachedData.teachers.push({ name: `أ/ ${t.teacherName}`, info: `مادة ${t.subject} (${t.className})`, badge: statusBadge });
+            cachedData.teachers.push({ name: `أ/ ${t.teacherName}`, info: `مادة ${t.subject} (آخر دخول: ${tLastSeen})`, badge: statusBadge, phone: tPhone, type: 'معلم' });
         }
 
-        // حساب المعلم الأكثر تفاعلاً
-        let topTeacher = "لا يوجد رصد";
+        // حساب صدارة المعلمين
+        let topTeacher = "لا يوجد رصد حالي";
         let maxReports = 0;
         let teachersRankArray = [];
 
         for (let tId in teachers) {
             let sub = teachers[tId].subject;
             let count = teacherReportCount[sub] || 0;
-            teachersRankArray.push({ name: `أ/ ${teachers[tId].teacherName}`, subject: sub, count: count });
+            teachersRankArray.push({ name: `أ/ ${teachers[tId].teacherName}`, subject: sub, count: count, phone: teachers[tId].phone || '0500000000' });
             if (count > maxReports) {
                 maxReports = count;
                 topTeacher = `أ/ ${teachers[tId].teacherName} (${count} تقرير)`;
@@ -309,7 +345,7 @@
         document.getElementById('topTeacherName').innerText = topTeacher;
         cachedData.teachersRank = teachersRankArray.sort((a,b)=> b.count - a.count);
 
-        // --- ثانياً: معالجة وفرز بيانات الطلاب وأولياء الأمور ---
+        // تصنيف الطلاب وأولياء الأمور
         let bestStudents = [];
         let weakStudents = [];
         let parentsSeenCount = 0;
@@ -321,26 +357,26 @@
         for (let cls in students) {
             for (let sKey in students[cls]) {
                 const std = students[cls][sKey];
-                cachedData.students.push({ name: std.name, info: `الصف: ${cls}`, badge: `<span class="badge bg-info">مسجل</span>` });
+                const sPhone = std.pass || '';
+                
+                cachedData.students.push({ name: std.name, info: `الصف: ${cls} | رقم الجوال: ${sPhone}`, badge: `<span class="badge bg-info">نشط</span>`, phone: sPhone, type: 'طالب' });
                 
                 if (std.lastSeen) {
                     parentsSeenCount++;
-                    let itemHtml = `
-                        <div class="student-rank-item" onclick="showModal('activeParents')">
+                    parentsListContainer.innerHTML += `
+                        <div class="student-rank-item" onclick="fillWhatsAppTarget('${sPhone}', 'ولي أمر الطالب ${std.name}', 'متابعة تفاعل دخولك اليومي')">
                             <div>👨‍👩‍👦 عائلة: <strong>${std.name}</strong></div>
-                            <span class="badge bg-success">اطلع: ${std.lastSeen.split(' - ')[0]}</span>
+                            <span class="badge bg-success">متصل: ${std.lastSeen.split(' - ')[0]} 📱</span>
                         </div>`;
-                    parentsListContainer.innerHTML += itemHtml;
-                    cachedData.activeParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-success">آخر اطلاع: ${std.lastSeen}</span>` });
+                    cachedData.activeParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-success">آخر دخول: ${std.lastSeen}</span>`, phone: sPhone, type: 'ولي أمر' });
                 } else {
                     parentsUnseenCount++;
-                    let itemHtml = `
-                        <div class="student-rank-item" style="background:#fff1f2" onclick="showModal('inactiveParents')">
+                    parentsListContainer.innerHTML += `
+                        <div class="student-rank-item" style="background:#fff1f2" onclick="fillWhatsAppTarget('${sPhone}', 'ولي أمر الطالب ${std.name}', 'دعوة لتسجيل الدخول ومتابعة الأبناء')">
                             <div>👨‍👩‍👦 عائلة: <strong>${std.name}</strong></div>
-                            <span class="badge bg-danger">⚠️ لم يطّلع مطلقاً</span>
+                            <span class="badge bg-danger">⚠️ لم يدخل مطلقاً</span>
                         </div>`;
-                    parentsListContainer.innerHTML += itemHtml;
-                    cachedData.inactiveParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-danger">لم يدخل النظام نهائياً</span>` });
+                    cachedData.inactiveParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-danger">غير متصل نهائياً</span>`, phone: sPhone, type: 'ولي أمر' });
                 }
 
                 let scoreExc = 0, scoreWeak = 0, prizesCount = 0, warningsCount = 0;
@@ -354,48 +390,46 @@
                         if (ev.warning) warningsCount++;
                     }
                 }
-                bestStudents.push({ name: std.name, class: cls, score: scoreExc, prizes: prizesCount });
-                weakStudents.push({ name: std.name, class: cls, score: scoreWeak, warns: warningsCount });
+                bestStudents.push({ name: std.name, class: cls, score: scoreExc, prizes: prizesCount, phone: sPhone });
+                weakStudents.push({ name: std.name, class: cls, score: scoreWeak, warns: warningsCount, phone: sPhone });
             }
         }
 
         document.getElementById('countSeenParents').innerText = parentsSeenCount;
         document.getElementById('countUnseenParents').innerText = parentsUnseenCount;
-
-        // تلوين كارت الغائبين بناءً على خطورة الموقف الأكاديمي
         document.getElementById('countUnseenParents').parentElement.style.background = parentsUnseenCount > 0 ? "#fff1f2" : "#ffffff";
 
-        // عرض قائمة الشرف
+        // لوحة الشرف
         bestStudents.sort((a, b) => (b.score + b.prizes) - (a.score + a.prizes));
         const bestContainer = document.getElementById('bestStudentsList');
         bestContainer.innerHTML = "";
         bestStudents.slice(0, 10).forEach((s, index) => {
             if(s.score > 0 || s.prizes > 0) {
                 bestContainer.innerHTML += `
-                    <div class="student-rank-item" onclick="showStudentSummary('${s.name}', ${s.score}, ${s.prizes}, 'تميز')">
+                    <div class="student-rank-item" onclick="fillWhatsAppTarget('${s.phone}', 'الطالب المتميز ${s.name}', 'تهنئة بالتميز الأكاديمي والحصول على نقاط شرف')">
                         <div>🏅 #${index+1} <strong>${s.name}</strong> <small style="color:var(--muted)">(${s.class})</small></div>
-                        <span class="badge bg-success">تميز: ${s.score} | جوائز: ${s.prizes} 🏆</span>
+                        <span class="badge bg-success">تميز: ${s.score} | جوائز: ${s.prizes}</span>
                     </div>`;
             }
         });
         if(bestContainer.innerHTML === "") bestContainer.innerHTML = "<div style='color:var(--muted); text-align:center; padding:10px;'>لا توجد نقاط تميز مسجلة حالياً</div>";
 
-        // عرض قائمة المتابعة
+        // المتابعة الأكاديمية
         weakStudents.sort((a, b) => (b.score + b.warns) - (a.score + a.warns));
         const weakContainer = document.getElementById('weakStudentsList');
         weakContainer.innerHTML = "";
         weakStudents.slice(0, 10).forEach((s, index) => {
             if(s.score > 0 || s.warns > 0) {
                 weakContainer.innerHTML += `
-                    <div class="student-rank-item" onclick="showStudentSummary('${s.name}', ${s.score}, ${s.warns}, 'ضعف')">
+                    <div class="student-rank-item" onclick="fillWhatsAppTarget('${s.phone}', 'ولي أمر الطالب ${s.name}', 'إشعار بضرورة مراجعة المدرسة لوجود ملاحظات أكاديمية')">
                         <div>📌 <strong>${s.name}</strong> <small style="color:var(--muted)">(${s.class})</small></div>
                         <span class="badge bg-danger">ضعف: ${s.score} | إنذارات: ${s.warns} ⚠️</span>
                     </div>`;
             }
         });
-        if(weakContainer.innerHTML === "") weakContainer.innerHTML = "<div style='color:var(--muted); text-align:center; padding:10px;'>السجل نظيف تماماً ولا يوجد طلاب ضعاف رُصدوا</div>";
+        if(weakContainer.innerHTML === "") weakContainer.innerHTML = "<div style='color:var(--muted); text-align:center; padding:10px;'>السجل الأكاديمي نظيف تماماً للطلاب</div>";
 
-        // --- ثالثاً: سجل الرصد التاريخي الموحد ---
+        // سجل الرصد العام
         const logsTable = document.getElementById('auditLogsTable');
         logsTable.innerHTML = "";
         let allFlattenedLogs = [];
@@ -403,18 +437,20 @@
         for (let cls in evaluations) {
             for (let stdKey in evaluations[cls]) {
                 let studentName = "طالب مجهول";
-                if (students[cls] && students[cls][stdKey]) {
-                    studentName = students[cls][stdKey].name;
-                }
+                if (students[cls] && students[cls][stdKey]) studentName = students[cls][stdKey].name;
+                const associatedPhone = studentsPhoneMap[studentName] || '';
+                
                 for (let repKey in evaluations[cls][stdKey]) {
                     const log = evaluations[cls][stdKey][repKey];
                     allFlattenedLogs.push({
                         dateTime: log.date + " " + (log.time || ""),
                         student: studentName + " (" + cls + ")",
+                        studentRawName: studentName,
                         subject: log.subject,
                         level: levelNames[log.level] || 'تم التقويم',
                         homework: log.homework || 'لا يوجد',
-                        message: log.message || 'بدون تفاصيل إضافية'
+                        phone: associatedPhone,
+                        path: `evaluations/${cls}/${stdKey}/${repKey}`
                     });
                 }
             }
@@ -423,64 +459,130 @@
         allFlattenedLogs.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
 
         if(allFlattenedLogs.length === 0) {
-            logsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted)">لم يتم إرسال أي تقارير يومية في المدرسة حتى الآن لتوثيقها.</td></tr>`;
+            logsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted)">لم يتم رصد تقارير بالمنظومة حتى الآن.</td></tr>`;
         } else {
             allFlattenedLogs.forEach(l => {
                 logsTable.innerHTML += `
-                    <tr>
+                    <tr class="clickable-row" onclick="event.stopPropagation(); fillWhatsAppTarget('${l.phone}', 'ولي أمر الطالب ${l.studentRawName}', 'بخصوص تقرير مادة ${l.subject}: التقييم (${l.level}) والواجب (${l.homework})')">
                         <td><small style="color:var(--muted)">${l.dateTime}</small></td>
                         <td><strong>${l.student}</strong></td>
                         <td><span class="badge bg-info">${l.subject}</span></td>
                         <td><span class="badge bg-warning">${l.level}</span></td>
-                        <td><code style="color:var(--primary)">${l.homework}</code></td>
-                        <td><small>${l.message}</small></td>
+                        <td><code>${l.homework}</code></td>
+                        <td onclick="event.stopPropagation();">
+                            <button class="btn-action btn-red" style="padding:3px 8px; font-size:11px;" onclick="deleteSingleLog('${l.path}')">حذف 🗑️</button>
+                        </td>
                     </tr>
                 `;
             });
         }
     }
 
-    // --- نظام الفتح والتحكم بالنافذة التفاعلية (Modal Control System) ---
+    // إعداد بيانات الإرسال عند النقر
+    function fillWhatsAppTarget(phone, nameHeadline, contextReason) {
+        if(!phone || phone === 'undefined' || phone === '0500000000') {
+            alert(`⚠️ تنبيه: لا يوجد رقم جوال مسجل للشخص المحدد (${nameHeadline}) في النظام حالياً!`);
+            return;
+        }
+        
+        document.getElementById('waPhone').value = phone.trim();
+        document.getElementById('waMessage').value = `السلام عليكم ورحمة الله وبركاته، إلى ${nameHeadline} من إدارة مدرسة أُسيد بن حضير: تفيدكم الإدارة بـ [${contextReason}]، يرجى المتابعة والاهتمام.`;
+        document.getElementById('waStatus').innerHTML = `🎯 جاهز لإرسال إشعار إلى: <strong style="color:var(--primary)">${nameHeadline}</strong>`;
+        
+        const panel = document.getElementById('whatsappPanel');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        panel.classList.add('whatsapp-highlight');
+        setTimeout(() => panel.classList.remove('whatsapp-highlight'), 1500);
+    }
+
+    function sendWhatsAppNotification() {
+        const phone = document.getElementById('waPhone').value.trim();
+        const msg = document.getElementById('waMessage').value.trim();
+        if(!phone || !msg) { alert("يرجى ملء حقول الهاتف ونص الرسالة الإدارية أولاً!"); return; }
+        
+        let formattedPhone = phone;
+        if(formattedPhone.startsWith('05')) { formattedPhone = '966' + formattedPhone.substring(1); }
+        
+        const url = `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+        
+        document.getElementById('waStatus').innerHTML = `<span style="color:var(--success)">تم فتح نافذة إرسال الرابط بنجاح ✅</span>`;
+    }
+
+    function deleteSingleLog(firebasePath) {
+        if(confirm("هل أنت متأكد من حذف هذا التقرير الرصدي بشكل نهائي؟")) {
+            database.ref(firebasePath).remove().then(() => {
+                alert("تم حذف التقرير بنجاح 🗑️");
+                fetchFullSchoolData();
+            });
+        }
+    }
+
+    // الدالة الذكية المحدثة: تصفير السجلات والتقييمات الحركية فقط مع حماية الحسابات والأسماء
+    function triggerResetSystem() {
+        const pass = prompt("تنبيه الحذف الذكي: يرجى كتابة رمز التأكيد (حذف كل شيء) للمضي قدماً في تصفير سجلات الرصد الدورية فقط:");
+        if(pass === "حذف كل شيء") {
+            if(confirm("مؤكد؟ هذا الإجراء سيحذف كافة التقييمات، الواجبات، الملاحظات الأكاديمية وسجلات الغياب سحابياً لبدء دورة رصد جديدة، لكنه سيحتفظ بأسماء وحسابات المعلمين والطلاب وأولياء الأمور دون أي تغيير.")) {
+                // تصفير فرع التقييمات فقط والحفاظ على الطلاب والمعلمين
+                database.ref('evaluations').remove().then(() => {
+                    alert("تم تصفير وتفريغ سجلات التقارير بنجاح، مع الإبقاء الفوري على بيانات المعلمين وأولياء الأمور الأساسية والطلاب 📋✅");
+                    fetchFullSchoolData();
+                }).catch(err => {
+                    alert(`فشلت العملية: ${err.message}`);
+                });
+            }
+        } else if(pass !== null) {
+            alert("رمز التأكيد غير صحيح! تم إلغاء عملية التصفير لحماية المنظومة 🔐");
+        }
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert(`خطأ: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
     function showModal(type) {
         const modal = document.getElementById('infoModal');
         const title = document.getElementById('modalTitle');
         const body = document.getElementById('modalBody');
-        
-        body.innerHTML = "";
-        modal.style.display = "flex";
+        body.innerHTML = ""; modal.style.display = "flex";
 
         if (type === 'teachers') {
-            title.innerText = "📋 الكادر التعليمي الفعال بالمنظومة";
+            title.innerText = "📋 الكادر التعليمي (اضغط لتجهيز رسالة)";
             cachedData.teachers.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'تنسيق العمل الإداري والأكاديمي للدرجات')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
         } 
         else if (type === 'students') {
-            title.innerText = "🎒 قائمة الطلاب المقيدين في المدرسة";
+            title.innerText = "🎒 قائمة الطلاب المسجلين (اضغط لتجهيز رسالة)";
             cachedData.students.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', 'ولي أمر الطالب ${item.name}', 'متابعة سجل الطالب عبر بوابة تعلمّنا')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
         } 
         else if (type === 'activeParents') {
-            title.innerText = "🟢 أولياء الأمور المتفاعلين والمتابعين اليوم";
-            if(cachedData.activeParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا يوجد أي سجلات دخول اليوم</p>";
+            title.innerText = "🟢 أولياء الأمور النشطين (اضغط لتجهيز رسالة)";
+            if(cachedData.activeParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا توجد عمليات دخول مسجلة اليوم</p>";
             cachedData.activeParents.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'شكر وتقدير لحرصكم على متابعة المنصة اليومية')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
         } 
         else if (type === 'inactiveParents') {
-            title.innerText = "🔴 أولياء الأمور المتغيبين عن المتابعة (الأكثر خمولاً)";
-            if(cachedData.inactiveParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--success)'>ممتاز! جميع أولياء الأمور مطلعون على المنظومة</p>";
+            title.innerText = "🔴 أولياء الأمور المتغيبين (اضغط لتجهيز رسالة)";
+            if(cachedData.inactiveParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--success)'>ممتاز! جميع أولياء الأمور متصلون بالمنظومة</p>";
             cachedData.inactiveParents.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'إشعار بضرورة الدخول وتفعيل الحساب لمتابعة الغيابات والواجبات')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
         }
         else if (type === 'topTeacher') {
-            title.innerText = "📈 ترتيب تفاعل المعلمين ورصدهم للدرجات";
-            if(cachedData.teachersRank.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا يوجد أي رصد متاح حالياً</p>";
+            title.innerText = "📈 ترتيب تفاعل المعلمين ورصدهم";
             cachedData.teachersRank.forEach((item, index) => {
                 body.innerHTML += `
-                    <div class="modal-list-item">
+                    <div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'شكر وتقدير على تميزكم في رصد التقارير الدورية باللوحة')">
                         <div><strong>#${index+1} ${item.name}</strong><br><small style="color:var(--muted)">مادة: ${item.subject}</small></div>
                         <span class="badge bg-success">${item.count} تقرير صادر</span>
                     </div>`;
@@ -488,40 +590,10 @@
         }
     }
 
-    function showStudentSummary(name, score1, score2, type) {
-        const modal = document.getElementById('infoModal');
-        const title = document.getElementById('modalTitle');
-        const body = document.getElementById('modalBody');
-        modal.style.display = "flex";
-        
-        title.innerText = `📊 ملخص الحالة الأكاديمية: ${name}`;
-        if(type === 'تميز') {
-            body.innerHTML = `
-                <div style="text-align:center; padding:20px;">
-                    <div style="font-size:50px">🏅</div>
-                    <h3>أداء متميز استثنائي</h3>
-                    <p>حصل الطالب <strong>${name}</strong> على إجمالي <strong>${score1}</strong> حصص تفوق وإبداع، وتم تتويجه بـ <strong>${score2}</strong> جوائز تقديرية مرسلة لأولياء الأمور عبر المنصة الإلكترونية.</p>
-                </div>`;
-        } else {
-            body.innerHTML = `
-                <div style="text-align:center; padding:20px; background:#fff1f2; border-radius:12px;">
-                    <div style="font-size:50px">⚠️</div>
-                    <h3 style="color:var(--danger)">متابعة إدارية وتدخل أكاديمي</h3>
-                    <p>رصدت المنظومة تراجعاً أكاديمياً للطالب <strong>${name}</strong> بواقع <strong>${score1}</strong> ملاحظات ضعف، بالإضافة إلى تلقي عائلته لـ <strong>${score2}</strong> إنذارات أسبوعية تستوجب المتابعة الفورية.</p>
-                </div>`;
-        }
-    }
-
-    function closeModal() {
-        document.getElementById('infoModal').style.display = "none";
-    }
-
-    // إغلاق النافذة المنبثقة التلقائي عند الضغط خارجها
+    function closeModal() { document.getElementById('infoModal').style.display = "none"; }
     window.onclick = function(event) {
         const modal = document.getElementById('infoModal');
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+        if (event.target == modal) modal.style.display = "none";
     }
 </script>
 </body>
