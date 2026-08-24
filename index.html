@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة الإشراف والمراقبة الشاملة | مدرسة أُسيد بن حضير</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;600;700;900&display=swap" rel="stylesheet">
+    <title>لوحة الإشراف والمراقبة الشاملة | إدارة المدرسة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -14,6 +14,7 @@
             --bg: #f8fafc; --surface: #ffffff; --primary: #4f46e5; --secondary: #06b6d4;
             --dark: #0f172a; --muted: #64748b; --border: #e2e8f0;
             --success: #22c55e; --warning: #f59e0b; --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
         }
 
         * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -21,17 +22,28 @@
 
         .navbar { background: var(--dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .navbar h1 { margin: 0; font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 10px; }
-        
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .btn-action { border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: 'Cairo'; font-size: 13px; }
-        .btn-blue { background: var(--primary); } .btn-blue:hover { background: #4338ca; }
-        .btn-green { background: var(--success); } .btn-green:hover { background: #16a34a; }
-        .btn-red { background: var(--danger); } .btn-red:hover { background: #dc2626; }
-        .btn-purple { background: #7c3aed; } .btn-purple:hover { background: #6d28d9; }
+        .refresh-btn { background: var(--primary); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .refresh-btn:hover { background: #4338ca; }
+        .logout-btn { background: var(--danger); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; display: none; }
+        .logout-btn:hover { background: #dc2626; }
 
         .container { max-width: 1400px; margin: auto; padding: 20px; display: flex; flex-direction: column; gap: 25px; }
 
-        /* الكروت الإحصائية */
+        /* ستايل صندوق تسجيل الدخول (بوابة الدخول) */
+        #authContainer { display: flex; justify-content: center; align-items: center; min-height: 60vh; }
+        .auth-box { background: var(--surface); padding: 40px; border-radius: 24px; box-shadow: var(--shadow); width: 100%; max-width: 450px; text-align: center; border: 1px solid var(--border); }
+        .auth-box h2 { margin: 0 0 10px 0; color: var(--dark); font-weight: 900; }
+        .auth-box p { color: var(--muted); font-size: 14px; margin-bottom: 25px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; text-align: right; }
+        .form-group label { font-size: 13px; font-weight: 700; color: var(--muted); }
+        .inp { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; font-weight: 600; background: #f8fafc; outline: none; transition: 0.2s; }
+        .inp:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .btn-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--primary), #6366f1); color: white; font-weight: 700; font-size: 16px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(79, 70, 229, 0.3); }
+
+        /* إخفاء محتوى اللوحة في البداية */
+        #dashboardContent { display: none; }
+
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .stat-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 5px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
@@ -39,7 +51,6 @@
         .stat-card p { margin: 0; font-size: 24px; font-weight: 900; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .stat-card.accent { border-right: 5px solid var(--primary); }
 
-        /* تقسيم اللوحة */
         .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         @media (max-width: 992px) { .main-grid { grid-template-columns: 1fr; } }
 
@@ -47,191 +58,161 @@
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
         .panel-header h2 { margin: 0; font-size: 16px; font-weight: 900; color: var(--dark); }
 
-        /* الجداول والقوائم */
         .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: right; font-size: 13px; }
         th { background: var(--bg); color: var(--muted); padding: 12px; font-weight: 700; }
         td { padding: 12px; border-bottom: 1px solid var(--border); font-weight: 600; }
-        tr.clickable-row { cursor: pointer; transition: background 0.2s; }
-        tr.clickable-row:hover { background: #f1f5f9; }
+        tr:hover { background: #f8fafc; }
 
-        /* الأوسمة */
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
         .bg-success { background: #dcfce7; color: #166534; }
         .bg-danger { background: #fee2e2; color: #991b1b; }
         .bg-warning { background: #fef3c7; color: #92400e; }
         .bg-info { background: #e0f2fe; color: #0369a1; }
-        .bg-purple { background: #f3e8ff; color: #6b21a8; }
 
         .student-rank-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
         .student-rank-item:hover { background: #f1f5f9; }
+        .student-rank-item:last-child { border: none; }
         
         .list-scroll { max-height: 350px; overflow-y: auto; padding-right: 5px; }
 
-        /* نافذة المودال */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--surface); width: 100%; max-width: 700px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: fadeIn 0.3s ease; display: flex; flex-direction: column; max-height: 85vh; }
+        .modal-content { background: var(--surface); width: 100%; max-width: 650px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: fadeIn 0.3s ease; display: flex; flex-direction: column; max-height: 80vh; }
         .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .modal-header h2 { margin: 0; font-size: 18px; font-weight: 900; color: var(--dark); }
         .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted); }
         .modal-body { padding: 20px; overflow-y: auto; font-size: 14px; }
-        .modal-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
-        .modal-list-item:hover { background: #f8fafc; }
         
-        /* واجهة الواتساب المدمجة */
-        .whatsapp-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; transition: all 0.3s ease; }
-        .whatsapp-highlight { transform: scale(1.01); box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); border-color: var(--success); }
-        .inp-msg { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-family: 'Cairo'; resize: none; font-size: 13px; }
+        .modal-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+        .modal-list-item:last-child { border: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        @media print {
-            body { background: white; color: black; }
-            .navbar, .btn-action, .whatsapp-box, .refresh-btn { display: none !important; }
-            .panel { box-shadow: none !important; border: none !important; }
-            .list-scroll { max-height: none !important; overflow: visible !important; }
-        }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <h1><span>📊</span> لوحة القيادة والمراقبة الشاملة | مدرسة أُسيد بن حضير</h1>
-    <div class="nav-actions">
-        <button class="btn-action btn-purple" onclick="toggleFullscreen()">ملء الشاشة 🖥️</button>
-        <button class="btn-action btn-green" onclick="window.print()">طباعة التقرير الشهري 🖨️</button>
-        <button class="btn-action btn-red" onclick="triggerResetSystem()">تصفير السجلات الدورية ⚠️</button>
-        <button class="btn-action btn-blue" onclick="fetchFullSchoolData()">تحديث حيوى 🔄</button>
+    <h1 id="navTitle"><span>📊</span> بوابة الإشراف والمراقبة الشاملة</h1>
+    <div style="display:flex; gap:10px;">
+        <button id="refreshBtn" class="refresh-btn" onclick="fetchFullSchoolData()" style="display:none;">تحديث البيانات المباشرة 🔄</button>
+        <button id="logoutBtn" class="logout-btn" onclick="logoutAdmin()">تسجيل الخروج 🚪</button>
     </div>
 </nav>
 
-<div class="container" id="dashboardContainer">
+<div class="container">
     
-    <!-- الكروت الإحصائية الذكية السريعة -->
-    <div class="stats-grid">
-        <div class="stat-card accent" onclick="showModal('teachers')"><h3>إجمالي المعلمين</h3><p id="countTeachers">0</p></div>
-        <div class="stat-card accent" onclick="showModal('students')"><h3>إجمالي الطلاب المسجلين</h3><p id="countStudents">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--success)" onclick="showModal('activeParents')"><h3>أولياء أمور تفاعلوا اليوم</h3><p id="countSeenParents" style="color: var(--success)">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--danger)" onclick="showModal('inactiveParents')"><h3>أولياء أمور متغيبين</h3><p id="countUnseenParents" style="color: var(--danger)">0</p></div>
-        <div class="stat-card" style="border-right: 5px solid var(--warning)" onclick="showModal('topTeacher')"><h3>المعلم الأكثر تفاعلاً 🌟</h3><p id="topTeacherName" style="color: var(--warning); font-size: 15px; margin-top: 5px;">جاري الحساب...</p></div>
+    <div id="authContainer">
+        <div class="auth-box">
+            <h2>🔐 دخول الإدارة للوحة المراقبة</h2>
+            <p>يرجى إدخال بيانات اعتماد مدرستك المعتمدة للوصول</p>
+            <div class="form-group">
+                <label>اسم مستخدم الإدارة</label>
+                <input type="text" id="loginUser" class="inp" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="loginPass" class="inp" placeholder="أدخل كلمة المرور">
+            </div>
+            <button class="btn-submit" onclick="loginToMonitoring()">تسجيل الدخول والمتابعة</button>
+        </div>
     </div>
 
-    <!-- واجهة الإرسال السريع الفورية عبر الواتساب -->
-    <div class="panel whatsapp-box" id="whatsappPanel">
-        <div style="font-weight: 900; color: #166534; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-            <span>💬</span> مركز إشعارات الـ WhatsApp الفوري (انقر على أي اسم لتعبئته تلقائياً)
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; align-items: center;">
-            <input type="text" id="waPhone" class="inp-msg" style="height:42px;" placeholder="رقم الجوال المستهدف">
-            <textarea id="waMessage" class="inp-msg" rows="1" placeholder="اكتب نص الرسالة الإدارية أو انقر اسم شخص لتجهيز الرسالة..."></textarea>
-            <button class="btn-action btn-green" style="height:42px; width:100%" onclick="sendWhatsAppNotification()">إرسال الرسالة الآن 🚀</button>
-        </div>
-        <div id="waStatus" style="font-size: 12px; font-weight: 700; color: var(--muted);">حالة الإرسال: في الانتظار...</div>
-    </div>
-
-    <div class="main-grid">
-        
-        <!-- العمود الأيمن الكبير -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            
-            <!-- رادار رصد المعلمين وسجل حضورهم الإلكتروني بالمنظومة -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>🕵️ رادار رصد ومتابعة المعلمين (اضغط على الصف لإرسال تعميم)</h2>
-                    <span class="badge bg-purple">مراقبة حية وجلسات المعلمين</span>
-                </div>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>المعلم</th>
-                                <th>المادة الموكلة</th>
-                                <th>الفصول المربوطة</th>
-                                <th>آخر ظهور للمعلم</th>
-                                <th>حالة الرصد</th>
-                            </tr>
-                        </thead>
-                        <tbody id="teachersStatusTable">
-                            <tr><td colspan="5" style="text-align:center; color:var(--muted)">جاري سحب بيانات الكادر التعليمي...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- سجل الرصد الشامل التاريخي وحذف الحركة الفردية يدويًا -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>📜 السجل العام للرصد المدرسي والتحكم الفردي في الحذف</h2>
-                </div>
-                <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>التاريخ والوقت</th>
-                                <th>الطالب</th>
-                                <th>المادة</th>
-                                <th>التقييم</th>
-                                <th>الواجب</th>
-                                <th>خيارات الإدارة والتعديل</th>
-                            </tr>
-                        </thead>
-                        <tbody id="auditLogsTable">
-                            <tr><td colspan="6" style="text-align:center; color:var(--muted)">في انتظار تحميل سجل الرصد التاريخي...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+    <div id="dashboardContent">
+        <div class="stats-grid">
+            <div class="stat-card accent" onclick="showModal('teachers')"><h3>إجمالي المعلمين</h3><p id="countTeachers">0</p></div>
+            <div class="stat-card accent" onclick="showModal('students')"><h3>إجمالي الطلاب المسجلين</h3><p id="countStudents">0</p></div>
+            <div class="stat-card" style="border-right: 5px solid var(--success)" onclick="showModal('activeParents')"><h3>أولياء أمور تفاعلوا</h3><p id="countSeenParents" style="color: var(--success)">0</p></div>
+            <div class="stat-card" style="border-right: 5px solid var(--danger)" onclick="showModal('inactiveParents')"><h3>أولياء أمور غائبين 📉</h3><p id="countUnseenParents" style="color: var(--danger)">0</p></div>
+            <div class="stat-card" style="border-right: 5px solid var(--warning)" onclick="showModal('topTeacher')"><h3>المعلم الأكثر تفاعلاً 🌟</h3><p id="topTeacherName" style="color: var(--warning); font-size: 16px; margin-top: 5px;">في انتظار التحديد...</p></div>
         </div>
 
-        <!-- العمود الأيسر -->
-        <div style="display: flex; flex-direction: column; gap: 20px;">
-            
-            <!-- لوحة الشرف وأفضل الطلاب -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>🏆 لوحة الشرف وأفضل الطلاب</h2>
+        <div class="main-grid">
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>🕵️ رادار رصد المعلمين وحالة التواجد</h2>
+                        <span class="badge bg-info">تحديث لحظي</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>المعلم</th>
+                                    <th>المادة الموكلة</th>
+                                    <th>الفصول المربوطة</th>
+                                    <th>حالة الرصد الأسبوعي</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachersStatusTable">
+                                <tr><td colspan="4" style="text-align:center; color:var(--muted)">جاري تحميل السجلات...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="list-scroll" id="bestStudentsList">
-                    <div style="text-align:center; color:var(--muted); padding:10px;">جاري حساب مستويات التميز...</div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>📜 السجل العام للرصد المدرسي (التقارير الصادرة)</h2>
+                    </div>
+                    <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>التاريخ والوقت</th>
+                                    <th>الطالب</th>
+                                    <th>المادة</th>
+                                    <th>التقييم الرقمي</th>
+                                    <th>الواجب</th>
+                                    <th>الملاحظة الصادرة لعائلة الطالب</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogsTable">
+                                <tr><td colspan="6" style="text-align:center; color:var(--muted)">جاري تحميل السجلات...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- قائمة المتابعة الأكاديمية والضعف للتدخل -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>⚠️ قائمة المتابعة الأكاديمية (الطلاب)</h2>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>🏆 لوحة الشرف وأفضل الطلاب</h2>
+                    </div>
+                    <div class="list-scroll" id="bestStudentsList">
+                        <div style="text-align:center; color:var(--muted); padding:10px;">جاري تحميل القائمة...</div>
+                    </div>
                 </div>
-                <div class="list-scroll" id="weakStudentsList">
-                    <div style="text-align:center; color:var(--muted); padding:10px;">جاري الفرز والتحليل الراداري...</div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>⚠️ قائمة المتابعة الأكاديمية (الطلاب)</h2>
+                    </div>
+                    <div class="list-scroll" id="weakStudentsList">
+                        <div style="text-align:center; color:var(--muted); padding:10px;">جاري الفرز...</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>📱 رادار تفاعل واطلاع أولياء الأمور</h2>
+                    </div>
+                    <div class="list-scroll" id="parentsAuditorList">
+                        <div style="text-align:center; color:var(--muted); padding:10px;">تحليل الاتصالات...</div>
+                    </div>
                 </div>
             </div>
-
-            <!-- سجل الدخول الشامل والظهور الأخير لأولياء الأمور للفرز الدقيق -->
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>📱 رادار دخول وظهور أولياء الأمور اليومي</h2>
-                </div>
-                <div class="list-scroll" id="parentsAuditorList">
-                    <div style="text-align:center; color:var(--muted); padding:10px;">تحليل اتصالات أولياء الأمور...</div>
-                </div>
-            </div>
-
         </div>
-
     </div>
 </div>
 
-<!-- النافذة المنبثقة التفاعلية الموحدة (Modal System) -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h2 id="modalTitle">تفاصيل المؤشر</h2>
             <button class="modal-close" onclick="closeModal()">&times;</button>
         </div>
-        <div class="modal-body" id="modalBody">
-            <!-- محتوى منبثق ديناميكي -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
@@ -242,215 +223,283 @@
         databaseURL: "https://myschoolproject-4ad92-default-rtdb.firebaseio.com",
         projectId: "myschoolproject-4ad92"
     };
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+    firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
     const levelNames = { 'exc': 'متميز ✨', 'cre': 'مبدع 🎨', 'vg': 'جيد جداً 👍', 'fa': 'مقبول 🆗', 'we': 'ضعيف ⚠️' };
-    
     let cachedData = { teachers: [], students: [], activeParents: [], inactiveParents: [], teachersRank: [] };
-    let studentsPhoneMap = {}; 
+    
+    let loggedSchoolId = null;
+    let loggedSchoolName = null;
 
-    window.onload = function() {
-        fetchFullSchoolData();
-    };
+    function cleanString(str) {
+        return str ? str.toString().replace(/[٠-٩]/g, function (d) { return d.charCodeAt(0) - 1632; }).trim() : "";
+    }
 
-    function fetchFullSchoolData() {
-        let globalTeachers = {};
-        let globalStudents = {};
-        let globalEvaluations = {};
+    // ==================== [١. نظام تسجيل الدخول والحماية] ====================
+    function loginToMonitoring() {
+        const uInput = cleanString(document.getElementById('loginUser').value);
+        const pInput = cleanString(document.getElementById('loginPass').value);
 
-        database.ref('assignments').once('value', snap => {
-            globalTeachers = snap.val() || {};
-            document.getElementById('countTeachers').innerText = Object.keys(globalTeachers).length;
-            
-            database.ref('students').once('value', stdSnap => {
-                globalStudents = stdSnap.val() || {};
-                
-                let totalStudentsCount = 0;
-                studentsPhoneMap = {}; 
-                for(let cls in globalStudents) {
-                    for(let sId in globalStudents[cls]) {
-                        studentsPhoneMap[globalStudents[cls][sId].name] = globalStudents[cls][sId].pass || '';
-                    }
-                    totalStudentsCount += Object.keys(globalStudents[cls]).length;
+        if(!uInput || !pInput) {
+            alert("⚠️ يرجى إدخال اسم المستخدم وكلمة المرور للوصول إلى لوحة المراقبة.");
+            return;
+        }
+
+        database.ref('school_admins').once('value').then(snapshot => {
+            const admins = snapshot.val() || {};
+            let authSuccess = false;
+
+            for(let id in admins) {
+                if(admins[id].user === uInput && admins[id].pass.toString() === pInput) {
+                    authSuccess = true;
+                    loggedSchoolId = admins[id].schoolId;
+                    loggedSchoolName = admins[id].schoolName;
+                    break;
                 }
-                document.getElementById('countStudents').innerText = totalStudentsCount;
+            }
 
-                database.ref('evaluations').once('value', evalSnap => {
-                    globalEvaluations = evalSnap.val() || {};
-                    processAndRenderDashboard(globalTeachers, globalStudents, globalEvaluations);
-                });
-            });
+            if(authSuccess) {
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                document.getElementById('refreshBtn').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('navTitle').innerHTML = `<span>📊</span> بوابة المراقبة: ${loggedSchoolName}`;
+                
+                fetchFullSchoolData();
+            } else {
+                alert("❌ فشل تسجيل الدخول: خطأ في اسم المستخدم أو كلمة المرور.");
+            }
+        }).catch(err => {
+            console.error("خطأ في الاتصال بقاعدة البيانات:", err);
+            alert("حدث خطأ أثناء محاولة الاتصال بالخادم.");
         });
     }
 
-    function processAndRenderDashboard(teachers, students, evaluations) {
+    function logoutAdmin() {
+        if(confirm("هل أنت متأكد من رغبتك في تسجيل الخروج من بوابة المراقبة؟")) {
+            loggedSchoolId = null;
+            loggedSchoolName = null;
+            
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('authContainer').style.display = 'flex';
+            document.getElementById('refreshBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('navTitle').innerHTML = `<span>📊</span> بوابة الإشراف والمراقبة الشاملة`;
+            
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+        }
+    }
+
+    // ==================== [٢. جلب ومعالجة البيانات السحابية بسرعة فائقة] ====================
+    function fetchFullSchoolData() {
+        if (!loggedSchoolId) return;
+
+        document.getElementById('teachersStatusTable').innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--primary); font-weight:bold;">⏳ جاري المزامنة السحابية المباشرة...</td></tr>`;
+        document.getElementById('auditLogsTable').innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--primary); font-weight:bold;">⏳ جاري فحص السجلات...</td></tr>`;
+
+        // التعديل الجوهري: نطلب الفلترة المباشرة من الخادم لتقليص حجم البيانات والوقت
+        Promise.all([
+            database.ref('assignments').orderByChild('schoolId').equalTo(loggedSchoolId).once('value'),
+            database.ref('students').orderByChild('schoolId').equalTo(loggedSchoolId).once('value'),
+            database.ref('evaluations').once('value')
+        ]).then(([assignmentsSnap, studentsSnap, evaluationsSnap]) => {
+            
+            let globalTeachers = assignmentsSnap.val() || {};
+            let globalStudents = studentsSnap.val() || {};
+            let globalEvaluations = evaluationsSnap.val() || {};
+
+            // العدادات المباشرة دون الحاجة للمرور بحلقات تكرارية طويلة
+            document.getElementById('countTeachers').innerText = Object.keys(globalTeachers).length;
+            document.getElementById('countStudents').innerText = Object.keys(globalStudents).length;
+
+            processAndRenderDashboard(globalTeachers, globalStudents, globalEvaluations, loggedSchoolId);
+
+        }).catch(error => {
+            console.error("خطأ في الاتصال بالبيانات:", error);
+            alert("حدث خطأ أثناء مزامنة البيانات.");
+        });
+    }
+
+    function processAndRenderDashboard(teachers, students, evaluations, selectedSchoolId) {
         cachedData = { teachers: [], students: [], activeParents: [], inactiveParents: [], teachersRank: [] };
 
         const teachersTable = document.getElementById('teachersStatusTable');
-        teachersTable.innerHTML = "";
+        const parentsListContainer = document.getElementById('parentsAuditorList');
+        const logsTable = document.getElementById('auditLogsTable');
         
         let activeSubjectsWithReports = new Set();
         let teacherReportCount = {};
 
+        // فحص التقييمات التابعة لطلاب المدرسة الحالية فقط
         for (let cls in evaluations) {
             for (let stdKey in evaluations[cls]) {
-                for (let repKey in evaluations[cls][stdKey]) {
-                    let sub = evaluations[cls][stdKey][repKey].subject;
-                    activeSubjectsWithReports.add(sub);
-                    teacherReportCount[sub] = (teacherReportCount[sub] || 0) + 1;
+                const std = students[stdKey];
+                if (std) { 
+                    for (let repKey in evaluations[cls][stdKey]) {
+                        let sub = evaluations[cls][stdKey][repKey].subject;
+                        if(sub) {
+                            activeSubjectsWithReports.add(sub);
+                            teacherReportCount[sub] = (teacherReportCount[sub] || 0) + 1;
+                        }
+                    }
                 }
             }
         }
 
-        // رصد الكادر التعليمي
+        // تحسين رادار المعلمين: بناء النص بالكامل أولاً
+        let teachersHtml = "";
+        let teacherAdded = false;
         for (let tId in teachers) {
             const t = teachers[tId];
-            const hasSentReports = activeSubjectsWithReports.has(t.subject);
-            const statusBadge = hasSentReports 
-                ? `<span class="badge bg-success">✓ قام بالرصد</span>` 
-                : `<span class="badge bg-danger">🚨 متأخر عن الرصد</span>`;
-            
-            const tLastSeen = t.lastLogin ? t.lastLogin : "لم يسجل دخول قريباً";
-            const tPhone = t.phone || '0500000000'; 
+            teacherAdded = true;
+            let subj = t.subject || 'غير محدد';
+            let tName = t.teacherName || t.name || 'غير محدد';
+            let clsName = t.className || 'غير محدد';
 
-            teachersTable.innerHTML += `
-                <tr class="clickable-row" onclick="fillWhatsAppTarget('${tPhone}', 'المعلم أ/ ${t.teacherName}', 'معلم مادة ${t.subject}')">
-                    <td><strong>أ/ ${t.teacherName}</strong></td>
-                    <td><span class="badge bg-info">${t.subject}</span></td>
-                    <td><small style="color:var(--muted)">${t.className}</small></td>
-                    <td><span class="badge bg-purple">${tLastSeen}</span></td>
+            const hasSentReports = activeSubjectsWithReports.has(subj);
+            const statusBadge = hasSentReports 
+                ? `<span class="badge bg-success">✓ قام بالرصد الأسبوعي</span>` 
+                : `<span class="badge bg-danger">🚨 متأخر عن الرصد</span>`;
+
+            teachersHtml += `
+                <tr>
+                    <td><strong>أ/ ${tName}</strong></td>
+                    <td><span class="badge bg-info">${subj}</span></td>
+                    <td><small style="color:var(--muted)">${clsName}</small></td>
                     <td>${statusBadge}</td>
                 </tr>
             `;
-            cachedData.teachers.push({ name: `أ/ ${t.teacherName}`, info: `مادة ${t.subject} (آخر دخول: ${tLastSeen})`, badge: statusBadge, phone: tPhone, type: 'معلم' });
+            cachedData.teachers.push({ name: `أ/ ${tName}`, info: `مادة ${subj} (${clsName})`, badge: statusBadge });
         }
+        teachersTable.innerHTML = teacherAdded ? teachersHtml : `<tr><td colspan="4" style="text-align:center; color:var(--muted)">لا يوجد كادر تعليمي مسجل لهذه المدرسة.</td></tr>`;
 
-        // حساب صدارة المعلمين
-        let topTeacher = "لا يوجد رصد حالي";
+        // حساب ترتيب المعلمين
+        let topTeacher = "لا يوجد رصد";
         let maxReports = 0;
         let teachersRankArray = [];
 
         for (let tId in teachers) {
             let sub = teachers[tId].subject;
+            let tName = teachers[tId].teacherName || teachers[tId].name || 'غير محدد';
+            if(!sub) continue;
             let count = teacherReportCount[sub] || 0;
-            teachersRankArray.push({ name: `أ/ ${teachers[tId].teacherName}`, subject: sub, count: count, phone: teachers[tId].phone || '0500000000' });
+            teachersRankArray.push({ name: `أ/ ${tName}`, subject: sub, count: count });
             if (count > maxReports) {
                 maxReports = count;
-                topTeacher = `أ/ ${teachers[tId].teacherName} (${count} تقرير)`;
+                topTeacher = `أ/ ${tName} (${count} تقرير)`;
             }
         }
         document.getElementById('topTeacherName').innerText = topTeacher;
         cachedData.teachersRank = teachersRankArray.sort((a,b)=> b.count - a.count);
 
-        // تصنيف الطلاب وأولياء الأمور
+        // تحسين رادار أولياء الأمور وحساب التميز/الضعف
         let bestStudents = [];
         let weakStudents = [];
         let parentsSeenCount = 0;
         let parentsUnseenCount = 0;
-        
-        const parentsListContainer = document.getElementById('parentsAuditorList');
-        parentsListContainer.innerHTML = "";
+        let parentsHtml = "";
 
-        for (let cls in students) {
-            for (let sKey in students[cls]) {
-                const std = students[cls][sKey];
-                const sPhone = std.pass || '';
-                
-                cachedData.students.push({ name: std.name, info: `الصف: ${cls} | رقم الجوال: ${sPhone}`, badge: `<span class="badge bg-info">نشط</span>`, phone: sPhone, type: 'طالب' });
-                
-                if (std.lastSeen) {
-                    parentsSeenCount++;
-                    parentsListContainer.innerHTML += `
-                        <div class="student-rank-item" onclick="fillWhatsAppTarget('${sPhone}', 'ولي أمر الطالب ${std.name}', 'متابعة تفاعل دخولك اليومي')">
-                            <div>👨‍👩‍👦 عائلة: <strong>${std.name}</strong></div>
-                            <span class="badge bg-success">متصل: ${std.lastSeen.split(' - ')[0]} 📱</span>
-                        </div>`;
-                    cachedData.activeParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-success">آخر دخول: ${std.lastSeen}</span>`, phone: sPhone, type: 'ولي أمر' });
-                } else {
-                    parentsUnseenCount++;
-                    parentsListContainer.innerHTML += `
-                        <div class="student-rank-item" style="background:#fff1f2" onclick="fillWhatsAppTarget('${sPhone}', 'ولي أمر الطالب ${std.name}', 'دعوة لتسجيل الدخول ومتابعة الأبناء')">
-                            <div>👨‍👩‍👦 عائلة: <strong>${std.name}</strong></div>
-                            <span class="badge bg-danger">⚠️ لم يدخل مطلقاً</span>
-                        </div>`;
-                    cachedData.inactiveParents.push({ name: `ولي أمر: ${std.name}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-danger">غير متصل نهائياً</span>`, phone: sPhone, type: 'ولي أمر' });
-                }
+        for (let sKey in students) {
+            const std = students[sKey];
+            let sName = std.studentName || std.name || "طالب مجهول";
+            let cls = std.className || "غير محدد";
 
-                let scoreExc = 0, scoreWeak = 0, prizesCount = 0, warningsCount = 0;
-                if (evaluations[cls] && evaluations[cls][sKey]) {
-                    const stdEvals = evaluations[cls][sKey];
-                    for (let evKey in stdEvals) {
-                        const ev = stdEvals[evKey];
-                        if (ev.level === 'exc' || ev.level === 'cre') scoreExc++;
-                        if (ev.level === 'we') scoreWeak++;
-                        if (ev.award) prizesCount++;
-                        if (ev.warning) warningsCount++;
-                    }
-                }
-                bestStudents.push({ name: std.name, class: cls, score: scoreExc, prizes: prizesCount, phone: sPhone });
-                weakStudents.push({ name: std.name, class: cls, score: scoreWeak, warns: warningsCount, phone: sPhone });
+            cachedData.students.push({ name: sName, info: `الصف: ${cls}`, badge: `<span class="badge bg-info">مسجل</span>` });
+            
+            if (std.lastSeen) {
+                parentsSeenCount++;
+                parentsHtml += `
+                    <div class="student-rank-item" onclick="showModal('activeParents')">
+                        <div>👨‍👩‍👦 عائلة: <strong>${sName}</strong></div>
+                        <span class="badge bg-success">اطلع: ${std.lastSeen.split(' - ')[0]}</span>
+                    </div>`;
+                cachedData.activeParents.push({ name: `ولي أمر: ${sName}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-success">آخر اطلاع: ${std.lastSeen}</span>` });
+            } else {
+                parentsUnseenCount++;
+                parentsHtml += `
+                    <div class="student-rank-item" style="background:#fff1f2" onclick="showModal('inactiveParents')">
+                        <div>👨‍👩‍👦 عائلة: <strong>${sName}</strong></div>
+                        <span class="badge bg-danger">⚠️ لم يطّلع مطلقاً</span>
+                    </div>`;
+                cachedData.inactiveParents.push({ name: `ولي أمر: ${sName}`, info: `الصف: ${cls}`, badge: `<span class="badge bg-danger">لم يدخل النظام نهائياً</span>` });
             }
+
+            let scoreExc = 0, scoreWeak = 0, prizesCount = 0, warningsCount = 0;
+            if (evaluations[cls] && evaluations[cls][sKey]) {
+                const stdEvals = evaluations[cls][sKey];
+                for (let evKey in stdEvals) {
+                    const ev = stdEvals[evKey];
+                    if (ev.level === 'exc' || ev.level === 'cre') scoreExc++;
+                    if (ev.level === 'we') scoreWeak++;
+                    if (ev.award) prizesCount++;
+                    if (ev.warning) warningsCount++;
+                }
+            }
+            bestStudents.push({ name: sName, class: cls, score: scoreExc, prizes: prizesCount, warns: warningsCount });
+            weakStudents.push({ name: sName, class: cls, score: scoreWeak, warns: warningsCount });
         }
 
         document.getElementById('countSeenParents').innerText = parentsSeenCount;
         document.getElementById('countUnseenParents').innerText = parentsUnseenCount;
         document.getElementById('countUnseenParents').parentElement.style.background = parentsUnseenCount > 0 ? "#fff1f2" : "#ffffff";
 
-        // لوحة الشرف
+        parentsListContainer.innerHTML = (parentsSeenCount === 0 && parentsUnseenCount === 0) 
+            ? `<div style="text-align:center; color:var(--muted); padding:10px;">لا يوجد سجل دخول لأولياء الأمور.</div>` 
+            : parentsHtml;
+
+        // بناء لوحة الشرف
         bestStudents.sort((a, b) => (b.score + b.prizes) - (a.score + a.prizes));
         const bestContainer = document.getElementById('bestStudentsList');
-        bestContainer.innerHTML = "";
+        let bestHtml = "";
+        let bestAdded = false;
         bestStudents.slice(0, 10).forEach((s, index) => {
             if(s.score > 0 || s.prizes > 0) {
-                bestContainer.innerHTML += `
-                    <div class="student-rank-item" onclick="fillWhatsAppTarget('${s.phone}', 'الطالب المتميز ${s.name}', 'تهنئة بالتميز الأكاديمي والحصول على نقاط شرف')">
+                bestAdded = true;
+                bestHtml += `
+                    <div class="student-rank-item" onclick="showStudentSummary('${s.name}', ${s.score}, ${s.prizes}, 'تميز')">
                         <div>🏅 #${index+1} <strong>${s.name}</strong> <small style="color:var(--muted)">(${s.class})</small></div>
-                        <span class="badge bg-success">تميز: ${s.score} | جوائز: ${s.prizes}</span>
+                        <span class="badge bg-success">تميز: ${s.score} | جوائز: ${s.prizes} 🏆</span>
                     </div>`;
             }
         });
-        if(bestContainer.innerHTML === "") bestContainer.innerHTML = "<div style='color:var(--muted); text-align:center; padding:10px;'>لا توجد نقاط تميز مسجلة حالياً</div>";
+        bestContainer.innerHTML = bestAdded ? bestHtml : "<div style='color:var(--muted); text-align:center; padding:10px;'>لا توجد نقاط تميز مسجلة لهذه المدرسة حالياً</div>";
 
-        // المتابعة الأكاديمية
+        // بناء قائمة المتابعة الأكاديمية
         weakStudents.sort((a, b) => (b.score + b.warns) - (a.score + a.warns));
         const weakContainer = document.getElementById('weakStudentsList');
-        weakContainer.innerHTML = "";
+        let weakHtml = "";
+        let weakAdded = false;
         weakStudents.slice(0, 10).forEach((s, index) => {
             if(s.score > 0 || s.warns > 0) {
-                weakContainer.innerHTML += `
-                    <div class="student-rank-item" onclick="fillWhatsAppTarget('${s.phone}', 'ولي أمر الطالب ${s.name}', 'إشعار بضرورة مراجعة المدرسة لوجود ملاحظات أكاديمية')">
+                weakAdded = true;
+                weakHtml += `
+                    <div class="student-rank-item" onclick="showStudentSummary('${s.name}', ${s.score}, ${s.warns}, 'ضعف')">
                         <div>📌 <strong>${s.name}</strong> <small style="color:var(--muted)">(${s.class})</small></div>
                         <span class="badge bg-danger">ضعف: ${s.score} | إنذارات: ${s.warns} ⚠️</span>
                     </div>`;
             }
         });
-        if(weakContainer.innerHTML === "") weakContainer.innerHTML = "<div style='color:var(--muted); text-align:center; padding:10px;'>السجل الأكاديمي نظيف تماماً للطلاب</div>";
+        weakContainer.innerHTML = weakAdded ? weakHtml : "<div style='color:var(--muted); text-align:center; padding:10px;'>السجل نظيف تماماً ولا يوجد طلاب ضعاف.</div>";
 
-        // سجل الرصد العام
-        const logsTable = document.getElementById('auditLogsTable');
-        logsTable.innerHTML = "";
+        // بناء السجل العام للتقارير الصادرة
         let allFlattenedLogs = [];
-
         for (let cls in evaluations) {
             for (let stdKey in evaluations[cls]) {
-                let studentName = "طالب مجهول";
-                if (students[cls] && students[cls][stdKey]) studentName = students[cls][stdKey].name;
-                const associatedPhone = studentsPhoneMap[studentName] || '';
+                const std = students[stdKey];
+                if (!std) continue;
+                let studentName = std.studentName || std.name || "طالب مجهول";
                 
                 for (let repKey in evaluations[cls][stdKey]) {
                     const log = evaluations[cls][stdKey][repKey];
                     allFlattenedLogs.push({
                         dateTime: log.date + " " + (log.time || ""),
                         student: studentName + " (" + cls + ")",
-                        studentRawName: studentName,
                         subject: log.subject,
                         level: levelNames[log.level] || 'تم التقويم',
                         homework: log.homework || 'لا يوجد',
-                        phone: associatedPhone,
-                        path: `evaluations/${cls}/${stdKey}/${repKey}`
+                        message: log.message || 'بدون تفاصيل إضافية'
                     });
                 }
             }
@@ -459,141 +508,113 @@
         allFlattenedLogs.sort((a, b) => b.dateTime.localeCompare(a.dateTime));
 
         if(allFlattenedLogs.length === 0) {
-            logsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted)">لم يتم رصد تقارير بالمنظومة حتى الآن.</td></tr>`;
+            logsTable.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted)">لم يتم إرسال أي تقارير يومية في هذه المدرسة حتى الآن لتوثيقها.</td></tr>`;
         } else {
+            let logsHtml = "";
             allFlattenedLogs.forEach(l => {
-                logsTable.innerHTML += `
-                    <tr class="clickable-row" onclick="event.stopPropagation(); fillWhatsAppTarget('${l.phone}', 'ولي أمر الطالب ${l.studentRawName}', 'بخصوص تقرير مادة ${l.subject}: التقييم (${l.level}) والواجب (${l.homework})')">
+                logsHtml += `
+                    <tr>
                         <td><small style="color:var(--muted)">${l.dateTime}</small></td>
                         <td><strong>${l.student}</strong></td>
                         <td><span class="badge bg-info">${l.subject}</span></td>
                         <td><span class="badge bg-warning">${l.level}</span></td>
-                        <td><code>${l.homework}</code></td>
-                        <td onclick="event.stopPropagation();">
-                            <button class="btn-action btn-red" style="padding:3px 8px; font-size:11px;" onclick="deleteSingleLog('${l.path}')">حذف 🗑️</button>
-                        </td>
+                        <td><code style="color:var(--primary)">${l.homework}</code></td>
+                        <td><small>${l.message}</small></td>
                     </tr>
                 `;
             });
+            logsTable.innerHTML = logsHtml;
         }
     }
 
-    // إعداد بيانات الإرسال عند النقر
-    function fillWhatsAppTarget(phone, nameHeadline, contextReason) {
-        if(!phone || phone === 'undefined' || phone === '0500000000') {
-            alert(`⚠️ تنبيه: لا يوجد رقم جوال مسجل للشخص المحدد (${nameHeadline}) في النظام حالياً!`);
-            return;
-        }
-        
-        document.getElementById('waPhone').value = phone.trim();
-        document.getElementById('waMessage').value = `السلام عليكم ورحمة الله وبركاته، إلى ${nameHeadline} من إدارة مدرسة أُسيد بن حضير: تفيدكم الإدارة بـ [${contextReason}]، يرجى المتابعة والاهتمام.`;
-        document.getElementById('waStatus').innerHTML = `🎯 جاهز لإرسال إشعار إلى: <strong style="color:var(--primary)">${nameHeadline}</strong>`;
-        
-        const panel = document.getElementById('whatsappPanel');
-        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        panel.classList.add('whatsapp-highlight');
-        setTimeout(() => panel.classList.remove('whatsapp-highlight'), 1500);
-    }
-
-    function sendWhatsAppNotification() {
-        const phone = document.getElementById('waPhone').value.trim();
-        const msg = document.getElementById('waMessage').value.trim();
-        if(!phone || !msg) { alert("يرجى ملء حقول الهاتف ونص الرسالة الإدارية أولاً!"); return; }
-        
-        let formattedPhone = phone;
-        if(formattedPhone.startsWith('05')) { formattedPhone = '966' + formattedPhone.substring(1); }
-        
-        const url = `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${encodeURIComponent(msg)}`;
-        window.open(url, '_blank');
-        
-        document.getElementById('waStatus').innerHTML = `<span style="color:var(--success)">تم فتح نافذة إرسال الرابط بنجاح ✅</span>`;
-    }
-
-    function deleteSingleLog(firebasePath) {
-        if(confirm("هل أنت متأكد من حذف هذا التقرير الرصدي بشكل نهائي؟")) {
-            database.ref(firebasePath).remove().then(() => {
-                alert("تم حذف التقرير بنجاح 🗑️");
-                fetchFullSchoolData();
-            });
-        }
-    }
-
-    // الدالة الذكية المحدثة: تصفير السجلات والتقييمات الحركية فقط مع حماية الحسابات والأسماء
-    function triggerResetSystem() {
-        const pass = prompt("تنبيه الحذف الذكي: يرجى كتابة رمز التأكيد (حذف كل شيء) للمضي قدماً في تصفير سجلات الرصد الدورية فقط:");
-        if(pass === "حذف كل شيء") {
-            if(confirm("مؤكد؟ هذا الإجراء سيحذف كافة التقييمات، الواجبات، الملاحظات الأكاديمية وسجلات الغياب سحابياً لبدء دورة رصد جديدة، لكنه سيحتفظ بأسماء وحسابات المعلمين والطلاب وأولياء الأمور دون أي تغيير.")) {
-                // تصفير فرع التقييمات فقط والحفاظ على الطلاب والمعلمين
-                database.ref('evaluations').remove().then(() => {
-                    alert("تم تصفير وتفريغ سجلات التقارير بنجاح، مع الإبقاء الفوري على بيانات المعلمين وأولياء الأمور الأساسية والطلاب 📋✅");
-                    fetchFullSchoolData();
-                }).catch(err => {
-                    alert(`فشلت العملية: ${err.message}`);
-                });
-            }
-        } else if(pass !== null) {
-            alert("رمز التأكيد غير صحيح! تم إلغاء عملية التصفير لحماية المنظومة 🔐");
-        }
-    }
-
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                alert(`خطأ: ${err.message}`);
-            });
-        } else {
-            document.exitFullscreen();
-        }
-    }
-
+    // ==================== [٣. النوافذ المنبثقة (Modals) السريعة] ====================
     function showModal(type) {
         const modal = document.getElementById('infoModal');
         const title = document.getElementById('modalTitle');
         const body = document.getElementById('modalBody');
-        body.innerHTML = ""; modal.style.display = "flex";
+        let modalHtml = "";
+        body.innerHTML = "";
+        modal.style.display = "flex";
 
         if (type === 'teachers') {
-            title.innerText = "📋 الكادر التعليمي (اضغط لتجهيز رسالة)";
+            title.innerText = "📋 الكادر التعليمي الفعال";
             cachedData.teachers.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'تنسيق العمل الإداري والأكاديمي للدرجات')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                modalHtml += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
+            body.innerHTML = modalHtml;
         } 
         else if (type === 'students') {
-            title.innerText = "🎒 قائمة الطلاب المسجلين (اضغط لتجهيز رسالة)";
+            title.innerText = "🎒 قائمة الطلاب المقيدين";
             cachedData.students.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', 'ولي أمر الطالب ${item.name}', 'متابعة سجل الطالب عبر بوابة تعلمّنا')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                modalHtml += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
             });
+            body.innerHTML = modalHtml;
         } 
         else if (type === 'activeParents') {
-            title.innerText = "🟢 أولياء الأمور النشطين (اضغط لتجهيز رسالة)";
-            if(cachedData.activeParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا توجد عمليات دخول مسجلة اليوم</p>";
-            cachedData.activeParents.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'شكر وتقدير لحرصكم على متابعة المنصة اليومية')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
-            });
+            title.innerText = "🟢 أولياء الأمور المتفاعلين";
+            if(cachedData.activeParents.length === 0) {
+                body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا يوجد أي سجلات دخول اليوم</p>";
+            } else {
+                cachedData.activeParents.forEach(item => {
+                    modalHtml += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                });
+                body.innerHTML = modalHtml;
+            }
         } 
         else if (type === 'inactiveParents') {
-            title.innerText = "🔴 أولياء الأمور المتغيبين (اضغط لتجهيز رسالة)";
-            if(cachedData.inactiveParents.length === 0) body.innerHTML = "<p style='text-align:center;color:var(--success)'>ممتاز! جميع أولياء الأمور متصلون بالمنظومة</p>";
-            cachedData.inactiveParents.forEach(item => {
-                body.innerHTML += `<div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'إشعار بضرورة الدخول وتفعيل الحساب لمتابعة الغيابات والواجبات')"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
-            });
+            title.innerText = "🔴 أولياء الأمور المتغيبين عن المتابعة";
+            if(cachedData.inactiveParents.length === 0) {
+                body.innerHTML = "<p style='text-align:center;color:var(--success)'>ممتاز! جميع أولياء الأمور مطلعون على المنظومة</p>";
+            } else {
+                cachedData.inactiveParents.forEach(item => {
+                    modalHtml += `<div class="modal-list-item"><div><strong>${item.name}</strong><br><small style="color:var(--muted)">${item.info}</small></div>${item.badge}</div>`;
+                });
+                body.innerHTML = modalHtml;
+            }
         }
         else if (type === 'topTeacher') {
-            title.innerText = "📈 ترتيب تفاعل المعلمين ورصدهم";
-            cachedData.teachersRank.forEach((item, index) => {
-                body.innerHTML += `
-                    <div class="modal-list-item" onclick="closeModal(); fillWhatsAppTarget('${item.phone}', '${item.name}', 'شكر وتقدير على تميزكم في رصد التقارير الدورية باللوحة')">
-                        <div><strong>#${index+1} ${item.name}</strong><br><small style="color:var(--muted)">مادة: ${item.subject}</small></div>
-                        <span class="badge bg-success">${item.count} تقرير صادر</span>
-                    </div>`;
-            });
+            title.innerText = "📈 ترتيب تفاعل المعلمين";
+            if(cachedData.teachersRank.length === 0) {
+                body.innerHTML = "<p style='text-align:center;color:var(--muted)'>لا يوجد أي رصد متاح حالياً</p>";
+            } else {
+                cachedData.teachersRank.forEach((item, index) => {
+                    modalHtml += `
+                        <div class="modal-list-item">
+                            <div><strong>#${index+1} ${item.name}</strong><br><small style="color:var(--muted)">مادة: ${item.subject}</small></div>
+                            <span class="badge bg-warning">${item.count} تقرير مرصود</span>
+                        </div>`;
+                });
+                body.innerHTML = modalHtml;
+            }
         }
     }
 
-    function closeModal() { document.getElementById('infoModal').style.display = "none"; }
+    // دالة عرض ملخص إحصائيات الطالب (تميز / ضعف)
+    function showStudentSummary(name, score, counter, type) {
+        const modal = document.getElementById('infoModal');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+        modal.style.display = "flex";
+        title.innerText = `📊 ملخص حالة الطالب: ${name}`;
+        body.innerHTML = `
+            <div style="text-align:center; padding:20px; font-weight: 700;">
+                <h3 style="color: var(--primary)">الطالب: ${name}</h3>
+                <p style="font-size:16px;">مؤشر حالة (${type}): <span style="font-size:20px; color: var(--danger)">${score}</span></p>
+                <p style="color: var(--muted)">إجمالي السجلات المرتبطة بهذا المؤشر: ${counter}</p>
+            </div>`;
+    }
+
+    // دالة إغلاق النافذة المنبثقة
+    function closeModal() {
+        document.getElementById('infoModal').style.display = "none";
+    }
+
+    // إغلاق النافذة عند النقر خارجها
     window.onclick = function(event) {
         const modal = document.getElementById('infoModal');
-        if (event.target == modal) modal.style.display = "none";
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
 </script>
 </body>
