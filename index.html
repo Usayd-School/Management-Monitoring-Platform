@@ -174,6 +174,7 @@
 
 <div id="notify">تم الإجراء بنجاح ✓</div>
 
+<!-- بطاقة الوصول -->
 <div id="cardModal" class="modal" onclick="closeCardModal()">
     <div class="id-card" onclick="event.stopPropagation()">
         <div class="id-card-header">🎓 سجل الواجبات الإلكتروني</div>
@@ -201,9 +202,10 @@
     </div>
 </div>
 
+<!-- سجل تقييم الطالب -->
 <div id="evalHistoryModal" class="modal" onclick="closeEvalHistoryModal()">
-    <div class="card" id="printEvalArea" style="max-width: 750px; width: 90%; background: #ffffff; border-radius: 20px; padding: 25px; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">
-        <h2>📜 سجل النقاط وبيانات الواجب</h2>
+    <div class="card" id="printEvalArea" style="max-width: 800px; width: 92%; background: #ffffff; border-radius: 20px; padding: 25px; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">
+        <h2>📜 سجل النقاط وبيانات الواجب للطالب</h2>
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
             <h4 id="evalHistoryStudentTitle" style="color:var(--primary); margin: 0; font-weight:800;">-</h4>
             <div id="evalHistoryActions" class="hide-on-print" style="display: flex; gap: 10px;">
@@ -216,16 +218,55 @@
                         <th>اسم المعلم والتخصص 👨‍🏫</th>
                         <th>تفاصيل الواجب والتقييم 📝</th>
                         <th>يوم ووقت التفاعل 🕒</th>
+                        <th class="hide-on-print">إجراء</th>
                     </tr>
                 </thead>
                 <tbody id="evalHistoryTableBody">
-                    <tr><td colspan="3" style="text-align:center;">جاري تحميل البيانات...</td></tr>
+                    <tr><td colspan="4" style="text-align:center;">جاري تحميل البيانات...</td></tr>
                 </tbody>
             </table>
         </div>
         <div class="hide-on-print" style="display: flex; gap: 10px; margin-top:15px;">
             <button class="btn-submit" style="background:#0f172a;" onclick="printEvalHistory()">🖨️ طباعة التقرير</button>
             <button class="btn-submit" style="background:#64748b;" onclick="closeEvalHistoryModal()">إغلاق النافذة</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة السجل الشامل للمعلم (الجديدة) -->
+<div id="teacherLogModal" class="modal" onclick="closeTeacherLogModal()">
+    <div class="card" style="max-width: 900px; width: 95%; background: #ffffff; border-radius: 20px; padding: 25px; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">
+        <h2>👨‍🏫 سجل المعلم الشامل للإرساليات والتقييمات</h2>
+        <h4 id="teacherLogTitle" style="color:var(--primary); margin-top:5px; margin-bottom:15px;">-</h4>
+        
+        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px dashed #cbd5e1; margin-bottom: 15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <p style="margin:0; font-size:13px; color:var(--dark);">حدد الملاحظات غير المكتملة أو الخاطئة وانقر على زر الحذف ليتم مسحها فوراً من سجل جميع الطلاب.</p>
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <label style="display:flex; align-items:center; cursor:pointer; font-weight:bold; color:var(--primary);">
+                        <input type="checkbox" id="selectAllTLogs" onchange="toggleAllTLogs(this)" style="margin-left:5px; width:18px; height:18px;"> تحديد الكل
+                    </label>
+                    <button class="btn-submit" style="background:#ef4444; width:auto; margin:0; padding:8px 15px; font-size:13px;" onclick="deleteSelectedTeacherLogs()">🗑️ حذف السجلات المحددة</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="accounts-table">
+                <thead>
+                    <tr>
+                        <th>تحديد</th>
+                        <th>اسم الطالب (الفصل)</th>
+                        <th>تفاصيل التقييم / الواجب</th>
+                        <th>التاريخ</th>
+                        <th>إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="teacherLogTableBody"></tbody>
+            </table>
+        </div>
+        <div style="margin-top:15px;">
+            <button class="btn-submit" style="background:#64748b;" onclick="closeTeacherLogModal()">إغلاق النافذة</button>
         </div>
     </div>
 </div>
@@ -401,6 +442,7 @@
                                 <th>اسم المستخدم والمرور</th>
                                 <th>المادة / التخصص</th>
                                 <th>الفصول المسندة (إلغاء ✖)</th>
+                                <th>سجل المرسلات 📤</th>
                                 <th>حالة الدخول</th>
                                 <th>إجراء</th>
                             </tr>
@@ -442,6 +484,7 @@ const database = firebase.database();
 let activeSchoolId = null;
 let activeSchoolName = null;
 let selectedClassFilter = null;
+let currentTeacherLogName = ''; // جديد
 
 function cleanString(str) {
     if(!str) return "";
@@ -567,12 +610,157 @@ function openCardModal(name, role, user, phone) {
 }
 function closeCardModal() { document.getElementById('cardModal').style.display = 'none'; }
 
+// دوال سجل المعلم الشامل (الجديدة)
+function openTeacherLogModal(teacherName) {
+    currentTeacherLogName = teacherName;
+    document.getElementById('teacherLogTitle').innerText = `باسم المعلم: ${teacherName}`;
+    document.getElementById('teacherLogTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;">جاري تحميل السجل...</td></tr>';
+    document.getElementById('teacherLogModal').style.display = 'flex';
+    document.getElementById('selectAllTLogs').checked = false;
+
+    database.ref('students').once('value').then(stuSnap => {
+        const studentsData = stuSnap.val() || {};
+        
+        database.ref('evaluations').once('value').then(snap => {
+            const evalsData = snap.val() || {};
+            const tbody = document.getElementById('teacherLogTableBody');
+            tbody.innerHTML = '';
+            let count = 0;
+            let records = [];
+
+            for (let cName in evalsData) {
+                for (let sKey in evalsData[cName]) {
+                    let sName = (studentsData[sKey] && studentsData[sKey].studentName) ? studentsData[sKey].studentName : 'طالب محذوف من النظام';
+                    for (let eKey in evalsData[cName][sKey]) {
+                        let ev = evalsData[cName][sKey][eKey];
+                        let tName = ev.teacherName || ev.teacher || ev.author || '';
+                        
+                        if (tName === teacherName) {
+                            records.push({ cName, sKey, sName, eKey, ev });
+                        }
+                    }
+                }
+            }
+
+            records.sort((a, b) => {
+                let tA = extractTimeFromKey(a.eKey) || 0;
+                let tB = extractTimeFromKey(b.eKey) || 0;
+                return tB - tA; // ترتيب تنازلي (الأحدث أولاً)
+            });
+
+            records.forEach(rec => {
+                count++;
+                let dateStr = formatBeautifulDate(rec.ev.timestamp || rec.ev.date || rec.ev.createdAt || extractTimeFromKey(rec.eKey));
+                
+                let plainBadges = [];
+                if (rec.ev.level === 'exc') plainBadges.push('تميز ✨');
+                if (rec.ev.level === 'cre' || rec.ev.level === 'creative' || rec.ev.award === 'creative') plainBadges.push('مبدع 💡');
+                if (rec.ev.award === 'gold') plainBadges.push('وسام ذهبي 🥇');
+                if (rec.ev.award === 'silver') plainBadges.push('وسام فضي 🥈');
+                if (rec.ev.award === 'bronze') plainBadges.push('وسام برونزي 🥉');
+                if (rec.ev.warning) plainBadges.push('إنذار ⚠️');
+                if (rec.ev.level === 'we' || rec.ev.level === 'weak' || rec.ev.award === 'weak' || rec.ev.weak) plainBadges.push('ضعيف 📉');
+                if (rec.ev.level === 'vg') plainBadges.push('جيد جداً 🌟');
+                if (rec.ev.level === 'fa') plainBadges.push('مقبول 👍');
+                
+                let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
+                
+                let homeworkText = rec.ev.assignmentName || rec.ev.assignment || rec.ev.homework || rec.ev.homeworkTitle || rec.ev.homeworkDetails || rec.ev.task || rec.ev.title || "";
+                let noteText = rec.ev.note || rec.ev.notes || rec.ev.details || rec.ev.comment || rec.ev.comments || rec.ev.msg || rec.ev.message || rec.ev.reason || rec.ev.description || rec.ev.text || rec.ev.evalNote || rec.ev.content || "";
+                
+                let combinedDetails = "";
+                if (typeof rec.ev === 'string') { 
+                    combinedDetails = rec.ev; 
+                } else if (homeworkText && noteText) { 
+                    combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
+                } else if (homeworkText) { 
+                    combinedDetails = `الواجب: ${homeworkText}`; 
+                } else if (noteText) { 
+                    combinedDetails = `الملاحظة: ${noteText}`; 
+                } else { 
+                    // عرض الملاحظات الفارغة بوضوح ليسهل حذفها
+                    combinedDetails = '<span style="color:#ef4444; font-weight:bold;">رصد متابعة: (بدون محتوى نصي / نقاط فقط)</span>'; 
+                }
+
+                tbody.innerHTML += `
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="text-align:center;"><input type="checkbox" class="t-log-cb" style="width:16px; height:16px; cursor:pointer;" data-c="${rec.cName}" data-s="${rec.sKey}" data-e="${rec.eKey}"></td>
+                        <td><b>${rec.sName}</b> <br><small style="color:var(--muted)">(${rec.cName})</small></td>
+                        <td>
+                            <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:4px;">${evalBadgeText}</div>
+                            <div style="font-size:13px; color:var(--dark);">${combinedDetails}</div>
+                        </td>
+                        <td>${dateStr}</td>
+                        <td>
+                            <button onclick="deleteSingleTeacherLog('${rec.cName}', '${rec.sKey}', '${rec.eKey}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold;">حذف نهائي</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">لا توجد سجلات أو إرساليات مسجلة لهذا المعلم.</td></tr>';
+            }
+        });
+    });
+}
+
+function closeTeacherLogModal() {
+    document.getElementById('teacherLogModal').style.display = 'none';
+}
+
+function toggleAllTLogs(source) {
+    let checkboxes = document.querySelectorAll('.t-log-cb');
+    for(let i=0, n=checkboxes.length; i<n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function deleteSingleTeacherLog(cName, sKey, eKey) {
+    if(!confirm("⚠️ هل أنت متأكد من حذف هذا السجل نهائياً للطلاب المحددين؟")) return;
+    database.ref('evaluations/' + cName + '/' + sKey + '/' + eKey).remove().then(() => {
+        showNotification("تم حذف السجل بنجاح ✓");
+        openTeacherLogModal(currentTeacherLogName); // تحديث القائمة
+        if(selectedClassFilter === cName) buildStudentsGrid(cName);
+        loadAdminStatsAndRankings();
+    }).catch(err => {
+        alert("حدث خطأ أثناء الحذف: " + err.message);
+    });
+}
+
+function deleteSelectedTeacherLogs() {
+    const checkboxes = document.querySelectorAll('.t-log-cb:checked');
+    if(checkboxes.length === 0) {
+        alert("الرجاء تحديد سجل واحد على الأقل للحذف.");
+        return;
+    }
+    if(!confirm(`⚠️ هل أنت متأكد من حذف (${checkboxes.length}) سجل محدد نهائياً؟ سيتم سحبها من تقارير الطلاب.`)) return;
+
+    let deletePromises = [];
+    checkboxes.forEach(cb => {
+        let c = cb.getAttribute('data-c');
+        let s = cb.getAttribute('data-s');
+        let e = cb.getAttribute('data-e');
+        deletePromises.push(database.ref('evaluations/' + c + '/' + s + '/' + e).remove());
+    });
+
+    Promise.all(deletePromises).then(() => {
+        showNotification("تم الحذف المتعدد بنجاح ✓");
+        openTeacherLogModal(currentTeacherLogName); // تحديث القائمة
+        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
+        loadAdminStatsAndRankings();
+    }).catch(err => {
+        alert("حدث خطأ أثناء الحذف المجمع: " + err.message);
+    });
+}
+
+
 function openEvalHistoryModal(studentKey, studentName, className, studentPhone) {
     document.getElementById('evalHistoryStudentTitle').innerText = `الطالب: ${studentName} - فصل (${className})`;
     const actionsDiv = document.getElementById('evalHistoryActions');
     actionsDiv.innerHTML = '';
     const tbody = document.getElementById('evalHistoryTableBody');
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">جاري تحميل سجل النقاط...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">جاري تحميل سجل النقاط...</td></tr>';
     document.getElementById('evalHistoryModal').style.display = 'flex';
 
     database.ref('evaluations/' + className + '/' + studentKey).once('value').then(snapshot => {
@@ -638,6 +826,10 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
                 plainBadges.push('مقبول 👍');
             }
             
+            if (plainBadges.length === 0) {
+                detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">متابعة بدون تقييم 📌</span> ';
+            }
+
             let homeworkText = ev.assignmentName || ev.assignment || ev.homework || ev.homeworkTitle || ev.homeworkDetails || ev.task || ev.title || "";
             let noteText = ev.note || ev.notes || ev.details || ev.comment || ev.comments || ev.msg || ev.message || ev.reason || ev.description || ev.text || ev.evalNote || ev.content || "";
             
@@ -651,7 +843,7 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
             } else if (noteText) {
                 combinedDetails = `الملاحظة: ${noteText}`;
             } else {
-                combinedDetails = 'تقييم عام (لم يتم كتابة تفاصيل)';
+                combinedDetails = 'رصد متابعة (بدون محتوى / نقاط فقط)';
             }
 
             detailsHtml += `
@@ -666,15 +858,18 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
                     <td><b style="font-size: 14px;">👨‍🏫 ${displayTeacher}</b></td>
                     <td>${detailsHtml}</td>
                     <td>${dateStr}</td>
+                    <td class="hide-on-print">
+                        <button onclick="deleteSingleEval('${className}', '${studentKey}', '${eKey}', '${studentName.replace(/'/g, "\\'")}', '${studentPhone || ''}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف نهائي 🗑️</button>
+                    </td>
                 </tr>
             `;
 
-            let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'لا يوجد تقييم';
+            let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
             reportText += `👨‍🏫 المعلم: ${displayTeacher}\n📅 اليوم والتاريخ: ${simpleDateStr}\n🎖️ التقييم: ${evalBadgeText}\n📝 التفاصيل: ${combinedDetails}\n\n`;
         }
 
         if (count === 0) {
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الطالب حتى الآن.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الطالب حتى الآن.</td></tr>';
             reportText += "لا توجد تقييمات مسجلة حتى الآن.\n";
         }
 
@@ -683,6 +878,19 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
             let encodedMsg = encodeURIComponent(reportText);
             actionsDiv.innerHTML = `<a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)">💬 إرسال التقرير كامل واتساب</a>`;
         }
+    });
+}
+
+function deleteSingleEval(className, studentKey, eKey, studentName, studentPhone) {
+    if(!confirm("⚠️ هل أنت متأكد من حذف هذه الرسالة/التقييم نهائياً؟")) return;
+    
+    database.ref('evaluations/' + className + '/' + studentKey + '/' + eKey).remove().then(() => {
+        showNotification("تم حذف الرسالة نهائياً ✓");
+        openEvalHistoryModal(studentKey, studentName, className, studentPhone);
+        if(selectedClassFilter === className) buildStudentsGrid(className);
+        loadAdminStatsAndRankings();
+    }).catch(err => {
+        alert("حدث خطأ أثناء الحذف: " + err.message);
     });
 }
 
@@ -837,7 +1045,6 @@ function loadAdminStatsAndRankings() {
                         }
                     }
 
-                    // --- 1. بناء لوحة جميع المعلمين ---
                     let topTeachers = Object.keys(teacherActivity).map(t => ({ 
                         name: t, 
                         count: teacherActivity[t].count,
@@ -929,7 +1136,6 @@ function loadAdminStatsAndRankings() {
                     let teachersContainer = document.getElementById('active-teachers-container');
                     if(teachersContainer) teachersContainer.innerHTML = activeTeachersHTML;
 
-                    // --- 2. الإحصائيات الشاملة ---
                     document.getElementById('admin-tot-exc').innerText = totals.exc;
                     document.getElementById('admin-tot-creative').innerText = totals.creative;
                     document.getElementById('admin-tot-gold').innerText = totals.gold;
@@ -938,7 +1144,6 @@ function loadAdminStatsAndRankings() {
                     document.getElementById('admin-tot-weak').innerText = totals.weak;
                     document.getElementById('admin-tot-warn').innerText = totals.warn;
 
-                    // --- 3. بناء لوحة الشرف ---
                     let rankingHTML = "";
                     for (let cName in classRankings) {
                         classRankings[cName].sort((a, b) => b.points - a.points);
@@ -1227,6 +1432,7 @@ function buildTeachersGrid() {
                         <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${item.teacherUser}" onchange="updateField('assignments', '${key}', 'teacherUser', this.value); updateField('assignments', '${key}', 'teacherPass', this.value)"></td>
                         <td>${subjectBadge}</td>
                         <td><div style="display:flex; flex-wrap:wrap; gap:4px;">${visualBadges}</div></td>
+                        <td><button onclick="openTeacherLogModal('${item.teacherName.replace(/'/g, "\\'")}')" style="background:var(--secondary); color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700; width:100%;">سجل المعلم 🔍</button></td>
                         <td>${loginStatusDisplay}</td>
                         <td><button onclick="removeAccount('assignments', '${key}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف بالكامل</button></td>
                     </tr>`;
@@ -1333,7 +1539,7 @@ function buildStudentsGrid(clsName) {
                             </td>
 
                             <td>
-                                <button onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">🔍 سجل المعلم والواتساب</button>
+                                <button onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; width:100%;">🔍 تقارير الطالب</button>
                             </td>
 
                             <td>${loginStatusDisplay}</td>
@@ -1440,7 +1646,7 @@ function importStudentsExcel(event) {
 }
 
 function logoutSchoolAdmin() {
-    activeSchoolId = null; activeSchoolName = null; selectedClassFilter = null;
+    activeSchoolId = null; activeSchoolName = null; selectedClassFilter = null; currentTeacherLogName = '';
     document.getElementById('schoolDashboardContent').style.display = 'none';
     document.getElementById('classSheetCard').style.display = 'none';
     document.getElementById('schoolAuthBox').style.display = 'block';
