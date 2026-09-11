@@ -35,26 +35,69 @@
 
         .container { padding: 30px 20px; max-width: 1400px; margin: auto; }
 
-        .card, .header { 
-            background: rgba(255, 255, 255, 0.65); 
+        .header { 
+            background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
             border-radius: 24px; 
             padding: 25px; 
             box-shadow: var(--shadow); 
             border: 1px solid rgba(255, 255, 255, 0.5); 
             margin-bottom: 25px; 
-            position: relative; 
+            display: flex; justify-content: space-between; align-items: center; 
         }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
         .header h1 { margin: 0; font-weight: 900; color: var(--primary); font-size: 26px; }
 
-        .grid-container { display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 30px; }
+        /* الأقسام الرئيسية الكبرى (التبويبات) */
+        .major-section {
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .major-section-header {
+            background: linear-gradient(135deg, var(--dark), #3730a3);
+            color: white;
+            padding: 18px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .major-section-header h2 { margin: 0; font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .major-section-content {
+            padding: 25px;
+            display: none;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .major-section.active .major-section-content {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        .toggle-icon { transition: transform 0.3s; font-size: 20px; font-weight: bold; }
+        .major-section.active .toggle-icon { transform: rotate(180deg); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* البطاقات الداخلية */
+        .card { 
+            background: rgba(255, 255, 255, 0.75); 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            margin-bottom: 25px; 
+            position: relative; 
+        }
+        .card > h2 { 
+            margin-top: 0; font-weight: 800; font-size: 18px; border-bottom: 2px dashed rgba(0,0,0,0.1); 
+            padding-bottom: 12px; color: var(--dark); display: flex; align-items: center; gap: 8px; 
+        }
+
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         .full-width { grid-column: span 2; }
         @media (max-width: 1050px) { .grid-container { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
-
-        .card h2 { margin-top: 0; font-weight: 800; font-size: 19px; border-bottom: 2px dashed rgba(0,0,0,0.1); padding-bottom: 12px; color: var(--dark); display: flex; align-items: center; gap: 8px; }
 
         .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
         .form-group label { font-size: 13px; font-weight: 700; color: var(--dark); }
@@ -70,15 +113,15 @@
         .btn-accent { background: linear-gradient(135deg, var(--secondary), #0891b2); box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2); }
         .btn-download { background: #10b981; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; margin-bottom: 10px; }
 
-        .accounts-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(255,255,255,0.7); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+        .accounts-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(255,255,255,0.8); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
         .accounts-table th, .accounts-table td { padding: 14px 16px; text-align: right; font-size: 13px; border-bottom: 1px solid var(--border); font-weight: 600; }
-        .accounts-table th { background: rgba(241, 245, 249, 0.8); font-weight: 700; color: #475569; }
+        .accounts-table th { background: rgba(241, 245, 249, 0.9); font-weight: 700; color: #475569; }
         .accounts-table tr:last-child td { border-bottom: none; }
         
         .badge { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; display: inline-block; background: #e0e7ff; color: #3730a3; position: relative;}
 
         .classes-flex-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
-        .class-bubble { background: rgba(255,255,255,0.8); border: 1px solid var(--border); padding: 10px 15px; border-radius: 14px; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow); justify-content: space-between; min-width: 130px;}
+        .class-bubble { background: rgba(255,255,255,0.9); border: 1px solid var(--border); padding: 10px 15px; border-radius: 14px; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); justify-content: space-between; min-width: 130px;}
         .class-bubble > span:first-child { cursor: pointer; flex-grow: 1; }
         .class-bubble:hover { border-color: var(--primary); transform: translateY(-2px); }
         .class-bubble.selected { background: var(--primary); color: white; border-color: var(--primary); }
@@ -124,33 +167,35 @@
         .clickable-name { color: var(--primary); cursor: pointer; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
         .clickable-name:hover { color: var(--secondary); text-decoration: underline; }
         
-        .file-upload-wrapper { border: 2px dashed rgba(255,255,255,0.8); padding: 20px; border-radius: 16px; text-align: center; background: rgba(255,255,255,0.5); margin-bottom: 15px; position: relative; }
+        .file-upload-wrapper { border: 2px dashed rgba(255,255,255,0.8); padding: 20px; border-radius: 16px; text-align: center; background: rgba(255,255,255,0.6); margin-bottom: 15px; position: relative; }
         .file-upload-wrapper input[type="file"] { width: 100%; margin-top: 10px; }
 
         .admin-stats-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
             gap: 15px; 
             margin-bottom: 25px; 
         }
         .admin-stat-card { 
-            background: rgba(255,255,255,0.85); 
+            background: rgba(255,255,255,0.9); 
             padding: 15px; 
             border-radius: 20px; 
             text-align: center; 
             border: 1px solid rgba(255,255,255,0.9); 
             box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            transition: all 0.2s ease;
         }
+        .admin-stat-card:hover { transform: translateY(-3px); }
         .admin-stat-card h4 { margin: 0; font-size: 13px; color: var(--muted); }
-        .admin-stat-card p { margin: 5px 0 0; font-size: 26px; font-weight: 900; color: var(--primary); }
+        .admin-stat-card p { margin: 5px 0 0; font-size: 24px; font-weight: 900; color: var(--primary); }
 
         .admin-class-section { 
-            background: rgba(255,255,255,0.75); 
+            background: rgba(255,255,255,0.9); 
             padding: 20px; 
             border-radius: 20px; 
             margin-bottom: 20px; 
             border: 1px solid var(--border); 
-            box-shadow: var(--shadow);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .admin-table { 
             width: 100%; 
@@ -165,33 +210,87 @@
         .admin-table td { padding: 12px; border-bottom: 1px solid #f8fafc; font-size: 13px; font-weight: 700; color: var(--dark); }
         .admin-table tr:hover td { background: #f1f5f9; }
 
-        @media print {
-            .hide-on-print { display: none !important; }
-        }
+        .energy-card { background: rgba(255,255,255,0.95); border: 1px solid var(--border); padding: 18px; border-radius: 20px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s;}
+        .energy-card:hover { transform: translateY(-3px); border-color: var(--secondary); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .energy-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 900; margin-bottom: 10px; color: var(--dark); }
+        .energy-bar-bg { background: #e2e8f0; height: 14px; border-radius: 20px; overflow: hidden; position: relative; }
+        .energy-bar-fill { height: 100%; border-radius: 20px; transition: width 0.6s ease; background: linear-gradient(90deg, #3b82f6, #22c55e); }
+        .energy-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 8px; font-weight: 700; }
+
+        .modal-body-scroll { max-height: 70vh; overflow-y: auto; padding-right: 5px; }
+
+        @media print { .hide-on-print { display: none !important; } }
     </style>
 </head>
 <body>
 
 <div id="notify">تم الإجراء بنجاح ✓</div>
 
-<!-- بطاقة الوصول -->
+<!-- النوافذ المنبثقة -->
+<div id="hwStatsModal" class="modal" onclick="closeHwStatsModal()">
+    <div class="card" style="width: 520px; max-width: 95%; background: #ffffff; padding: 25px;" onclick="event.stopPropagation()">
+        <h2 style="color: var(--primary); border-bottom: none; margin-bottom: 5px;">📊 طاقة الإنجاز مفصلة حسب الفصول</h2>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">تعرض هذه القائمة مقارنة لنسبة الواجبات المكتملة بين الفصول الدراسية.</p>
+        <div id="hwClassStatsContainer" class="modal-body-scroll"></div>
+        <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeHwStatsModal()">إغلاق النافذة</button>
+    </div>
+</div>
+
+<div id="parentLoginModal" class="modal" onclick="closeParentLoginModal()">
+    <div class="card" style="width: 520px; max-width: 95%; background: #ffffff; padding: 25px;" onclick="event.stopPropagation()">
+        <h2 style="color: #0284c7; border-bottom: none; margin-bottom: 5px;">👨‍👩‍👧‍👦 نسبة دخول أولياء الأمور لكل فصل</h2>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">تعرض هذه القائمة مؤشر نسبة دخول وتسجيل أولياء الأمور مقسمة حسب الفصول.</p>
+        <div id="parentLoginClassContainer" class="modal-body-scroll"></div>
+        <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeParentLoginModal()">إغلاق النافذة</button>
+    </div>
+</div>
+
+<div id="teacherStatsModal" class="modal" onclick="closeTeacherStatsModal()">
+    <div class="card" style="width: 550px; max-width: 95%; background: #ffffff; padding: 25px;" onclick="event.stopPropagation()">
+        <h2 style="color: #8b5cf6; border-bottom: none; margin-bottom: 5px;">👨‍🏫 مؤشر نسبة إنجاز كل معلم</h2>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">تعرض هذه القائمة طاقة ومؤشر إنجاز كل معلم (الواجبات المكتملة مقابل المرسلة).</p>
+        <div id="teacherStatsContainer" class="modal-body-scroll"></div>
+        <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeTeacherStatsModal()">إغلاق النافذة</button>
+    </div>
+</div>
+
+<div id="dailyInteractionModal" class="modal" onclick="closeDailyInteractionModal()">
+    <div class="card" style="width: 550px; max-width: 95%; background: #ffffff; padding: 25px;" onclick="event.stopPropagation()">
+        <h2 style="color: #10b981; border-bottom: none; margin-bottom: 5px;">📈 مؤشر نسبة التفاعل اليومي (آخر 15 يوم)</h2>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">مؤشر طاقة للتفاعل اليومي ورصد عمليات الدخول والتقييمات لكل يوم.</p>
+        <div id="dailyInteractionContainer" class="modal-body-scroll"></div>
+        <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeDailyInteractionModal()">إغلاق النافذة</button>
+    </div>
+</div>
+
+<div id="moveStudentModal" class="modal" onclick="closeMoveStudentModal()">
+    <div class="card" style="width: 400px;" onclick="event.stopPropagation()">
+        <h2 style="padding-right:0;">🔄 نقل أو تكرار الطالب</h2>
+        <h4 id="moveStudentName" style="color:var(--primary); margin-bottom: 15px;">-</h4>
+        <div class="form-group">
+            <label>الفصل المستهدف</label>
+            <select id="targetClassSelect" class="inp"><option value="">-- اختر الفصل المستهدف --</option></select>
+        </div>
+        <div class="form-group">
+            <label>نوع الإجراء المطلوب</label>
+            <select id="moveActionSelect" class="inp">
+                <option value="move">نقل نهائي (مع نقل سجل التقييمات)</option>
+                <option value="duplicate">تكرار حساب الطالب</option>
+            </select>
+        </div>
+        <button class="btn-submit" style="background:#0284c7;" onclick="executeMoveOrDuplicate()">تنفيذ الإجراء 🚀</button>
+        <button class="btn-submit" style="background:#64748b;" onclick="closeMoveStudentModal()">إلغاء</button>
+    </div>
+</div>
+
 <div id="cardModal" class="modal" onclick="closeCardModal()">
     <div class="id-card" onclick="event.stopPropagation()">
         <div class="id-card-header">🎓 سجل الواجبات الإلكتروني</div>
         <div class="id-card-logo">بطاقة الوصول الموحدة للمستفيد</div>
         <div class="id-card-body">
-            <div class="id-field">
-                <div class="id-field-info"><span>الاسم الكريم</span><strong id="cardName">-</strong></div>
-                <span style="font-size: 20px;">👤</span>
-            </div>
-            <div class="id-field">
-                <div class="id-field-info"><span>الارتباط / التخصص</span><strong id="cardRole">-</strong></div>
-                <span style="font-size: 20px;">🏫</span>
-            </div>
-            <div class="id-field">
-                <div class="id-field-info"><span>اسم المستخدم (وكلمة المرور)</span><strong id="cardUser" style="font-family: monospace; color: var(--primary); font-size:15px;">-</strong></div>
-                <span style="font-size: 20px;">🔑</span>
-            </div>
+            <div class="id-field"><div class="id-field-info"><span>الاسم الكريم</span><strong id="cardName">-</strong></div><span style="font-size: 20px;">👤</span></div>
+            <div class="id-field"><div class="id-field-info"><span>الارتباط / التخصص</span><strong id="cardRole">-</strong></div><span style="font-size: 20px;">🏫</span></div>
+            <div class="id-field"><div class="id-field-info"><span>اسم المستخدم (وكلمة المرور)</span><strong id="cardUser" style="font-family: monospace; color: var(--primary); font-size:15px;">-</strong></div><span style="font-size: 20px;">🔑</span></div>
             <div class="id-field">
                 <div class="id-field-info"><span>رقم الجوال النشط</span><strong id="cardPhone">-</strong></div>
                 <a id="cardWhatsappBtn" href="#" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)">💬 إرسال واتساب</a>
@@ -202,14 +301,12 @@
     </div>
 </div>
 
-<!-- سجل تقييم الطالب -->
 <div id="evalHistoryModal" class="modal" onclick="closeEvalHistoryModal()">
     <div class="card" id="printEvalArea" style="max-width: 800px; width: 92%; background: #ffffff; border-radius: 20px; padding: 25px; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">
-        <h2>📜 سجل النقاط وبيانات الواجب للطالب</h2>
+        <h2 style="padding-right:0;">📜 سجل النقاط وبيانات الواجب للطالب</h2>
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
             <h4 id="evalHistoryStudentTitle" style="color:var(--primary); margin: 0; font-weight:800;">-</h4>
-            <div id="evalHistoryActions" class="hide-on-print" style="display: flex; gap: 10px;">
-                </div>
+            <div id="evalHistoryActions" class="hide-on-print" style="display: flex; gap: 10px;"></div>
         </div>
         <div style="overflow-x: auto;">
             <table class="accounts-table" style="margin-top:10px;">
@@ -233,20 +330,19 @@
     </div>
 </div>
 
-<!-- نافذة السجل الشامل للمعلم (الجديدة) -->
 <div id="teacherLogModal" class="modal" onclick="closeTeacherLogModal()">
     <div class="card" style="max-width: 900px; width: 95%; background: #ffffff; border-radius: 20px; padding: 25px; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">
-        <h2>👨‍🏫 سجل المعلم الشامل للإرساليات والتقييمات</h2>
+        <h2 style="padding-right:0;">👨‍🏫 سجل المعلم الشامل للإرساليات والتقييمات</h2>
         <h4 id="teacherLogTitle" style="color:var(--primary); margin-top:5px; margin-bottom:15px;">-</h4>
         
         <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px dashed #cbd5e1; margin-bottom: 15px;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <p style="margin:0; font-size:13px; color:var(--dark);">حدد الملاحظات غير المكتملة أو الخاطئة وانقر على زر الحذف ليتم مسحها فوراً من سجل جميع الطلاب.</p>
+                <p style="margin:0; font-size:13px; color:var(--dark);">حدد الملاحظات غير المكتملة وانقر للحذف ليتم مسحها من سجل جميع الطلاب.</p>
                 <div style="display:flex; gap:15px; align-items:center;">
                     <label style="display:flex; align-items:center; cursor:pointer; font-weight:bold; color:var(--primary);">
                         <input type="checkbox" id="selectAllTLogs" onchange="toggleAllTLogs(this)" style="margin-left:5px; width:18px; height:18px;"> تحديد الكل
                     </label>
-                    <button class="btn-submit" style="background:#ef4444; width:auto; margin:0; padding:8px 15px; font-size:13px;" onclick="deleteSelectedTeacherLogs()">🗑️ حذف السجلات المحددة</button>
+                    <button class="btn-submit" style="background:#ef4444; width:auto; margin:0; padding:8px 15px; font-size:13px;" onclick="deleteSelectedTeacherLogs()">🗑️ حذف السجلات</button>
                 </div>
             </div>
         </div>
@@ -271,10 +367,11 @@
     </div>
 </div>
 
+<!-- بداية محتوى الصفحة -->
 <div class="container">
 
     <div id="schoolAuthBox" class="card" style="max-width: 480px; margin: 80px auto; text-align: center; background: rgba(255,255,255,0.85);">
-        <h2>🔐 تسجيل دخول النظام الإداري للمدرسة</h2>
+        <h2 style="padding-right:0;">🔐 تسجيل دخول النظام الإداري للمدرسة</h2>
         <p style="color:var(--muted); font-size:13px; margin-bottom:24px;">يرجى استخدام الحساب الممنوح لك من الإدارة العامة للمنصة</p>
         <div class="form-group" style="text-align: right;">
             <label>اسم مستخدم الإدارة</label>
@@ -296,179 +393,306 @@
             <button onclick="logoutSchoolAdmin()" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:12px; cursor:pointer; font-weight:700; font-size:13px;">تسجيل الخروج</button>
         </div>
 
-        <div class="card full-width">
-            <h2>📊 الإحصائيات العامة للمدرسة (التميز والأوسمة)</h2>
-            <div class="admin-stats-grid">
-                <div class="admin-stat-card"><h4>التميز ✨</h4><p id="admin-tot-exc">0</p></div>
-                <div class="admin-stat-card"><h4>مبدع 💡</h4><p id="admin-tot-creative">0</p></div>
-                <div class="admin-stat-card"><h4>ذهب 🥇</h4><p id="admin-tot-gold">0</p></div>
-                <div class="admin-stat-card"><h4>فضة 🥈</h4><p id="admin-tot-silver">0</p></div>
-                <div class="admin-stat-card"><h4>برونز 🥉</h4><p id="admin-tot-bronze">0</p></div>
-                <div class="admin-stat-card"><h4>ضعيف 📉</h4><p id="admin-tot-weak">0</p></div>
-                <div class="admin-stat-card"><h4>إنذار ⚠️</h4><p id="admin-tot-warn">0</p></div>
+        <!-- القسم الأول: المؤشرات والإحصائيات -->
+        <div class="major-section active">
+            <div class="major-section-header" onclick="toggleMajorSection(this)">
+                <h2>📊 قسم المؤشرات والإحصائيات العامة</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="major-section-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 25px;">
+                    <div class="card energy-card" style="margin-bottom:0;" onclick="openHwStatsModal()">
+                        <div class="energy-header">
+                            <span>⚡ طاقة الإنجاز الكلية للواجبات</span>
+                            <span id="mainEnergyPercent" style="color:var(--primary); font-size: 20px;">0%</span>
+                        </div>
+                        <div class="energy-bar-bg">
+                            <div id="mainEnergyBar" class="energy-bar-fill" style="width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b);"></div>
+                        </div>
+                        <div class="energy-details">
+                            <span id="mainEnergyDone">✅ المكتملة: 0</span>
+                            <span id="mainEnergyTotal">📊 الإجمالي: 0</span>
+                        </div>
+                    </div>
+
+                    <div class="card energy-card" style="margin-bottom:0;" onclick="openParentLoginModal()">
+                        <div class="energy-header">
+                            <span>👨‍👩‍👧‍👦 نسبة دخول أولياء الأمور</span>
+                            <span id="parentLoginPercent" style="color:#0284c7; font-size: 20px;">0%</span>
+                        </div>
+                        <div class="energy-bar-bg">
+                            <div id="parentLoginBar" class="energy-bar-fill" style="width: 0%; background: linear-gradient(90deg, #0284c7, #22c55e);"></div>
+                        </div>
+                        <div class="energy-details">
+                            <span id="parentLoginDone">🔑 سجلوا الدخول: 0</span>
+                            <span id="parentLoginTotal">👥 إجمالي الطلاب: 0</span>
+                        </div>
+                    </div>
+
+                    <div class="card energy-card" style="margin-bottom:0;" onclick="openTeacherStatsModal()">
+                        <div class="energy-header">
+                            <span>👨‍🏫 نسبة إنجاز المعلمين (لواجباتهم)</span>
+                            <span id="teacherDonePercent" style="color:#8b5cf6; font-size: 20px;">0%</span>
+                        </div>
+                        <div class="energy-bar-bg">
+                            <div id="teacherDoneBar" class="energy-bar-fill" style="width: 0%; background: linear-gradient(90deg, #8b5cf6, #10b981);"></div>
+                        </div>
+                        <div class="energy-details">
+                            <span id="teacherDoneCount">🎯 النشطون والمنجزون: 0</span>
+                            <span id="teacherTotalCount">👨‍🏫 إجمالي المعلمين: 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card full-width" style="margin-bottom:0;">
+                    <h2 style="border-bottom:none;">📈 الإحصائيات العامة للمدرسة والتفاعل الحي</h2>
+                    <div class="admin-stats-grid">
+                        <div class="admin-stat-card"><h4>التميز ✨</h4><p id="admin-tot-exc">0</p></div>
+                        <div class="admin-stat-card"><h4>مبدع 💡</h4><p id="admin-tot-creative">0</p></div>
+                        <div class="admin-stat-card"><h4>ذهب 🥇</h4><p id="admin-tot-gold">0</p></div>
+                        <div class="admin-stat-card"><h4>فضة 🥈</h4><p id="admin-tot-silver">0</p></div>
+                        <div class="admin-stat-card"><h4>برونز 🥉</h4><p id="admin-tot-bronze">0</p></div>
+                        <div class="admin-stat-card"><h4>ضعيف 📉</h4><p id="admin-tot-weak">0</p></div>
+                        <div class="admin-stat-card"><h4>إنذار ⚠️</h4><p id="admin-tot-warn">0</p></div>
+                        <div class="admin-stat-card" style="border:1px solid #fecaca; background:#fef2f2;">
+                            <h4 style="color:#ef4444;">غياب 🚫</h4><p id="admin-tot-absent" style="color:#ef4444;">0</p>
+                        </div>
+                        <div class="admin-stat-card" style="border:1px solid #bbf7d0; background:#f0fdf4; cursor:pointer;" onclick="openDailyInteractionModal()" title="انقر لعرض نسبة التفاعل لكل يوم (آخر 15 يوم)">
+                            <h4 style="color:#166534;">المتصلون الآن 🟢</h4><p id="admin-tot-online" style="color:#166534; font-size:18px; line-height: 1.2;">0</p>
+                        </div>
+                        <div class="admin-stat-card" style="border:1px solid #bae6fd; background:#f0f9ff; cursor:pointer;" onclick="openDailyInteractionModal()" title="انقر لعرض نسبة التفاعل لكل يوم (آخر 15 يوم)">
+                            <h4 style="color:#0284c7;">تفاعل الأيام 📈</h4><p id="admin-today-interaction" style="color:#0284c7;">0%</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="grid-container">
-            
-            <div class="card">
-                <h2>🏫 تهيئة وإضافة الفصول الدراسية</h2>
-                <div class="form-group">
-                    <label>اسم الفصل الجديد</label>
-                    <input type="text" id="newClassNameInput" class="inp" placeholder="مثال: أول ١ أو ثالث ٢">
-                </div>
-                <button class="btn-submit" style="background: var(--dark);" onclick="createSchoolClass()">تثبيت وتدشين الفصل 📌</button>
+        <!-- القسم الثاني: الإدارة والتهيئة -->
+        <div class="major-section">
+            <div class="major-section-header" onclick="toggleMajorSection(this)">
+                <h2>⚙️ قسم إدارة الفصول والحسابات (التهيئة)</h2>
+                <span class="toggle-icon">▼</span>
             </div>
-
-            <div class="card">
-                <h2>🗂️ الفصول الدراسية المعتمدة (انقر للحذف النهائي والمسح)</h2>
-                <div class="classes-flex-grid" id="classesContainerBox"></div>
-            </div>
-
-            <div class="card">
-                <h2>🔄 تحديث وإسناد فصول لمعلم مضاف</h2>
-                <div class="form-group">
-                    <label>اختر المعلم المراد تعديله</label>
-                    <select id="existTeacherSelect" class="inp" onchange="loadExistingTeacherClasses()">
-                        <option value="">-- حدد المعلم من القائمة لتعديل جداوله --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>تعديل/إضافة الفصول المعتمدة المسندة له 📋</label>
-                    <div class="features-grid" id="existTeacherClassesGrid" style="max-height: 160px; overflow-y: auto;"></div>
-                </div>
-                <button class="btn-submit btn-accent" onclick="updateExistTeacherAssignment()">حفظ وتحديث جداول المعلم سحابياً 💾</button>
-            </div>
-
-            <div class="card">
-                <h2>👨‍🏫 إضافة حساب معلم جديد</h2>
-                
-                <div class="file-upload-wrapper">
-                    <button class="btn-download" onclick="downloadTeacherTemplate()">⬇️ تحميل قالب إكسل للمعلمين</button>
-                    <p style="font-weight: bold; color: var(--primary); font-size: 13px; margin-top:5px;">📁 ارفع ملف الإكسل بعد تعبئته لإضافة المعلمين دفعة واحدة</p>
-                    <input type="file" id="excelTeachersInput" accept=".xlsx, .xls" onchange="importTeachersExcel(event)">
-                </div>
-
-                <div style="border-top: 1px dashed var(--border); margin: 15px 0; padding-top: 10px;">
-                    <h3 style="font-size: 14px; color: var(--dark); margin-bottom: 10px;">أو إضافة معلم بشكل يدوي:</h3>
-                    <div class="form-group">
-                        <label>اسم المعلم الكامل</label>
-                        <input type="text" id="tName" class="inp" placeholder="مثال: أ. عاصم المشيقح">
+            <div class="major-section-content">
+                <div class="grid-container">
+                    <div class="card">
+                        <h2>🏫 تهيئة وإضافة الفصول الدراسية</h2>
+                        <div class="form-group">
+                            <label>اسم الفصل الجديد</label>
+                            <input type="text" id="newClassNameInput" class="inp" placeholder="مثال: أول ١ أو ثالث ٢">
+                        </div>
+                        <button class="btn-submit" style="background: var(--dark);" onclick="createSchoolClass()">تثبيت وتدشين الفصل 📌</button>
                     </div>
-                    <div class="form-group">
-                        <label>رقم الجوال الخاص بالمعلم</label>
-                        <input type="text" id="tPhone" class="inp" placeholder="05xxxxxxxx">
+
+                    <div class="card">
+                        <h2>🗂️ الفصول الدراسية المعتمدة (انقر للحذف)</h2>
+                        <div class="classes-flex-grid" id="classesContainerBox"></div>
                     </div>
-                    <div class="form-group">
-                        <label>التخصص / المادة</label>
-                        <input type="text" id="tSubj" class="inp" placeholder="مثال: رياضيات">
+
+                    <div class="card">
+                        <h2>🔄 تحديث وإسناد فصول لمعلم مضاف</h2>
+                        <div class="form-group">
+                            <label>اختر المعلم المراد تعديله</label>
+                            <select id="existTeacherSelect" class="inp" onchange="loadExistingTeacherClasses()">
+                                <option value="">-- حدد المعلم من القائمة لتعديل جداوله --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>تعديل/إضافة الفصول المعتمدة المسندة له 📋</label>
+                            <div class="features-grid" id="existTeacherClassesGrid" style="max-height: 160px; overflow-y: auto;"></div>
+                        </div>
+                        <button class="btn-submit btn-accent" onclick="updateExistTeacherAssignment()">حفظ وتحديث جداول المعلم سحابياً 💾</button>
                     </div>
-                    <div class="form-group">
-                        <label>اسم المستخدم (سيكون هو نفسه كلمة المرور)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="text" id="tUser" class="inp" placeholder="اسم المستخدم أو الهوية الوطنية">
-                            <button class="btn-submit" style="margin:0; width:auto; padding:0 15px; font-size:12px; white-space:nowrap;" onclick="autoGenerateUser('tUser')">توليد تلقائي</button>
+
+                    <div class="card">
+                        <h2>👨‍🏫 إضافة حساب معلم جديد</h2>
+                        <div class="file-upload-wrapper">
+                            <button class="btn-download" onclick="downloadTeacherTemplate()">⬇️ تحميل قالب إكسل للمعلمين</button>
+                            <p style="font-weight: bold; color: var(--primary); font-size: 13px; margin-top:5px;">📁 ارفع ملف الإكسل بعد تعبئته لإضافة المعلمين دفعة واحدة</p>
+                            <input type="file" id="excelTeachersInput" accept=".xlsx, .xls" onchange="importTeachersExcel(event)">
+                        </div>
+
+                        <div style="border-top: 1px dashed var(--border); margin: 15px 0; padding-top: 10px;">
+                            <h3 style="font-size: 14px; color: var(--dark); margin-bottom: 10px;">أو إضافة معلم بشكل يدوي:</h3>
+                            <div class="form-group">
+                                <label>اسم المعلم الكامل</label>
+                                <input type="text" id="tName" class="inp" placeholder="مثال: أ. عاصم المشيقح">
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الجوال الخاص بالمعلم</label>
+                                <input type="text" id="tPhone" class="inp" placeholder="05xxxxxxxx">
+                            </div>
+                            <div class="form-group">
+                                <label>التخصص / المادة</label>
+                                <input type="text" id="tSubj" class="inp" placeholder="مثال: رياضيات">
+                            </div>
+                            <div class="form-group">
+                                <label>اسم المستخدم (سيكون هو نفسه كلمة المرور)</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="tUser" class="inp" placeholder="اسم المستخدم أو الهوية الوطنية">
+                                    <button class="btn-submit" style="margin:0; width:auto; padding:0 15px; font-size:12px; white-space:nowrap;" onclick="autoGenerateUser('tUser')">توليد تلقائي</button>
+                                </div>
+                            </div>
+                            <button class="btn-submit" style="background: #0284c7;" onclick="addTeacherAccount()">مزامنة وتوليد حساب المعلم فوراً ✨</button>
                         </div>
                     </div>
-                    <button class="btn-submit" style="background: #0284c7;" onclick="addTeacherAccount()">مزامنة وتوليد حساب المعلم فوراً ✨</button>
-                </div>
-            </div>
 
-            <div class="card">
-                <h2>👶 إضافة حساب طالب جديد</h2>
-                
-                <div class="form-group" style="background: rgba(255,255,255,0.8); padding: 10px; border-radius: 12px; border: 1px solid var(--primary);">
-                    <label style="color: var(--primary);">📌 أولاً: اختر الفصل المعتمد الذي ترغب بالإضافة إليه</label>
-                    <select id="stClassSelect" class="inp"><option value="">-- اختر الفصل --</option></select>
-                </div>
-
-                <div class="file-upload-wrapper">
-                    <button class="btn-download" onclick="downloadStudentTemplate()">⬇️ تحميل قالب إكسل للطلاب</button>
-                    <p style="font-weight: bold; color: var(--secondary); font-size: 13px; margin-top:5px;">📁 ارفع ملف الطلاب (سيتم إضافتهم للفصل المحدد بالأعلى)</p>
-                    <input type="file" id="excelStudentsInput" accept=".xlsx, .xls" onchange="importStudentsExcel(event)">
-                </div>
-
-                <div style="border-top: 1px dashed var(--border); margin: 15px 0; padding-top: 10px;">
-                    <h3 style="font-size: 14px; color: var(--dark); margin-bottom: 10px;">أو إضافة طالب بشكل يدوي:</h3>
-                    <div class="form-group">
-                        <label>اسم الطالب الكامل</label>
-                        <input type="text" id="stName" class="inp" placeholder="مثال: أحمد عبد الله السعيد">
-                    </div>
-                    <div class="form-group">
-                        <label>رقم جوال ولي الأمر</label>
-                        <input type="text" id="stPhone" class="inp" placeholder="05xxxxxxxx">
-                    </div>
-                    <div class="form-group">
-                        <label>اسم المستخدم (سيكون هو نفسه كلمة المرور)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="text" id="stUser" class="inp" placeholder="اسم المستخدم أو السجل المدني">
-                            <button class="btn-submit" style="margin:0; width:auto; padding:0 15px; font-size:12px; white-space:nowrap;" onclick="autoGenerateUser('stUser')">توليد تلقائي</button>
+                    <div class="card full-width">
+                        <h2>👔 إدارة حسابات الوكلاء (الإدارة المساعدة)</h2>
+                        <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+                            <div class="form-group" style="flex:1;">
+                                <label>اسم الوكيل</label>
+                                <input type="text" id="depName" class="inp" placeholder="الاسم الكامل للوكيل">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label>رقم الجوال</label>
+                                <input type="text" id="depPhone" class="inp" placeholder="05xxxxxxxx">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label>اسم المستخدم (سيكون هو نفسه كلمة المرور)</label>
+                                <input type="text" id="depUser" class="inp" placeholder="اسم المستخدم للمنصة">
+                            </div>
+                        </div>
+                        <button class="btn-submit" style="background:var(--dark); width:auto; padding: 10px 25px;" onclick="addDeputyAccount()">إضافة حساب وكيل جديد ➕</button>
+                        
+                        <div style="overflow-x: auto; margin-top:20px;">
+                            <table class="accounts-table">
+                                <thead>
+                                    <tr>
+                                        <th>اسم الوكيل 👔</th>
+                                        <th>رقم الجوال</th>
+                                        <th>اسم المستخدم والمرور</th>
+                                        <th>إجراء</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schoolDeputiesTableBody">
+                                    <tr><td colspan="4" style="text-align:center;">لا يوجد وكلاء مضافين حتى الآن.</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <button class="btn-submit" style="background: #06b6d4;" onclick="addStudentAccount()">توليد ومزامنة حساب الطالب 🚀</button>
+
+                    <div class="card full-width">
+                        <h2>👶 إضافة حساب طالب جديد</h2>
+                        
+                        <div class="form-group" style="background: rgba(255,255,255,0.8); padding: 10px; border-radius: 12px; border: 1px solid var(--primary);">
+                            <label style="color: var(--primary);">📌 أولاً: اختر الفصل المعتمد الذي ترغب بالإضافة إليه</label>
+                            <select id="stClassSelect" class="inp"><option value="">-- اختر الفصل --</option></select>
+                        </div>
+
+                        <div class="file-upload-wrapper" style="width: 50%; margin: auto;">
+                            <button class="btn-download" onclick="downloadStudentTemplate()">⬇️ تحميل قالب إكسل للطلاب</button>
+                            <p style="font-weight: bold; color: var(--secondary); font-size: 13px; margin-top:5px;">📁 ارفع ملف الطلاب (سيتم إضافتهم للفصل المحدد بالأعلى)</p>
+                            <input type="file" id="excelStudentsInput" accept=".xlsx, .xls" onchange="importStudentsExcel(event)">
+                        </div>
+
+                        <div style="border-top: 1px dashed var(--border); margin: 15px 0; padding-top: 10px; display: flex; gap: 15px; flex-wrap: wrap;">
+                            <div style="flex:1;">
+                                <h3 style="font-size: 14px; color: var(--dark); margin-bottom: 10px;">أو إضافة طالب بشكل يدوي:</h3>
+                                <div class="form-group">
+                                    <label>اسم الطالب الكامل</label>
+                                    <input type="text" id="stName" class="inp" placeholder="مثال: أحمد عبد الله السعيد">
+                                </div>
+                            </div>
+                            <div style="flex:1; margin-top: 32px;">
+                                <div class="form-group">
+                                    <label>رقم جوال ولي الأمر</label>
+                                    <input type="text" id="stPhone" class="inp" placeholder="05xxxxxxxx">
+                                </div>
+                            </div>
+                            <div style="flex:1; margin-top: 32px;">
+                                <div class="form-group">
+                                    <label>اسم المستخدم (نفسه كلمة المرور)</label>
+                                    <div style="display: flex; gap: 8px;">
+                                        <input type="text" id="stUser" class="inp" placeholder="اسم المستخدم أو السجل">
+                                        <button class="btn-submit" style="margin:0; width:auto; padding:0 15px; font-size:12px; white-space:nowrap;" onclick="autoGenerateUser('stUser')">توليد تلقائي</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-submit" style="background: #06b6d4;" onclick="addStudentAccount()">توليد ومزامنة حساب الطالب 🚀</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="card full-width" id="classSheetCard" style="display:none; border: 2px solid var(--primary);">
-                <h2 id="classSheetTitle">📋 طلاب الصف:</h2>
-                <div style="overflow-x: auto;">
-                    <table class="accounts-table">
-                        <thead>
-                            <tr>
-                                <th>اسم الطالب (انقر للتقرير 📜)</th>
-                                <th>الصف</th>
-                                <th>رقم الجوال والارسال</th>
-                                <th>اسم المستخدم والمرور</th>
-                                <th>رصيد النقاط 🌟</th>
-                                <th>الأوسمة والتقييم 🏅</th>
-                                <th>سجل المعلم والتقييم 🔍</th>
-                                <th>حالة الدخول</th>
-                                <th>إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody id="currentClassStudentsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card full-width">
-                <h2>👨‍🏫 كشف المعلمين وجدول الإسناد</h2>
-                <div style="overflow-x: auto;">
-                    <table class="accounts-table">
-                        <thead>
-                            <tr>
-                                <th>اسم المعلم (البطاقة 🪪)</th>
-                                <th>رقم الجوال والارسال</th>
-                                <th>اسم المستخدم والمرور</th>
-                                <th>المادة / التخصص</th>
-                                <th>الفصول المسندة (إلغاء ✖)</th>
-                                <th>سجل المرسلات 📤</th>
-                                <th>حالة الدخول</th>
-                                <th>إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody id="schoolTeachersTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card full-width">
-                <h2>🔥 لوحة شرف المعلمين وتصنيف التفاعل (سجل العطاء)</h2>
-                <div id="active-teachers-container" style="margin-top: 15px;">
-                    <p style="color:var(--muted); text-align:center;">جاري حساب تفاعل المعلمين...</p>
-                </div>
-            </div>
-
-            <div class="card full-width">
-                <h2>🏆 لوحة الشرف وترتيب الطلاب بحسب الفصول الدراسية النشطة</h2>
-                <div id="admin-rankings-container" style="margin-top: 15px;">
-                    <p style="color:var(--muted); text-align:center;">جاري تحميل ترتيب الفصول...</p>
-                </div>
-            </div>
-
         </div>
+
+        <!-- القسم الثالث: السجلات والكشوفات -->
+        <div class="major-section">
+            <div class="major-section-header" onclick="toggleMajorSection(this)">
+                <h2>📋 قسم السجلات والكشوفات (الطلاب والمعلمين)</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="major-section-content">
+                <div class="card full-width" id="classSheetCard" style="display:none; border: 2px solid var(--primary);">
+                    <h2 id="classSheetTitle">📋 طلاب الصف:</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="accounts-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم الطالب (انقر للتقرير 📜)</th>
+                                    <th>الصف</th>
+                                    <th>رقم الجوال والارسال</th>
+                                    <th>اسم المستخدم والمرور</th>
+                                    <th>رصيد النقاط 🌟</th>
+                                    <th>الأوسمة والتقييم 🏅</th>
+                                    <th>سجل المعلم والتقييم 🔍</th>
+                                    <th>حالة الدخول</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="currentClassStudentsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card full-width">
+                    <h2>👨‍🏫 كشف المعلمين وجدول الإسناد</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="accounts-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم المعلم (البطاقة 🪪)</th>
+                                    <th>رقم الجوال والارسال</th>
+                                    <th>اسم المستخدم والمرور</th>
+                                    <th>المادة / التخصص</th>
+                                    <th>الفصول المسندة (إلغاء ✖)</th>
+                                    <th>سجل المرسلات 📤</th>
+                                    <th>حالة الدخول</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schoolTeachersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- القسم الرابع: لوحات الشرف -->
+        <div class="major-section">
+            <div class="major-section-header" onclick="toggleMajorSection(this)">
+                <h2>🏆 قسم لوحات الشرف والترتيب</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="major-section-content">
+                <div class="card full-width">
+                    <h2>🔥 لوحة شرف المعلمين وتصنيف التفاعل (سجل العطاء)</h2>
+                    <div id="active-teachers-container" style="margin-top: 15px;">
+                        <p style="color:var(--muted); text-align:center;">جاري حساب تفاعل المعلمين...</p>
+                    </div>
+                </div>
+
+                <div class="card full-width">
+                    <h2>🏆 لوحة الشرف وترتيب الطلاب بحسب الفصول الدراسية النشطة</h2>
+                    <div id="admin-rankings-container" style="margin-top: 15px;">
+                        <p style="color:var(--muted); text-align:center;">جاري تحميل ترتيب الفصول...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
 </div>
 
 <script>
@@ -478,13 +702,64 @@ const firebaseConfig = {
     databaseURL: "https://myschoolproject-4ad92-default-rtdb.firebaseio.com",
     projectId: "myschoolproject-4ad92"
 };
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.database();
+
+// متغيرات الذاكرة المحلية (Local State) لتقليل الاتصال بقاعدة البيانات وتسريع التطبيق
+let localData = {
+    students: {},
+    classes: {},
+    assignments: {}, // المعلمين
+    evaluations: {}
+};
 
 let activeSchoolId = null;
 let activeSchoolName = null;
 let selectedClassFilter = null;
-let currentTeacherLogName = ''; // جديد
+let currentTeacherLogName = ''; 
+let currentMoveStudentKey = '';
+let currentMoveStudentClass = '';
+
+let globalClassHwStats = {};
+let globalClassParentLoginStats = {}; // تم تغييرها إلى مؤشر الدخول
+let globalTeacherStats = [];
+let globalDailyInteractionStats = [];
+
+let activeListeners = [];
+
+// التحكم في طي وتكبير الأقسام الكبرى
+function toggleMajorSection(headerElement) {
+    const parentSection = headerElement.parentElement;
+    parentSection.classList.toggle('active');
+}
+
+function detachAllListeners() {
+    activeListeners.forEach(item => {
+        if(item.ref && item.event) {
+            item.ref.off(item.event);
+        }
+    });
+    activeListeners = [];
+}
+
+function showNotification(msg) {
+    const notif = document.getElementById('notify');
+    notif.innerText = msg;
+    notif.style.display = 'block';
+    setTimeout(() => { notif.style.display = 'none'; }, 3000);
+}
+
+function updateField(node, key, field, val) {
+    database.ref(node + '/' + key).update({ [field]: val }).then(() => showNotification('تم التحديث ✓'));
+}
+
+function removeAccount(node, key) {
+    if(confirm('هل أنت متأكد من الحذف النهائي لهذا الحساب؟')) {
+        database.ref(node + '/' + key).remove().then(() => showNotification('تم الحذف بنجاح ✓'));
+    }
+}
 
 function cleanString(str) {
     if(!str) return "";
@@ -508,6 +783,8 @@ function getWhatsAppLink(phone, name, user, role) {
     let roleMsg = "";
     if (role.includes('معلم')) {
         roleMsg = "يمكنك من خلال النظام إرسال التقارير والواجبات للطلاب بكل سهولة.";
+    } else if (role.includes('وكيل')) {
+        roleMsg = "يمكنك الدخول للنظام وإدارة المنصة ومتابعة الطلاب والمعلمين.";
     } else {
         roleMsg = "يمكنك من خلال النظام الاطلاع على التقارير والواجبات المرسلة لك من المعلمين.";
     }
@@ -531,23 +808,16 @@ function extractTimeFromKey(key) {
         if (charPos === -1) return null;
         timestamp = timestamp * 64 + charPos;
     }
-    if (timestamp > 1400000000000 && timestamp < 2050000000000) {
-        return timestamp;
-    }
+    if (timestamp > 1400000000000 && timestamp < 2050000000000) return timestamp;
     return null;
 }
 
 function parseAndFormatDate(rawDate) {
     if (!rawDate || rawDate === 'سابق') return 'تاريخ سابق';
     let d = rawDate;
-    if (typeof rawDate === 'string' && !isNaN(rawDate) && rawDate.trim() !== '') {
-        d = Number(rawDate);
-    }
+    if (typeof rawDate === 'string' && !isNaN(rawDate) && rawDate.trim() !== '') d = Number(rawDate);
     let dateObj = new Date(d);
-    if (isNaN(dateObj.getTime())) {
-        if (typeof rawDate === 'string') return rawDate;
-        return 'تاريخ غير محدد';
-    }
+    if (isNaN(dateObj.getTime())) return typeof rawDate === 'string' ? rawDate : 'تاريخ غير محدد';
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return dateObj.toLocaleDateString('ar-SA', options);
 }
@@ -555,31 +825,28 @@ function parseAndFormatDate(rawDate) {
 function formatBeautifulDate(dateInput) {
     if (!dateInput || dateInput === 'سابق') return '<span style="color:var(--muted)">تاريخ سابق</span>';
     let d = dateInput;
-    if (typeof dateInput === 'string' && !isNaN(dateInput) && dateInput.trim() !== '') {
-        d = Number(dateInput);
-    }
+    if (typeof dateInput === 'string' && !isNaN(dateInput) && dateInput.trim() !== '') d = Number(dateInput);
     const date = new Date(d);
-    if (isNaN(date.getTime())) {
-        if (typeof dateInput === 'string') return `<span style="color: var(--primary); font-weight: 700;">📅 ${dateInput}</span>`;
-        return '<span style="color:var(--muted)">تاريخ غير محدد</span>'; 
-    }
-    const options = { 
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
-    };
+    if (isNaN(date.getTime())) return typeof dateInput === 'string' ? `<span style="color: var(--primary); font-weight: 700;">📅 ${dateInput}</span>` : '<span style="color:var(--muted)">تاريخ غير محدد</span>'; 
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
     return `<span style="color: var(--primary); font-weight: 700;">📅 ${date.toLocaleDateString('ar-SA', options)}</span>`;
 }
 
-function getLoginStatusHtml(lastLoginTimestamp) {
-    if (!lastLoginTimestamp) {
-        return `<span class="badge" style="background:#fee2e2; color:#b91c1c;">لم يفعل الحساب ❌</span>`;
-    }
-    let d = lastLoginTimestamp;
-    if (typeof lastLoginTimestamp === 'string' && !isNaN(lastLoginTimestamp) && lastLoginTimestamp.trim() !== '') {
-        d = Number(lastLoginTimestamp);
-    }
-    const date = new Date(d);
-    if (isNaN(date.getTime())) return `<span class="badge" style="background:#dcfce3; color:#166534;">نشط ✅</span>`;
-    
+// دالة ذكية للبحث عن أي صيغة لتاريخ الدخول في الكائن
+function getValidLoginTime(obj) {
+    let t = obj.lastLogin || obj.last_login || obj.loginTime || obj.timestamp;
+    if (!t) return 0;
+    let num = Number(t);
+    if (!isNaN(num) && num > 1000000000000) return num; 
+    let d = new Date(t).getTime();
+    if (!isNaN(d) && d > 1000000000000) return d; 
+    return 0;
+}
+
+function getLoginStatusHtml(obj) {
+    let loginTime = getValidLoginTime(obj);
+    if (loginTime === 0) return `<span class="badge" style="background:#fee2e2; color:#b91c1c;">لم يفعل الحساب ❌</span>`;
+    const date = new Date(loginTime);
     const dateString = date.toLocaleDateString('ar-SA') + ' ' + date.toLocaleTimeString('ar-SA');
     return `<span class="badge" style="background:#dcfce3; color:#166534;">نشط ✅</span><br><small style="color:var(--muted); font-size:10px; display:block; margin-top:4px;">آخر دخول:<br>${dateString}</small>`;
 }
@@ -605,292 +872,304 @@ function openCardModal(name, role, user, phone) {
     } else {
         waBtn.style.display = 'none';
     }
-    
     document.getElementById('cardModal').style.display = 'flex';
 }
 function closeCardModal() { document.getElementById('cardModal').style.display = 'none'; }
 
-// دوال سجل المعلم الشامل (الجديدة)
-function openTeacherLogModal(teacherName) {
-    currentTeacherLogName = teacherName;
-    document.getElementById('teacherLogTitle').innerText = `باسم المعلم: ${teacherName}`;
-    document.getElementById('teacherLogTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;">جاري تحميل السجل...</td></tr>';
-    document.getElementById('teacherLogModal').style.display = 'flex';
-    document.getElementById('selectAllTLogs').checked = false;
+function addDeputyAccount() {
+    if(!activeSchoolId) return;
+    const name = document.getElementById('depName').value.trim();
+    const phone = document.getElementById('depPhone').value.trim();
+    const user = cleanString(document.getElementById('depUser').value).toLowerCase();
 
-    database.ref('students').once('value').then(stuSnap => {
-        const studentsData = stuSnap.val() || {};
-        
-        database.ref('evaluations').once('value').then(snap => {
-            const evalsData = snap.val() || {};
-            const tbody = document.getElementById('teacherLogTableBody');
-            tbody.innerHTML = '';
-            let count = 0;
-            let records = [];
+    if(!name || !user) { alert("يرجى إكمال البيانات الأساسية للوكيل."); return; }
 
-            for (let cName in evalsData) {
-                for (let sKey in evalsData[cName]) {
-                    let sName = (studentsData[sKey] && studentsData[sKey].studentName) ? studentsData[sKey].studentName : 'طالب محذوف من النظام';
-                    for (let eKey in evalsData[cName][sKey]) {
-                        let ev = evalsData[cName][sKey][eKey];
-                        let tName = ev.teacherName || ev.teacher || ev.author || '';
-                        
-                        if (tName === teacherName) {
-                            records.push({ cName, sKey, sName, eKey, ev });
-                        }
-                    }
-                }
-            }
-
-            records.sort((a, b) => {
-                let tA = extractTimeFromKey(a.eKey) || 0;
-                let tB = extractTimeFromKey(b.eKey) || 0;
-                return tB - tA; // ترتيب تنازلي (الأحدث أولاً)
-            });
-
-            records.forEach(rec => {
-                count++;
-                let dateStr = formatBeautifulDate(rec.ev.timestamp || rec.ev.date || rec.ev.createdAt || extractTimeFromKey(rec.eKey));
-                
-                let plainBadges = [];
-                if (rec.ev.level === 'exc') plainBadges.push('تميز ✨');
-                if (rec.ev.level === 'cre' || rec.ev.level === 'creative' || rec.ev.award === 'creative') plainBadges.push('مبدع 💡');
-                if (rec.ev.award === 'gold') plainBadges.push('وسام ذهبي 🥇');
-                if (rec.ev.award === 'silver') plainBadges.push('وسام فضي 🥈');
-                if (rec.ev.award === 'bronze') plainBadges.push('وسام برونزي 🥉');
-                if (rec.ev.warning) plainBadges.push('إنذار ⚠️');
-                if (rec.ev.level === 'we' || rec.ev.level === 'weak' || rec.ev.award === 'weak' || rec.ev.weak) plainBadges.push('ضعيف 📉');
-                if (rec.ev.level === 'vg') plainBadges.push('جيد جداً 🌟');
-                if (rec.ev.level === 'fa') plainBadges.push('مقبول 👍');
-                
-                let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
-                
-                let homeworkText = rec.ev.assignmentName || rec.ev.assignment || rec.ev.homework || rec.ev.homeworkTitle || rec.ev.homeworkDetails || rec.ev.task || rec.ev.title || "";
-                let noteText = rec.ev.note || rec.ev.notes || rec.ev.details || rec.ev.comment || rec.ev.comments || rec.ev.msg || rec.ev.message || rec.ev.reason || rec.ev.description || rec.ev.text || rec.ev.evalNote || rec.ev.content || "";
-                
-                let combinedDetails = "";
-                if (typeof rec.ev === 'string') { 
-                    combinedDetails = rec.ev; 
-                } else if (homeworkText && noteText) { 
-                    combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
-                } else if (homeworkText) { 
-                    combinedDetails = `الواجب: ${homeworkText}`; 
-                } else if (noteText) { 
-                    combinedDetails = `الملاحظة: ${noteText}`; 
-                } else { 
-                    // عرض الملاحظات الفارغة بوضوح ليسهل حذفها
-                    combinedDetails = '<span style="color:#ef4444; font-weight:bold;">رصد متابعة: (بدون محتوى نصي / نقاط فقط)</span>'; 
-                }
-
-                tbody.innerHTML += `
-                    <tr style="border-bottom: 1px solid #e2e8f0;">
-                        <td style="text-align:center;"><input type="checkbox" class="t-log-cb" style="width:16px; height:16px; cursor:pointer;" data-c="${rec.cName}" data-s="${rec.sKey}" data-e="${rec.eKey}"></td>
-                        <td><b>${rec.sName}</b> <br><small style="color:var(--muted)">(${rec.cName})</small></td>
-                        <td>
-                            <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:4px;">${evalBadgeText}</div>
-                            <div style="font-size:13px; color:var(--dark);">${combinedDetails}</div>
-                        </td>
-                        <td>${dateStr}</td>
-                        <td>
-                            <button onclick="deleteSingleTeacherLog('${rec.cName}', '${rec.sKey}', '${rec.eKey}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold;">حذف نهائي</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            if (count === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">لا توجد سجلات أو إرساليات مسجلة لهذا المعلم.</td></tr>';
-            }
-        });
+    database.ref('deputies').push({
+        name: name, phone: phone, user: user, pass: user, schoolId: activeSchoolId
+    }).then(() => {
+        showNotification('تم إضافة الوكيل بنجاح ✓');
+        document.getElementById('depName').value = ''; document.getElementById('depPhone').value = ''; document.getElementById('depUser').value = '';
+        buildDeputiesGrid();
     });
 }
 
-function closeTeacherLogModal() {
-    document.getElementById('teacherLogModal').style.display = 'none';
+function buildDeputiesGrid() {
+    if(!activeSchoolId) return;
+    database.ref('deputies').orderByChild('schoolId').equalTo(activeSchoolId).once('value', snap => {
+        const tbody = document.getElementById('schoolDeputiesTableBody');
+        tbody.innerHTML = '';
+        let hasDeputies = false;
+        
+        snap.forEach(child => {
+            let d = child.val();
+            hasDeputies = true;
+            const waLink = d.phone ? getWhatsAppLink(d.phone, d.name, d.user, `وكيل إدارة المدرسة`) : '#';
+            const waDisplay = d.phone ? `<a href="${waLink}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="margin-bottom:4px;">💬 بطاقة الدخول</a>` : '';
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><a class="clickable-name" onclick="openCardModal('${d.name.replace(/'/g, "\\'")}', 'وكيل الإدارة', '${d.user}', '${d.phone}')">👔 ${d.name} 🪪</a></td>
+                    <td>
+                        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
+                            <input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; width:100px;" value="${d.phone || ''}" onchange="updateField('deputies', '${child.key}', 'phone', this.value)">
+                            <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">${waDisplay}</div>
+                        </div>
+                    </td>
+                    <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${d.user}" onchange="updateField('deputies', '${child.key}', 'user', this.value); updateField('deputies', '${child.key}', 'pass', this.value)"></td>
+                    <td><button onclick="removeAccount('deputies', '${child.key}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف الحساب</button></td>
+                </tr>`;
+        });
+        
+        if(!hasDeputies) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">لا يوجد وكلاء مضافين حتى الآن.</td></tr>';
+    });
 }
+
+function openMoveModal(studentKey, studentName, clsName) {
+    currentMoveStudentKey = studentKey;
+    currentMoveStudentClass = clsName;
+    document.getElementById('moveStudentName').innerText = `الطالب: ${studentName} - (من فصل: ${clsName})`;
+    
+    const select = document.getElementById('targetClassSelect');
+    select.innerHTML = '<option value="">-- اختر الفصل المستهدف --</option>';
+    
+    for(let key in localData.classes) {
+        let cName = localData.classes[key].className;
+        if(cName !== clsName) {
+            select.innerHTML += `<option value="${cName}">${cName}</option>`;
+        }
+    }
+    document.getElementById('moveStudentModal').style.display = 'flex';
+}
+function closeMoveStudentModal() { document.getElementById('moveStudentModal').style.display = 'none'; }
+
+function executeMoveOrDuplicate() {
+    const targetClass = document.getElementById('targetClassSelect').value;
+    const action = document.getElementById('moveActionSelect').value;
+    
+    if(!targetClass) { alert('الرجاء اختيار الفصل المستهدف من القائمة.'); return; }
+    
+    const studentData = localData.students[currentMoveStudentKey];
+    if(!studentData) return;
+    
+    if(action === 'duplicate') {
+        let newData = {...studentData};
+        newData.className = targetClass;
+        database.ref('students').push(newData).then(() => {
+            showNotification('تم تكرار حساب الطالب في الفصل الجديد بنجاح ✓');
+            closeMoveStudentModal();
+        });
+    } else if(action === 'move') {
+        database.ref('students/' + currentMoveStudentKey).update({ className: targetClass });
+        
+        let evals = (localData.evaluations[currentMoveStudentClass] || {})[currentMoveStudentKey];
+        if(evals) {
+            database.ref(`evaluations/${targetClass}/${currentMoveStudentKey}`).set(evals).then(() => {
+                database.ref(`evaluations/${currentMoveStudentClass}/${currentMoveStudentKey}`).remove();
+            });
+        }
+        showNotification('تم نقل الطالب بجميع سجلاته إلى الفصل الجديد ✓');
+        closeMoveStudentModal();
+    }
+}
+
+function openTeacherLogModal(teacherName) {
+    currentTeacherLogName = teacherName;
+    document.getElementById('teacherLogTitle').innerText = `باسم المعلم: ${teacherName}`;
+    const tbody = document.getElementById('teacherLogTableBody');
+    tbody.innerHTML = '';
+    document.getElementById('teacherLogModal').style.display = 'flex';
+    document.getElementById('selectAllTLogs').checked = false;
+
+    let activeClassNames = Object.values(localData.classes || {}).map(c => c.className);
+    let count = 0;
+    let records = [];
+
+    activeClassNames.forEach(cName => {
+        let cEvals = localData.evaluations[cName] || {};
+        for (let sKey in cEvals) {
+            let sName = (localData.students[sKey] && localData.students[sKey].studentName) ? localData.students[sKey].studentName : 'طالب محذوف من النظام';
+            for (let eKey in cEvals[sKey]) {
+                let ev = cEvals[sKey][eKey];
+                let tName = ev.teacherName || ev.teacher || ev.author || '';
+                
+                if (tName === teacherName) {
+                    records.push({ cName, sKey, sName, eKey, ev });
+                }
+            }
+        }
+    });
+
+    records.sort((a, b) => {
+        let tA = extractTimeFromKey(a.eKey) || 0;
+        let tB = extractTimeFromKey(b.eKey) || 0;
+        return tB - tA;
+    });
+
+    records.forEach(rec => {
+        count++;
+        let dateStr = formatBeautifulDate(rec.ev.timestamp || rec.ev.date || rec.ev.createdAt || extractTimeFromKey(rec.eKey));
+        let plainBadges = [];
+        if (rec.ev.level === 'exc') plainBadges.push('تميز ✨');
+        if (rec.ev.level === 'cre' || rec.ev.level === 'creative' || rec.ev.award === 'creative') plainBadges.push('مبدع 💡');
+        if (rec.ev.award === 'gold') plainBadges.push('وسام ذهبي 🥇');
+        if (rec.ev.award === 'silver') plainBadges.push('وسام فضي 🥈');
+        if (rec.ev.award === 'bronze') plainBadges.push('وسام برونزي 🥉');
+        if (rec.ev.warning) plainBadges.push('إنذار ⚠️');
+        if (rec.ev.level === 'we' || rec.ev.level === 'weak' || rec.ev.award === 'weak' || rec.ev.weak) plainBadges.push('ضعيف 📉');
+        if (rec.ev.level === 'absent' || rec.ev.absence) plainBadges.push('غياب 🚫');
+        if (rec.ev.level === 'vg') plainBadges.push('جيد جداً 🌟');
+        if (rec.ev.level === 'fa') plainBadges.push('مقبول 👍');
+        
+        let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
+        let homeworkText = rec.ev.assignmentName || rec.ev.assignment || rec.ev.homework || rec.ev.homeworkTitle || rec.ev.task || rec.ev.title || "";
+        let noteText = rec.ev.note || rec.ev.notes || rec.ev.details || rec.ev.comment || rec.ev.msg || rec.ev.reason || rec.ev.description || rec.ev.evalNote || "";
+        
+        let combinedDetails = "";
+        if (typeof rec.ev === 'string') combinedDetails = rec.ev; 
+        else if (homeworkText && noteText) combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
+        else if (homeworkText) combinedDetails = `الواجب: ${homeworkText}`; 
+        else if (noteText) combinedDetails = `الملاحظة: ${noteText}`; 
+        else combinedDetails = '<span style="color:#ef4444; font-weight:bold;">رصد متابعة: (بدون محتوى نصي / نقاط فقط)</span>'; 
+
+        tbody.innerHTML += `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="text-align:center;"><input type="checkbox" class="t-log-cb" style="width:16px; height:16px; cursor:pointer;" data-c="${rec.cName}" data-s="${rec.sKey}" data-e="${rec.eKey}"></td>
+                <td><b>${rec.sName}</b> <br><small style="color:var(--muted)">(${rec.cName})</small></td>
+                <td>
+                    <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:4px;">${evalBadgeText}</div>
+                    <div style="font-size:13px; color:var(--dark);">${combinedDetails}</div>
+                </td>
+                <td>${dateStr}</td>
+                <td>
+                    <button onclick="deleteSingleTeacherLog('${rec.cName}', '${rec.sKey}', '${rec.eKey}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold;">حذف نهائي</button>
+                </td>
+            </tr>`;
+    });
+
+    if (count === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">لا توجد سجلات أو إرساليات مسجلة لهذا المعلم.</td></tr>';
+}
+
+function closeTeacherLogModal() { document.getElementById('teacherLogModal').style.display = 'none'; }
 
 function toggleAllTLogs(source) {
     let checkboxes = document.querySelectorAll('.t-log-cb');
-    for(let i=0, n=checkboxes.length; i<n; i++) {
-        checkboxes[i].checked = source.checked;
-    }
+    for(let i=0; i<checkboxes.length; i++) checkboxes[i].checked = source.checked;
 }
 
 function deleteSingleTeacherLog(cName, sKey, eKey) {
     if(!confirm("⚠️ هل أنت متأكد من حذف هذا السجل نهائياً للطلاب المحددين؟")) return;
     database.ref('evaluations/' + cName + '/' + sKey + '/' + eKey).remove().then(() => {
         showNotification("تم حذف السجل بنجاح ✓");
-        openTeacherLogModal(currentTeacherLogName); // تحديث القائمة
-        if(selectedClassFilter === cName) buildStudentsGrid(cName);
-        loadAdminStatsAndRankings();
-    }).catch(err => {
-        alert("حدث خطأ أثناء الحذف: " + err.message);
-    });
+        openTeacherLogModal(currentTeacherLogName); 
+    }).catch(err => alert("حدث خطأ أثناء الحذف: " + err.message));
 }
 
 function deleteSelectedTeacherLogs() {
     const checkboxes = document.querySelectorAll('.t-log-cb:checked');
-    if(checkboxes.length === 0) {
-        alert("الرجاء تحديد سجل واحد على الأقل للحذف.");
-        return;
-    }
-    if(!confirm(`⚠️ هل أنت متأكد من حذف (${checkboxes.length}) سجل محدد نهائياً؟ سيتم سحبها من تقارير الطلاب.`)) return;
+    if(checkboxes.length === 0) { alert("الرجاء تحديد سجل واحد على الأقل للحذف."); return; }
+    if(!confirm(`⚠️ هل أنت متأكد من حذف (${checkboxes.length}) سجل محدد نهائياً؟`)) return;
 
     let deletePromises = [];
     checkboxes.forEach(cb => {
-        let c = cb.getAttribute('data-c');
-        let s = cb.getAttribute('data-s');
-        let e = cb.getAttribute('data-e');
+        let c = cb.getAttribute('data-c'), s = cb.getAttribute('data-s'), e = cb.getAttribute('data-e');
         deletePromises.push(database.ref('evaluations/' + c + '/' + s + '/' + e).remove());
     });
 
     Promise.all(deletePromises).then(() => {
         showNotification("تم الحذف المتعدد بنجاح ✓");
-        openTeacherLogModal(currentTeacherLogName); // تحديث القائمة
-        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
-        loadAdminStatsAndRankings();
-    }).catch(err => {
-        alert("حدث خطأ أثناء الحذف المجمع: " + err.message);
-    });
+        openTeacherLogModal(currentTeacherLogName); 
+    }).catch(err => alert("حدث خطأ أثناء الحذف المجمع: " + err.message));
 }
-
 
 function openEvalHistoryModal(studentKey, studentName, className, studentPhone) {
     document.getElementById('evalHistoryStudentTitle').innerText = `الطالب: ${studentName} - فصل (${className})`;
     const actionsDiv = document.getElementById('evalHistoryActions');
     actionsDiv.innerHTML = '';
     const tbody = document.getElementById('evalHistoryTableBody');
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">جاري تحميل سجل النقاط...</td></tr>';
+    tbody.innerHTML = '';
     document.getElementById('evalHistoryModal').style.display = 'flex';
 
-    database.ref('evaluations/' + className + '/' + studentKey).once('value').then(snapshot => {
-        const evals = snapshot.val() || {};
-        tbody.innerHTML = '';
-        let count = 0;
-        let reportText = `📊 *سجل المتابعة والواجبات*\n\n🎓 الطالب/ـة: *${studentName}*\n🏫 الفصل: *${className}*\n\n`;
+    const evals = (localData.evaluations[className] || {})[studentKey] || {};
+    let count = 0;
+    let reportText = `📊 *سجل المتابعة والواجبات*\n\n🎓 الطالب/ـة: *${studentName}*\n🏫 الفصل: *${className}*\n\n`;
 
-        for (let eKey in evals) {
-            count++;
-            let ev = evals[eKey];
-            let teacherName = ev.teacherName || ev.teacher || ev.author || 'المعلم المانح';
-            let teacherSubject = ev.subject || ev.teacherSubject || ev.spec || ev.maddah || '';
-            let displayTeacher = teacherSubject ? `${teacherName} [تخصص: ${teacherSubject}]` : teacherName;
-            
-            let rawDate = ev.timestamp ? ev.timestamp : (ev.date ? ev.date : ev.createdAt);
-            
-            if (!rawDate || (typeof rawDate === 'string' && isNaN(new Date(rawDate).getTime()) && isNaN(Number(rawDate)))) {
-                let extracted = extractTimeFromKey(eKey);
-                if (extracted) rawDate = extracted;
-            }
-
-            let dateStr = formatBeautifulDate(rawDate);
-            let simpleDateStr = parseAndFormatDate(rawDate);
-            
-            let detailsHtml = '';
-            let plainBadges = [];
-
-            if (ev.level === 'exc') { 
-                detailsHtml += '<span class="badge" style="background:#e0e7ff; color:#3730a3;">تميز ✨ (+2 نقطة)</span> '; 
-                plainBadges.push('تميز ✨');
-            }
-            if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') {
-                detailsHtml += '<span class="badge" style="background:#fef08a; color:#854d0e;">مبدع 💡 (+4 نقاط)</span> '; 
-                plainBadges.push('مبدع 💡');
-            }
-            if (ev.award === 'gold') { 
-                detailsHtml += '<span class="badge" style="background:#fef3c7; color:#d97706;">وسام ذهبي 🥇 (+5 نقاط)</span> '; 
-                plainBadges.push('وسام ذهبي 🥇');
-            }
-            if (ev.award === 'silver') { 
-                detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">وسام فضي 🥈 (+3 نقاط)</span> '; 
-                plainBadges.push('وسام فضي 🥈');
-            }
-            if (ev.award === 'bronze') { 
-                detailsHtml += '<span class="badge" style="background:#ffedd5; color:#c2410c;">وسام برونزي 🥉 (+1 نقطة)</span> '; 
-                plainBadges.push('وسام برونزي 🥉');
-            }
-            if (ev.warning) { 
-                detailsHtml += '<span class="badge" style="background:#fee2e2; color:#b91c1c;">ضعف / إنذار ⚠️ (-3 نقاط)</span> '; 
-                plainBadges.push('إنذار ⚠️');
-            }
-            if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) {
-                detailsHtml += '<span class="badge" style="background:#fca5a5; color:#7f1d1d;">ضعيف 📉 (-2 نقاط)</span> '; 
-                plainBadges.push('ضعيف 📉');
-            }
-            if (ev.level === 'vg') { 
-                detailsHtml += '<span class="badge" style="background:#bbf7d0; color:#166534;">جيد جداً 🌟 (+1 نقطة)</span> '; 
-                plainBadges.push('جيد جداً 🌟');
-            }
-            if (ev.level === 'fa') { 
-                detailsHtml += '<span class="badge" style="background:#e5e7eb; color:#374151;">مقبول 👍 (0 نقاط)</span> '; 
-                plainBadges.push('مقبول 👍');
-            }
-            
-            if (plainBadges.length === 0) {
-                detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">متابعة بدون تقييم 📌</span> ';
-            }
-
-            let homeworkText = ev.assignmentName || ev.assignment || ev.homework || ev.homeworkTitle || ev.homeworkDetails || ev.task || ev.title || "";
-            let noteText = ev.note || ev.notes || ev.details || ev.comment || ev.comments || ev.msg || ev.message || ev.reason || ev.description || ev.text || ev.evalNote || ev.content || "";
-            
-            let combinedDetails = "";
-            if (typeof ev === 'string') {
-                combinedDetails = ev;
-            } else if (homeworkText && noteText) {
-                combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`;
-            } else if (homeworkText) {
-                combinedDetails = `الواجب: ${homeworkText}`;
-            } else if (noteText) {
-                combinedDetails = `الملاحظة: ${noteText}`;
-            } else {
-                combinedDetails = 'رصد متابعة (بدون محتوى / نقاط فقط)';
-            }
-
-            detailsHtml += `
-                <div style="margin-top:10px; padding:8px 12px; background:#f8fafc; border-radius:10px; border:1px dashed #94a3b8; font-size:13px;">
-                    <span style="color:var(--primary); font-weight:800; display:block; margin-bottom:4px;">📋 بيانات الواجب/الملاحظة:</span> 
-                    <span style="color:var(--dark); font-weight:700;">${combinedDetails}</span>
-                </div>
-            `;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td><b style="font-size: 14px;">👨‍🏫 ${displayTeacher}</b></td>
-                    <td>${detailsHtml}</td>
-                    <td>${dateStr}</td>
-                    <td class="hide-on-print">
-                        <button onclick="deleteSingleEval('${className}', '${studentKey}', '${eKey}', '${studentName.replace(/'/g, "\\'")}', '${studentPhone || ''}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف نهائي 🗑️</button>
-                    </td>
-                </tr>
-            `;
-
-            let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
-            reportText += `👨‍🏫 المعلم: ${displayTeacher}\n📅 اليوم والتاريخ: ${simpleDateStr}\n🎖️ التقييم: ${evalBadgeText}\n📝 التفاصيل: ${combinedDetails}\n\n`;
+    for (let eKey in evals) {
+        count++;
+        let ev = evals[eKey];
+        let teacherName = ev.teacherName || ev.teacher || ev.author || 'المعلم المانح';
+        let teacherSubject = ev.subject || ev.teacherSubject || ev.spec || '';
+        let displayTeacher = teacherSubject ? `${teacherName} [تخصص: ${teacherSubject}]` : teacherName;
+        
+        let rawDate = ev.timestamp ? ev.timestamp : (ev.date ? ev.date : ev.createdAt);
+        if (!rawDate || (typeof rawDate === 'string' && isNaN(new Date(rawDate).getTime()) && isNaN(Number(rawDate)))) {
+            let extracted = extractTimeFromKey(eKey);
+            if (extracted) rawDate = extracted;
         }
 
-        if (count === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الطالب حتى الآن.</td></tr>';
-            reportText += "لا توجد تقييمات مسجلة حتى الآن.\n";
-        }
+        let dateStr = formatBeautifulDate(rawDate);
+        let simpleDateStr = parseAndFormatDate(rawDate);
+        
+        let detailsHtml = ''; let plainBadges = [];
 
-        if (studentPhone) {
-            let cleanPhone = formatPhoneForWhatsApp(studentPhone);
-            let encodedMsg = encodeURIComponent(reportText);
-            actionsDiv.innerHTML = `<a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)">💬 إرسال التقرير كامل واتساب</a>`;
-        }
-    });
+        if (ev.level === 'exc') { detailsHtml += '<span class="badge" style="background:#e0e7ff; color:#3730a3;">تميز ✨ (+2 نقطة)</span> '; plainBadges.push('تميز ✨'); }
+        if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') { detailsHtml += '<span class="badge" style="background:#fef08a; color:#854d0e;">مبدع 💡 (+4 نقاط)</span> '; plainBadges.push('مبدع 💡'); }
+        if (ev.award === 'gold') { detailsHtml += '<span class="badge" style="background:#fef3c7; color:#d97706;">وسام ذهبي 🥇 (+5)</span> '; plainBadges.push('وسام ذهبي 🥇'); }
+        if (ev.award === 'silver') { detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">فضي 🥈 (+3)</span> '; plainBadges.push('وسام فضي 🥈'); }
+        if (ev.award === 'bronze') { detailsHtml += '<span class="badge" style="background:#ffedd5; color:#c2410c;">برونزي 🥉 (+1)</span> '; plainBadges.push('وسام برونزي 🥉'); }
+        if (ev.warning) { detailsHtml += '<span class="badge" style="background:#fee2e2; color:#b91c1c;">إنذار ⚠️ (-3)</span> '; plainBadges.push('إنذار ⚠️'); }
+        if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) { detailsHtml += '<span class="badge" style="background:#fca5a5; color:#7f1d1d;">ضعيف 📉 (-2)</span> '; plainBadges.push('ضعيف 📉'); }
+        if (ev.level === 'absent' || ev.absence) { detailsHtml += '<span class="badge" style="background:#fecdd3; color:#be123c;">غياب 🚫</span> '; plainBadges.push('غياب 🚫'); }
+        if (ev.level === 'vg') { detailsHtml += '<span class="badge" style="background:#bbf7d0; color:#166534;">جيد جداً 🌟 (+1)</span> '; plainBadges.push('جيد جداً 🌟'); }
+        if (ev.level === 'fa') { detailsHtml += '<span class="badge" style="background:#e5e7eb; color:#374151;">مقبول 👍 (0)</span> '; plainBadges.push('مقبول 👍'); }
+        
+        if (plainBadges.length === 0) detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">متابعة بدون تقييم 📌</span> ';
+
+        let homeworkText = ev.assignmentName || ev.assignment || ev.homework || ev.title || "";
+        let noteText = ev.note || ev.notes || ev.details || ev.comment || ev.msg || "";
+        let combinedDetails = "";
+        
+        if (typeof ev === 'string') combinedDetails = ev; 
+        else if (homeworkText && noteText) combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
+        else if (homeworkText) combinedDetails = `الواجب: ${homeworkText}`; 
+        else if (noteText) combinedDetails = `الملاحظة: ${noteText}`; 
+        else combinedDetails = 'رصد متابعة (بدون محتوى / نقاط فقط)';
+
+        detailsHtml += `<div style="margin-top:10px; padding:8px 12px; background:#f8fafc; border-radius:10px; border:1px dashed #94a3b8; font-size:13px;">
+                            <span style="color:var(--primary); font-weight:800; display:block; margin-bottom:4px;">📋 بيانات الواجب/الملاحظة:</span> 
+                            <span style="color:var(--dark); font-weight:700;">${combinedDetails}</span>
+                        </div>`;
+
+        tbody.innerHTML += `
+            <tr>
+                <td><b style="font-size: 14px;">👨‍🏫 ${displayTeacher}</b></td>
+                <td>${detailsHtml}</td>
+                <td>${dateStr}</td>
+                <td class="hide-on-print">
+                    <button onclick="deleteSingleEval('${className}', '${studentKey}', '${eKey}', '${studentName.replace(/'/g, "\\'")}', '${studentPhone || ''}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف نهائي 🗑️</button>
+                </td>
+            </tr>`;
+
+        let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
+        reportText += `👨‍🏫 المعلم: ${displayTeacher}\n📅 التاريخ: ${simpleDateStr}\n🎖️ التقييم: ${evalBadgeText}\n📝 التفاصيل: ${combinedDetails}\n\n`;
+    }
+
+    if (count === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الطالب حتى الآن.</td></tr>';
+        reportText += "لا توجد تقييمات مسجلة حتى الآن.\n";
+    }
+
+    if (studentPhone) {
+        let cleanPhone = formatPhoneForWhatsApp(studentPhone);
+        let encodedMsg = encodeURIComponent(reportText);
+        actionsDiv.innerHTML = `<a href="https://wa.me/${cleanPhone}?text=${encodedMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)">💬 إرسال التقرير كامل واتساب</a>`;
+    }
 }
 
 function deleteSingleEval(className, studentKey, eKey, studentName, studentPhone) {
     if(!confirm("⚠️ هل أنت متأكد من حذف هذه الرسالة/التقييم نهائياً؟")) return;
-    
     database.ref('evaluations/' + className + '/' + studentKey + '/' + eKey).remove().then(() => {
         showNotification("تم حذف الرسالة نهائياً ✓");
         openEvalHistoryModal(studentKey, studentName, className, studentPhone);
-        if(selectedClassFilter === className) buildStudentsGrid(className);
-        loadAdminStatsAndRankings();
-    }).catch(err => {
-        alert("حدث خطأ أثناء الحذف: " + err.message);
     });
 }
 
@@ -898,25 +1177,18 @@ function printEvalHistory() {
     let printContents = document.getElementById('printEvalArea').innerHTML;
     let printWindow = window.open('', '', 'height=600,width=800');
     printWindow.document.write(`
-        <html lang="ar" dir="rtl">
-        <head>
-            <title>طباعة سجل تقييم الطالب</title>
-            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-            <style>
-                body { font-family: 'Cairo', sans-serif; padding: 20px; color: #0f172a; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
-                th, td { border: 1px solid #cbd5e1; padding: 12px; font-size: 14px; }
-                th { background-color: #f1f5f9; }
-                .hide-on-print { display: none !important; }
-                .badge { padding: 5px; border-radius: 5px; font-size: 12px; }
-            </style>
-        </head>
-        <body>
-            ${printContents}
-            <script>setTimeout(function(){ window.print(); window.close(); }, 500);<\/script>
-        </body>
-        </html>
-    `);
+        <html lang="ar" dir="rtl"><head><title>طباعة سجل تقييم الطالب</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+        <style>
+            body { font-family: 'Cairo', sans-serif; padding: 20px; color: #0f172a; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
+            th, td { border: 1px solid #cbd5e1; padding: 12px; font-size: 14px; }
+            th { background-color: #f1f5f9; }
+            .hide-on-print { display: none !important; }
+            .badge { padding: 5px; border-radius: 5px; font-size: 12px; }
+        </style></head><body>
+        ${printContents}
+        <script>setTimeout(function(){ window.print(); window.close(); }, 500);<\/script></body></html>`);
     printWindow.document.close();
 }
 
@@ -949,291 +1221,572 @@ function loginAsSchoolAdmin() {
     });
 }
 
+function logoutSchoolAdmin() {
+    detachAllListeners();
+    activeSchoolId = null;
+    activeSchoolName = null;
+    selectedClassFilter = null;
+    document.getElementById('schoolDashboardContent').style.display = 'none';
+    document.getElementById('schoolAuthBox').style.display = 'block';
+    document.getElementById('admLoginUser').value = '';
+    document.getElementById('admLoginPass').value = '';
+    showNotification("تم تسجيل الخروج بنجاح 👋");
+}
+
 function initSchoolDashboard() {
     if(!activeSchoolId) return;
-    database.ref('classes/' + activeSchoolId).on('value', snapshot => { 
-        syncClassesLayout(); 
+    detachAllListeners();
+    
+    showNotification("جاري تحميل بيانات المدرسة وتهيئة السجلات الذكية...");
+
+    const studentsRef = database.ref('students');
+    studentsRef.on('value', snap => {
+        localData.students = snap.val() || {};
         loadAdminStatsAndRankings(); 
-    });
-    database.ref('assignments').on('value', snapshot => { 
-        buildTeachersGrid(); 
-        populateExistingTeachersDropdown(); 
-        loadAdminStatsAndRankings(); 
-    });
-    database.ref('students').on('value', snapshot => { 
-        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter); 
-        loadAdminStatsAndRankings();
-    });
-    database.ref('evaluations').on('value', snapshot => {
         if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
+    });
+    activeListeners.push({ ref: studentsRef, event: 'value' });
+
+    const assignmentsRef = database.ref('assignments');
+    assignmentsRef.on('value', snap => {
+        localData.assignments = snap.val() || {};
+        buildTeachersGrid();
         loadAdminStatsAndRankings();
     });
+    activeListeners.push({ ref: assignmentsRef, event: 'value' });
+
+    const evalsRef = database.ref('evaluations');
+    evalsRef.on('value', snap => {
+        localData.evaluations = snap.val() || {};
+        loadAdminStatsAndRankings();
+        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
+    });
+    activeListeners.push({ ref: evalsRef, event: 'value' });
+
+    const classesRef = database.ref('classes/' + activeSchoolId);
+    classesRef.on('value', snapshot => { 
+        localData.classes = snapshot.val() || {};
+        syncClassesLayout(); 
+        loadAdminStatsAndRankings();
+    });
+    activeListeners.push({ ref: classesRef, event: 'value' });
+
+    populateExistingTeachersDropdown(); 
+    buildDeputiesGrid();
 }
 
 function loadAdminStatsAndRankings() {
     if(!activeSchoolId) return;
 
-    database.ref('classes/' + activeSchoolId).once('value', classSnap => {
-        const validClassesData = classSnap.val() || {};
-        const activeClassNames = Object.values(validClassesData).map(c => c.className);
+    const validClassesData = localData.classes || {};
+    const activeClassNames = Object.values(validClassesData).map(c => c.className);
+    
+    const studentsData = {};
+    for(let key in localData.students) {
+        if(localData.students[key].schoolId === activeSchoolId) {
+            studentsData[key] = localData.students[key];
+        }
+    }
+    const allAssignments = {};
+    for(let key in localData.assignments) {
+        if(localData.assignments[key].schoolId === activeSchoolId) {
+            allAssignments[key] = localData.assignments[key];
+        }
+    }
+    const evalsData = localData.evaluations || {};
 
-        database.ref('students').once('value', studentSnap => {
-            const studentsData = studentSnap.val() || {};
+    let totals = { exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, absent: 0 };
+    let classRankings = {}; 
+    let teacherActivity = {}; 
+    
+    let totalSchoolHw = 0;
+    let totalSchoolDoneHw = 0;
+    globalClassHwStats = {}; 
+    globalClassParentLoginStats = {}; // نسبة دخول أولياء الأمور
+    globalTeacherStats = [];
+    globalDailyInteractionStats = [];
+
+    let now = Date.now();
+    let thirtyMinsTime = now - (30 * 60 * 1000); 
+    
+    let onlineTeachersCount = 0;
+    let onlineParentsCount = 0;
+    let totalStudentsCount = 0;
+    let loggedInStudentsCount = 0;
+
+    let last15DaysMap = {};
+    for (let i = 0; i < 15; i++) {
+        let d = new Date(now - (i * 24 * 60 * 60 * 1000));
+        let keyDate = d.toISOString().split('T')[0];
+        let options = { weekday: 'short', month: 'numeric', day: 'numeric' };
+        last15DaysMap[keyDate] = {
+            dateKey: keyDate, dateLabel: d.toLocaleDateString('ar-SA', options),
+            isToday: i === 0, count: 0, logins: 0, totalActivity: 0
+        };
+    }
+
+    // --- حساب الطلاب ودخول أولياء الأمور (مؤشر قوي وثابت) ---
+    for (let sKey in studentsData) {
+        let s = studentsData[sKey];
+        totalStudentsCount++;
+        let hasLogin = false;
+        
+        let loginTime = getValidLoginTime(s);
+        if (loginTime > 0) {
+            hasLogin = true;
+            loggedInStudentsCount++;
+            if (loginTime >= thirtyMinsTime) onlineParentsCount++;
             
-            database.ref('evaluations').once('value', evalSnap => {
-                const evalsData = evalSnap.val() || {};
-                
-                database.ref('assignments').once('value', assignSnap => {
-                    const allAssignments = assignSnap.val() || {};
-                    
-                    let totals = { exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0 };
-                    let classRankings = {}; 
-                    let teacherActivity = {}; 
+            let loginDateKey = new Date(loginTime).toISOString().split('T')[0];
+            if (last15DaysMap[loginDateKey]) last15DaysMap[loginDateKey].logins++;
+        }
+        
+        if (s.className && activeClassNames.includes(s.className)) {
+            if (!globalClassParentLoginStats[s.className]) globalClassParentLoginStats[s.className] = { total: 0, loggedIn: 0 };
+            globalClassParentLoginStats[s.className].total++;
+            if (hasLogin) globalClassParentLoginStats[s.className].loggedIn++;
+        }
+    }
 
-                    for (let tKey in allAssignments) {
-                        if (allAssignments[tKey].schoolId === activeSchoolId) {
-                            teacherActivity[allAssignments[tKey].teacherName] = { 
-                                count: 0, 
-                                subject: allAssignments[tKey].subject || 'عام',
-                                exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0
-                            };
-                        }
-                    }
+    // --- حساب المعلمين ---
+    let totalTeachersCount = 0;
+    for (let tKey in allAssignments) {
+        totalTeachersCount++;
+        let tObj = allAssignments[tKey];
+        let tName = tObj.teacherName;
+        
+        let tLoginTime = getValidLoginTime(tObj);
+        if (tLoginTime >= thirtyMinsTime) onlineTeachersCount++;
+        
+        let assignedClassesList = tObj.className ? tObj.className.split(',').map(x => x.trim()).filter(x => x) : [];
+        teacherActivity[tName] = { 
+            count: 0, totalHw: 0, doneHw: 0, subject: tObj.subject || 'عام',
+            assignedClassesCount: assignedClassesList.length,
+            exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, absent: 0
+        };
+    }
 
-                    for (let className in evalsData) {
-                        if (!activeClassNames.includes(className)) continue;
-
-                        classRankings[className] = [];
-                        
-                        for (let studentKey in evalsData[className]) {
-                            let studentInfo = studentsData[studentKey];
-                            if (!studentInfo || studentInfo.schoolId !== activeSchoolId) continue;
-
-                            let sStats = { 
-                                key: studentKey, 
-                                name: studentInfo.studentName, 
-                                phone: studentInfo.studentPhone || '',
-                                exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, points: 0,
-                                teachersSet: new Set()
-                            };
-                            
-                            let sEvals = evalsData[className][studentKey];
-                            for (let eKey in sEvals) {
-                                let ev = sEvals[eKey];
-                                let tName = ev.teacherName || ev.teacher || ev.author || 'المعلم المانح';
-                                let tSubj = ev.subject || ev.teacherSubject || ev.spec || '';
-                                let teacherFullLabel = tSubj ? `${tName} (${tSubj})` : tName;
-                                
-                                if (!teacherActivity[tName]) {
-                                    teacherActivity[tName] = { count: 0, subject: tSubj || 'غير محدد', exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0 };
-                                }
-                                teacherActivity[tName].count++;
-
-                                sStats.teachersSet.add(teacherFullLabel);
-
-                                if (ev.level === 'exc') { totals.exc++; sStats.exc++; sStats.points += 2; teacherActivity[tName].exc++; }
-                                if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') { totals.creative++; sStats.creative++; sStats.points += 4; teacherActivity[tName].creative++; }
-                                if (ev.award === 'gold') { totals.gold++; sStats.gold++; sStats.points += 5; teacherActivity[tName].gold++; }
-                                if (ev.award === 'silver') { totals.silver++; sStats.silver++; sStats.points += 3; teacherActivity[tName].silver++; }
-                                if (ev.award === 'bronze') { totals.bronze++; sStats.bronze++; sStats.points += 1; teacherActivity[tName].bronze++; }
-                                if (ev.warning) { totals.warn++; sStats.warn++; sStats.points -= 3; teacherActivity[tName].warn++; }
-                                if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) { totals.weak++; sStats.weak++; sStats.points -= 2; teacherActivity[tName].weak++; }
-                                if (ev.level === 'vg') { totals.vg++; sStats.vg++; sStats.points += 1; teacherActivity[tName].vg++; }
-                                if (ev.level === 'fa') { totals.fa++; sStats.fa++; teacherActivity[tName].fa++; }
-                            }
-                            classRankings[className].push(sStats);
-                        }
-                    }
-
-                    let topTeachers = Object.keys(teacherActivity).map(t => ({ 
-                        name: t, 
-                        count: teacherActivity[t].count,
-                        subject: teacherActivity[t].subject,
-                        exc: teacherActivity[t].exc,
-                        creative: teacherActivity[t].creative,
-                        gold: teacherActivity[t].gold,
-                        silver: teacherActivity[t].silver,
-                        bronze: teacherActivity[t].bronze,
-                        warn: teacherActivity[t].warn,
-                        weak: teacherActivity[t].weak,
-                        vg: teacherActivity[t].vg,
-                        fa: teacherActivity[t].fa
-                    }));
-                    
-                    topTeachers.sort((a, b) => b.count - a.count);
-                    
-                    let activeTeachersHTML = `
-                        <div class="admin-class-section" id="print-teachers-rank">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                                <h4 style="color:var(--primary); margin:0; font-size:18px;">🔥 ترتيب وتصنيف سجل المعلمين</h4>
-                                <button onclick="printHonorRoll('print-teachers-rank', 'المعلمين')" class="btn-submit" style="width:auto; margin:0; padding:8px 15px; font-size:13px; background:var(--dark);">🖨️ طباعة التقرير</button>
-                            </div>
-                            <div style="overflow-x: auto;">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>الترتيب</th>
-                                            <th>اسم المعلم والتخصص</th>
-                                            <th>التقييمات 🎯</th>
-                                            <th>ممتاز ✨</th>
-                                            <th>مبدع 💡</th>
-                                            <th>جيد جداً 🌟</th>
-                                            <th>مقبول 👍</th>
-                                            <th>ذهب 🥇</th>
-                                            <th>فضة 🥈</th>
-                                            <th>برونز 🥉</th>
-                                            <th>ضعيف 📉</th>
-                                            <th>إنذار ⚠️</th>
-                                            <th>التفاعل 📊</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                    `;
-                    
-                    if(topTeachers.length === 0) {
-                        activeTeachersHTML += `<tr><td colspan="13" style="text-align:center; color:var(--muted);">لا يوجد معلمين مضافين في المدرسة حتى الآن.</td></tr>`;
-                    } else {
-                        topTeachers.forEach((t, i) => {
-                            let rankBadge = i === 0 ? '👑 1' : (i === 1 ? '🌟 2' : (i === 2 ? '⭐ 3' : (i + 1)));
-                            let rowStyle = t.count === 0 ? 'background: #fef2f2; color: #ef4444;' : '';
-                            
-                            let interactionLevel = "";
-                            if (t.count >= 15) {
-                                interactionLevel = '<span class="badge" style="background:#dcfce3; color:#166534;">ممتاز 🌟</span>';
-                            } else if (t.count >= 5) {
-                                interactionLevel = '<span class="badge" style="background:#fef3c7; color:#d97706;">مقبول 👍</span>';
-                            } else if (t.count > 0) {
-                                interactionLevel = '<span class="badge" style="background:#fee2e2; color:#b91c1c;">ضعيف 🔻</span>';
-                            } else {
-                                interactionLevel = '<span class="badge" style="background:#f1f5f9; color:#475569;">غير نشط ❌</span>';
-                            }
-
-                            activeTeachersHTML += `
-                                <tr style="${rowStyle}">
-                                    <td><b>${rankBadge}</b></td>
-                                    <td>
-                                        <strong style="color:var(--dark); font-size:14px;">👨‍🏫 ${t.name}</strong>
-                                        <div style="font-size:11px; color:var(--muted); margin-top:3px;">التخصص: ${t.subject}</div>
-                                    </td>
-                                    <td style="font-weight:900; font-size:16px;">${t.count}</td>
-                                    <td>${t.exc}</td>
-                                    <td>${t.creative}</td>
-                                    <td>${t.vg}</td>
-                                    <td>${t.fa}</td>
-                                    <td>${t.gold}</td>
-                                    <td>${t.silver}</td>
-                                    <td>${t.bronze}</td>
-                                    <td style="color:#ef4444;">${t.weak}</td>
-                                    <td style="color:#ef4444;">${t.warn}</td>
-                                    <td>${interactionLevel}</td>
-                                </tr>
-                            `;
-                        });
-                    }
-                    
-                    activeTeachersHTML += `</tbody></table></div></div>`;
-                    
-                    let teachersContainer = document.getElementById('active-teachers-container');
-                    if(teachersContainer) teachersContainer.innerHTML = activeTeachersHTML;
-
-                    document.getElementById('admin-tot-exc').innerText = totals.exc;
-                    document.getElementById('admin-tot-creative').innerText = totals.creative;
-                    document.getElementById('admin-tot-gold').innerText = totals.gold;
-                    document.getElementById('admin-tot-silver').innerText = totals.silver;
-                    document.getElementById('admin-tot-bronze').innerText = totals.bronze;
-                    document.getElementById('admin-tot-weak').innerText = totals.weak;
-                    document.getElementById('admin-tot-warn').innerText = totals.warn;
-
-                    let rankingHTML = "";
-                    for (let cName in classRankings) {
-                        classRankings[cName].sort((a, b) => b.points - a.points);
-                        
-                        rankingHTML += `
-                            <div class="admin-class-section" id="print-section-${cName.replace(/\s+/g, '-')}">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                                    <h4 style="color:var(--primary); margin:0; font-size:18px;">🏆 لوحة الشرف وترتيب فصل: ${cName}</h4>
-                                    <button onclick="printHonorRoll('print-section-${cName.replace(/\s+/g, '-')}', '${cName}')" class="btn-submit" style="width:auto; margin:0; padding:8px 15px; font-size:13px; background:var(--dark);">🖨️ طباعة التقرير</button>
-                                </div>
-                                <div style="overflow-x: auto;">
-                                    <table class="admin-table">
-                                        <thead>
-                                            <tr>
-                                                <th>الترتيب</th>
-                                                <th>اسم الطالب والمعلمين</th>
-                                                <th>النقاط 🌟</th>
-                                                <th>التميز ✨</th>
-                                                <th>مبدع 💡</th>
-                                                <th>جيد جداً 🌟</th>
-                                                <th>مقبول 👍</th>
-                                                <th>ذهب 🥇</th>
-                                                <th>فضة 🥈</th>
-                                                <th>برونز 🥉</th>
-                                                <th>ضعيف 📉</th>
-                                                <th>إنذار ⚠️</th>
-                                                <th class="hide-on-print">تخصيص الرسائل 💬</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                        `;
-                        
-                        if(classRankings[cName].length === 0) {
-                            rankingHTML += `<tr><td colspan="13" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الفصل حتى الآن.</td></tr>`;
-                        } else {
-                            classRankings[cName].forEach((st, index) => {
-                                let rankBadge = index === 0 ? '👑 1' : (index === 1 ? '🌟 2' : (index === 2 ? '⭐ 3' : (index + 1)));
-                                let cleanPhone = formatPhoneForWhatsApp(st.phone);
-                                let teachersListStr = st.teachersSet.size > 0 ? Array.from(st.teachersSet).join('، ') : 'إدارة المدرسة';
-
-                                let thankMsg = encodeURIComponent(`🌟 *رسالة شكر وتقدير*\n\nمرحباً ولي أمر الطالب/ـة المتميز: *${st.name}*\nنود أن نبارك لكم تميز طالبكم وتصدره لوحة الشرف بمجموع نقاط (*${st.points}* نقطة).\nشاكرين ومقدرين حسن متابعتكم وحرصكم المستمر 🌹`);
-                                let warnMsg = encodeURIComponent(`⚠️ *رسالة تنبيه ومتابعة*\n\nمرحباً ولي أمر الطالب/ـة: *${st.name}*\nنود لفت انتباهكم الكافي لمتابعة مستوى الطالب وملاحظاته (ضعف / إنذار) المسجلة في منصة سجل الواجبات الإلكتروني (النقاط الحالية: *${st.points}*).\nشاكرين لكم تعاونكم واهتمامكم.`);
-                                let reportMsg = encodeURIComponent(`📊 *تقرير الأداء الأسبوعي - لوحة الشرف*\n\n🎓 الطالب/ـة: *${st.name}*\n🏆 الترتيب في الفصل: ${index + 1}\n🌟 إجمالي النقاط: *${st.points}*\n\n🏅 تفاصيل الأوسمة والتقييم:\n✨ تميز: ${st.exc} | 💡 مبدع: ${st.creative} | 🌟 جيد جداً: ${st.vg} | 👍 مقبول: ${st.fa} | 🥇 ذهبي: ${st.gold} | 🥈 فضي: ${st.silver} | 🥉 برونزي: ${st.bronze} | 📉 ضعيف: ${st.weak} | ⚠️ إنذارات: ${st.warn}\n\n👨‍🏫 المعلمون المانحون للتقييم:\n${teachersListStr}\n\nنتمنى لكم مزيداً من التوفيق والنجاح 🌹`);
-                                
-                                let actionButtons = cleanPhone ? `
-                                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                                        <a href="https://wa.me/${cleanPhone}?text=${reportMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#0284c7; font-size:11px; padding:4px 10px;">📱 تقرير</a>
-                                        <a href="https://wa.me/${cleanPhone}?text=${thankMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#10b981; font-size:11px; padding:4px 10px;">🌟 شكر</a>
-                                        <a href="https://wa.me/${cleanPhone}?text=${warnMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#ef4444; font-size:11px; padding:4px 10px;">⚠️ تنبيه</a>
-                                    </div>
-                                ` : `<span style="font-size:11px; color:var(--muted);">لا يوجد رقم جوال</span>`;
-
-                                let teacherDetails = `<div style="font-size:11px; color:var(--muted); margin-top:3px; font-weight:600;">👨‍🏫 التقييم من: <span style="color:var(--primary);">${teachersListStr}</span></div>`;
-
-                                rankingHTML += `
-                                    <tr>
-                                        <td><b>${rankBadge}</b></td>
-                                        <td>
-                                            <strong style="color:var(--dark); font-size:14px;">${st.name}</strong>
-                                            ${teacherDetails}
-                                        </td>
-                                        <td style="color:${st.points < 0 ? '#ef4444' : 'var(--success)'}; font-weight:900; font-size:16px;">${st.points}</td>
-                                        <td>${st.exc}</td>
-                                        <td>${st.creative}</td>
-                                        <td>${st.vg}</td>
-                                        <td>${st.fa}</td>
-                                        <td>${st.gold}</td>
-                                        <td>${st.silver}</td>
-                                        <td>${st.bronze}</td>
-                                        <td style="color:#ef4444;">${st.weak}</td>
-                                        <td style="color:#ef4444;">${st.warn}</td>
-                                        <td class="hide-on-print">${actionButtons}</td>
-                                    </tr>
-                                `;
-                            });
-                        }
-                        
-                        rankingHTML += `</tbody></table></div></div>`;
-                    }
-                    
-                    if(Object.keys(classRankings).length === 0) {
-                        rankingHTML = "<div style='text-align:center; padding:20px; color:var(--muted);'>لا توجد فصول نشطة أو تقييمات مسجلة حالياً لعرض الترتيب.</div>";
-                    }
-
-                    document.getElementById('admin-rankings-container').innerHTML = rankingHTML;
-                });
-            });
-        });
+    activeClassNames.forEach(cName => {
+        if (!globalClassParentLoginStats[cName]) globalClassParentLoginStats[cName] = { total: 0, loggedIn: 0 };
+        if (!globalClassHwStats[cName]) globalClassHwStats[cName] = { total: 0, done: 0 };
     });
+
+    // --- جرد التقييمات ---
+    for (let className in evalsData) {
+        if (!activeClassNames.includes(className)) continue;
+        classRankings[className] = [];
+        
+        for (let studentKey in evalsData[className]) {
+            let studentInfo = studentsData[studentKey];
+            if (!studentInfo) continue;
+
+            let sStats = { 
+                key: studentKey, name: studentInfo.studentName, phone: studentInfo.studentPhone || '',
+                exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, points: 0, absent: 0,
+                teachersSet: new Set()
+            };
+            
+            let sEvals = evalsData[className][studentKey];
+            for (let eKey in sEvals) {
+                let ev = sEvals[eKey];
+                let tName = ev.teacherName || ev.teacher || ev.author || 'المعلم المانح';
+                let tSubj = ev.subject || ev.teacherSubject || ev.spec || '';
+                let teacherFullLabel = tSubj ? `${tName} (${tSubj})` : tName;
+                
+                if (!teacherActivity[tName]) {
+                    teacherActivity[tName] = { 
+                        count: 0, totalHw: 0, doneHw: 0, subject: tSubj || 'غير محدد', assignedClassesCount: 1, 
+                        exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, absent: 0 
+                    };
+                }
+                teacherActivity[tName].count++;
+                sStats.teachersSet.add(teacherFullLabel);
+
+                let hwText = ev.assignmentName || ev.assignment || ev.homework || ev.homeworkTitle || ev.task || ev.title || "";
+                if (hwText.trim() !== '') {
+                    totalSchoolHw++;
+                    globalClassHwStats[className].total++;
+                    teacherActivity[tName].totalHw++;
+                    
+                    let isDone = (ev.level === 'exc' || ev.level === 'vg' || ev.level === 'fa' || ev.level === 'cre' || ev.level === 'creative' || ev.award === 'gold' || ev.award === 'silver' || ev.award === 'bronze' || ev.hwStatus === 'done' || ev.status === 'completed');
+                    if (isDone) {
+                        totalSchoolDoneHw++;
+                        globalClassHwStats[className].done++;
+                        teacherActivity[tName].doneHw++;
+                    }
+                }
+
+                let evTimestamp = ev.timestamp || ev.date || ev.createdAt || extractTimeFromKey(eKey);
+                if (evTimestamp) {
+                    let evTimeNum = typeof evTimestamp === 'number' ? evTimestamp : (new Date(evTimestamp)).getTime();
+                    if (!isNaN(evTimeNum)) {
+                        let evDateKey = new Date(evTimeNum).toISOString().split('T')[0];
+                        if (last15DaysMap[evDateKey]) last15DaysMap[evDateKey].count++;
+                    }
+                }
+
+                if (ev.level === 'exc') { totals.exc++; sStats.exc++; sStats.points += 2; teacherActivity[tName].exc++; }
+                if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') { totals.creative++; sStats.creative++; sStats.points += 4; teacherActivity[tName].creative++; }
+                if (ev.award === 'gold') { totals.gold++; sStats.gold++; sStats.points += 5; teacherActivity[tName].gold++; }
+                if (ev.award === 'silver') { totals.silver++; sStats.silver++; sStats.points += 3; teacherActivity[tName].silver++; }
+                if (ev.award === 'bronze') { totals.bronze++; sStats.bronze++; sStats.points += 1; teacherActivity[tName].bronze++; }
+                if (ev.warning) { totals.warn++; sStats.warn++; sStats.points -= 3; teacherActivity[tName].warn++; }
+                if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) { totals.weak++; sStats.weak++; sStats.points -= 2; teacherActivity[tName].weak++; }
+                if (ev.level === 'absent' || ev.absence) { totals.absent++; sStats.absent++; teacherActivity[tName].absent++; }
+                if (ev.level === 'vg') { totals.vg++; sStats.vg++; sStats.points += 1; teacherActivity[tName].vg++; }
+                if (ev.level === 'fa') { totals.fa++; sStats.fa++; teacherActivity[tName].fa++; }
+            }
+            classRankings[className].push(sStats);
+        }
+    }
+
+    updateMainEnergyBar(totalSchoolHw, totalSchoolDoneHw);
+    updateParentLoginBar(totalStudentsCount, loggedInStudentsCount); // دالة التحديث الجديدة
+
+    let validTeachersForHw = 0;
+    let accomplishedCount = 0;
+    let overallHwPercentSum = 0;
+    for (let tName in teacherActivity) {
+        let t = teacherActivity[tName];
+        if (t.totalHw > 0) {
+            let percent = Math.round((t.doneHw / t.totalHw) * 100);
+            overallHwPercentSum += percent;
+            validTeachersForHw++;
+            if (percent >= 50) accomplishedCount++;
+            globalTeacherStats.push({ name: tName, subject: t.subject, count: t.count, assignedClassesCount: t.assignedClassesCount, target: t.totalHw, percent: percent });
+        } else if (t.count > 0) {
+            let target = Math.max(5, (t.assignedClassesCount || 1) * 5);
+            let percent = Math.min(100, Math.round((t.count / target) * 100));
+            overallHwPercentSum += percent;
+            validTeachersForHw++;
+            if (percent >= 50) accomplishedCount++;
+            globalTeacherStats.push({ name: tName, subject: t.subject, count: t.count, assignedClassesCount: t.assignedClassesCount, target: target, percent: percent });
+        }
+    }
+    let avgTeacherPercent = validTeachersForHw > 0 ? Math.round(overallHwPercentSum / validTeachersForHw) : 0;
+    updateTeacherDoneBar(validTeachersForHw, avgTeacherPercent, accomplishedCount);
+
+    let totalOnline = onlineTeachersCount + onlineParentsCount;
+    document.getElementById('admin-tot-online').innerHTML = `${totalOnline} <br><span style="font-size:11px; color:#166534; font-weight:bold;">(👨‍🏫 ${onlineTeachersCount} | 👨‍👩‍👧‍👦 ${onlineParentsCount})</span>`;
+    
+    let todayDateKey = new Date(now).toISOString().split('T')[0];
+    let todayActivityCount = last15DaysMap[todayDateKey] ? (last15DaysMap[todayDateKey].count + last15DaysMap[todayDateKey].logins) : 0;
+    let targetDailyBenchmark = Math.max(10, Math.round(totalStudentsCount * 0.25));
+    let todayInteractionPercent = Math.min(100, Math.round((todayActivityCount / targetDailyBenchmark) * 100));
+    document.getElementById('admin-today-interaction').innerText = todayInteractionPercent + "%";
+
+    globalDailyInteractionStats = Object.values(last15DaysMap).map(dayItem => {
+        let totalAct = dayItem.count + dayItem.logins;
+        let percent = Math.min(100, Math.round((totalAct / targetDailyBenchmark) * 100));
+        return {
+            dateKey: dayItem.dateKey, dateLabel: dayItem.dateLabel, isToday: dayItem.isToday,
+            count: dayItem.count, logins: dayItem.logins, totalActivity: totalAct, percent: percent
+        };
+    });
+
+    document.getElementById('admin-tot-exc').innerText = totals.exc;
+    document.getElementById('admin-tot-creative').innerText = totals.creative;
+    document.getElementById('admin-tot-gold').innerText = totals.gold;
+    document.getElementById('admin-tot-silver').innerText = totals.silver;
+    document.getElementById('admin-tot-bronze').innerText = totals.bronze;
+    document.getElementById('admin-tot-weak').innerText = totals.weak;
+    document.getElementById('admin-tot-warn').innerText = totals.warn;
+    document.getElementById('admin-tot-absent').innerText = totals.absent;
+
+    let topTeachers = Object.keys(teacherActivity).map(t => ({ 
+        name: t, count: teacherActivity[t].count, subject: teacherActivity[t].subject,
+        exc: teacherActivity[t].exc, creative: teacherActivity[t].creative, gold: teacherActivity[t].gold,
+        silver: teacherActivity[t].silver, bronze: teacherActivity[t].bronze, warn: teacherActivity[t].warn,
+        weak: teacherActivity[t].weak, vg: teacherActivity[t].vg, fa: teacherActivity[t].fa, absent: teacherActivity[t].absent
+    }));
+    topTeachers.sort((a, b) => b.count - a.count);
+    
+    let activeTeachersHTML = `
+        <div class="admin-class-section" id="print-teachers-rank">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                <h4 style="color:var(--primary); margin:0; font-size:18px;">🔥 ترتيب وتصنيف سجل المعلمين</h4>
+                <button onclick="printHonorRoll('print-teachers-rank', 'المعلمين')" class="btn-submit" style="width:auto; margin:0; padding:8px 15px; font-size:13px; background:var(--dark);">🖨️ طباعة التقرير</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>الترتيب</th><th>اسم المعلم والتخصص</th><th>التقييمات 🎯</th><th>ممتاز ✨</th>
+                            <th>مبدع 💡</th><th>جيد جداً 🌟</th><th>مقبول 👍</th><th>ذهب 🥇</th><th>فضة 🥈</th>
+                            <th>برونز 🥉</th><th>ضعيف 📉</th><th>إنذار ⚠️</th><th>غياب رصده 🚫</th><th>التفاعل 📊</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+    
+    if(topTeachers.length === 0) {
+        activeTeachersHTML += `<tr><td colspan="14" style="text-align:center; color:var(--muted);">لا يوجد معلمين مضافين في المدرسة حتى الآن.</td></tr>`;
+    } else {
+        topTeachers.forEach((t, i) => {
+            let rankBadge = i === 0 ? '👑 1' : (i === 1 ? '🌟 2' : (i === 2 ? '⭐ 3' : (i + 1)));
+            let rowStyle = t.count === 0 ? 'background: #fef2f2; color: #ef4444;' : '';
+            let interactionLevel = t.count >= 15 ? '<span class="badge" style="background:#dcfce3; color:#166534;">ممتاز 🌟</span>' : 
+                                  (t.count >= 5 ? '<span class="badge" style="background:#fef3c7; color:#d97706;">مقبول 👍</span>' : 
+                                  (t.count > 0 ? '<span class="badge" style="background:#fee2e2; color:#b91c1c;">ضعيف 🔻</span>' : '<span class="badge" style="background:#f1f5f9; color:#475569;">غير نشط ❌</span>'));
+
+            activeTeachersHTML += `
+                <tr style="${rowStyle}">
+                    <td><b>${rankBadge}</b></td>
+                    <td>
+                        <strong style="color:var(--dark); font-size:14px;">👨‍🏫 ${t.name}</strong>
+                        <div style="font-size:11px; color:var(--muted); margin-top:3px;">التخصص: ${t.subject}</div>
+                    </td>
+                    <td style="font-weight:900; font-size:16px;">${t.count}</td>
+                    <td>${t.exc}</td><td>${t.creative}</td><td>${t.vg}</td><td>${t.fa}</td><td>${t.gold}</td>
+                    <td>${t.silver}</td><td>${t.bronze}</td><td style="color:#ef4444;">${t.weak}</td>
+                    <td style="color:#ef4444;">${t.warn}</td><td style="color:#be123c;">${t.absent}</td>
+                    <td>${interactionLevel}</td>
+                </tr>`;
+        });
+    }
+    activeTeachersHTML += `</tbody></table></div></div>`;
+    document.getElementById('active-teachers-container').innerHTML = activeTeachersHTML;
+
+    let rankingHTML = "";
+    for (let cName in classRankings) {
+        classRankings[cName].sort((a, b) => b.points - a.points);
+        rankingHTML += `
+            <div class="admin-class-section" id="print-section-${cName.replace(/\s+/g, '-')}">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+                    <h4 style="color:var(--primary); margin:0; font-size:18px;">🏆 لوحة الشرف وترتيب فصل: ${cName}</h4>
+                    <button onclick="printHonorRoll('print-section-${cName.replace(/\s+/g, '-')}', '${cName}')" class="btn-submit" style="width:auto; margin:0; padding:8px 15px; font-size:13px; background:var(--dark);">🖨️ طباعة التقرير</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th><th>اسم الطالب والمعلمين</th><th>النقاط 🌟</th>
+                                <th>التميز ✨</th><th>مبدع 💡</th><th>جيد جداً 🌟</th><th>مقبول 👍</th>
+                                <th>ذهب 🥇</th><th>فضة 🥈</th><th>برونز 🥉</th><th>ضعيف 📉</th>
+                                <th>إنذار ⚠️</th><th>غياب 🚫</th><th class="hide-on-print">تخصيص الرسائل 💬</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        if(classRankings[cName].length === 0) {
+            rankingHTML += `<tr><td colspan="14" style="text-align:center; color:var(--muted);">لا توجد تقييمات مسجلة لهذا الفصل حتى الآن.</td></tr>`;
+        } else {
+            classRankings[cName].forEach((st, index) => {
+                let rankBadge = index === 0 ? '👑 1' : (index === 1 ? '🌟 2' : (index === 2 ? '⭐ 3' : (index + 1)));
+                let cleanPhone = formatPhoneForWhatsApp(st.phone);
+                let teachersListStr = st.teachersSet.size > 0 ? Array.from(st.teachersSet).join('، ') : 'إدارة المدرسة';
+
+                let thankMsg = encodeURIComponent(`🌟 *رسالة شكر وتقدير*\n\nمرحباً ولي أمر الطالب/ـة المتميز: *${st.name}*\nنود أن نبارك لكم تميز طالبكم وتصدره لوحة الشرف بمجموع نقاط (*${st.points}* نقطة).\nشاكرين ومقدرين حسن متابعتكم وحرصكم المستمر 🌹`);
+                let warnMsg = encodeURIComponent(`⚠️ *رسالة تنبيه ومتابعة*\n\nمرحباً ولي أمر الطالب/ـة: *${st.name}*\nنود لفت انتباهكم الكافي لمتابعة مستوى الطالب وملاحظاته (ضعف / إنذار / غياب) المسجلة في منصة سجل الواجبات الإلكتروني (النقاط الحالية: *${st.points}*).\nشاكرين لكم تعاونكم واهتمامكم.`);
+                let reportMsg = encodeURIComponent(`📊 *تقرير الأداء الأسبوعي - لوحة الشرف*\n\n🎓 الطالب/ـة: *${st.name}*\n🏆 الترتيب في الفصل: ${index + 1}\n🌟 إجمالي النقاط: *${st.points}*\n\n🏅 تفاصيل الأوسمة والتقييم:\n✨ تميز: ${st.exc} | 💡 مبدع: ${st.creative} | 🌟 جيد جداً: ${st.vg} | 👍 مقبول: ${st.fa} | 🥇 ذهبي: ${st.gold} | 🥈 فضي: ${st.silver} | 🥉 برونزي: ${st.bronze} | 📉 ضعيف: ${st.weak} | ⚠️ إنذارات: ${st.warn} | 🚫 غياب: ${st.absent}\n\n👨‍🏫 المعلمون المانحون للتقييم:\n${teachersListStr}\n\nنتمنى لكم مزيداً من التوفيق والنجاح 🌹`);
+                
+                let actionButtons = cleanPhone ? `
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <a href="https://wa.me/${cleanPhone}?text=${reportMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#0284c7; font-size:11px; padding:4px 10px;">📱 تقرير</a>
+                        <a href="https://wa.me/${cleanPhone}?text=${thankMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#10b981; font-size:11px; padding:4px 10px;">🌟 شكر</a>
+                        <a href="https://wa.me/${cleanPhone}?text=${warnMsg}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="background:#ef4444; font-size:11px; padding:4px 10px;">⚠️ تنبيه</a>
+                    </div>
+                ` : `<span style="font-size:11px; color:var(--muted);">لا يوجد رقم جوال</span>`;
+
+                rankingHTML += `
+                    <tr>
+                        <td><b>${rankBadge}</b></td>
+                        <td>
+                            <strong style="color:var(--dark); font-size:14px;">${st.name}</strong>
+                            <div style="font-size:11px; color:var(--muted); margin-top:3px; font-weight:600;">👨‍🏫 التقييم من: <span style="color:var(--primary);">${teachersListStr}</span></div>
+                        </td>
+                        <td style="color:${st.points < 0 ? '#ef4444' : 'var(--success)'}; font-weight:900; font-size:16px;">${st.points}</td>
+                        <td>${st.exc}</td><td>${st.creative}</td><td>${st.vg}</td><td>${st.fa}</td><td>${st.gold}</td>
+                        <td>${st.silver}</td><td>${st.bronze}</td><td style="color:#ef4444;">${st.weak}</td>
+                        <td style="color:#ef4444;">${st.warn}</td><td style="color:#be123c; font-weight:bold;">${st.absent}</td>
+                        <td class="hide-on-print">${actionButtons}</td>
+                    </tr>`;
+            });
+        }
+        rankingHTML += `</tbody></table></div></div>`;
+    }
+    
+    if(Object.keys(classRankings).length === 0) rankingHTML = "<div style='text-align:center; padding:20px; color:var(--muted);'>لا توجد فصول نشطة أو تقييمات مسجلة حالياً لعرض الترتيب.</div>";
+    document.getElementById('admin-rankings-container').innerHTML = rankingHTML;
 }
+
+function updateMainEnergyBar(total, done) {
+    let percent = total > 0 ? Math.round((done / total) * 100) : 0;
+    document.getElementById('mainEnergyPercent').innerText = percent + "%";
+    document.getElementById('mainEnergyDone').innerText = `✅ المكتملة: ${done}`;
+    document.getElementById('mainEnergyTotal').innerText = `📊 الإجمالي: ${total}`;
+    
+    let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+    if (percent >= 50) barColor = "linear-gradient(90deg, #3b82f6, #6366f1)"; 
+    if (percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)"; 
+    
+    let bar = document.getElementById('mainEnergyBar');
+    if (bar) { bar.style.width = percent + "%"; bar.style.background = barColor; }
+}
+
+function updateParentLoginBar(total, loggedIn) {
+    let percent = total > 0 ? Math.round((loggedIn / total) * 100) : 0;
+    document.getElementById('parentLoginPercent').innerText = percent + "%";
+    document.getElementById('parentLoginDone').innerText = `🔑 سجلوا الدخول: ${loggedIn}`;
+    document.getElementById('parentLoginTotal').innerText = `👥 إجمالي الطلاب: ${total}`;
+    
+    let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+    if (percent >= 50) barColor = "linear-gradient(90deg, #0284c7, #3b82f6)"; 
+    if (percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)"; 
+    
+    let bar = document.getElementById('parentLoginBar');
+    if (bar) { bar.style.width = percent + "%"; bar.style.background = barColor; }
+}
+
+function updateTeacherDoneBar(totalTeachers, avgPercent, accomplishedCount) {
+    document.getElementById('teacherDonePercent').innerText = avgPercent + "%";
+    document.getElementById('teacherDoneCount').innerText = `🎯 النشطون والمنجزون: ${accomplishedCount}`;
+    document.getElementById('teacherTotalCount').innerText = `👨‍🏫 إجمالي المعلمين: ${totalTeachers}`;
+    
+    let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+    if (avgPercent >= 50) barColor = "linear-gradient(90deg, #8b5cf6, #6366f1)"; 
+    if (avgPercent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)"; 
+    
+    let bar = document.getElementById('teacherDoneBar');
+    if (bar) { bar.style.width = avgPercent + "%"; bar.style.background = barColor; }
+}
+
+function openHwStatsModal() {
+    const container = document.getElementById('hwClassStatsContainer');
+    container.innerHTML = '';
+    let classesList = Object.keys(globalClassHwStats);
+    if(classesList.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">لا توجد إحصائيات لعرضها حالياً.</div>';
+    } else {
+        classesList.sort((a, b) => {
+            let pA = globalClassHwStats[a].total > 0 ? (globalClassHwStats[a].done / globalClassHwStats[a].total) : 0;
+            let pB = globalClassHwStats[b].total > 0 ? (globalClassHwStats[b].done / globalClassHwStats[b].total) : 0;
+            return pB - pA;
+        });
+
+        classesList.forEach(cName => {
+            let stats = globalClassHwStats[cName];
+            if(stats.total === 0) return;
+            let percent = Math.round((stats.done / stats.total) * 100);
+            let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+            if (percent >= 50) barColor = "linear-gradient(90deg, #3b82f6, #6366f1)"; 
+            if (percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)";
+
+            container.innerHTML += `
+                <div class="energy-card" style="cursor:default;">
+                    <div class="energy-header">
+                        <span>🏫 ${cName}</span><span style="color:var(--dark); font-weight:900;">${percent}%</span>
+                    </div>
+                    <div class="energy-bar-bg"><div class="energy-bar-fill" style="width: ${percent}%; background: ${barColor};"></div></div>
+                    <div class="energy-details">
+                        <span>✅ أتم الواجب: ${stats.done}</span><span>❌ لم يكمل: ${stats.total - stats.done}</span>
+                        <span>📊 إجمالي الواجبات: ${stats.total}</span>
+                    </div>
+                </div>`;
+        });
+        if(container.innerHTML === '') container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">جميع الفصول خالية من الواجبات حالياً.</div>';
+    }
+    document.getElementById('hwStatsModal').style.display = 'flex';
+}
+function closeHwStatsModal() { document.getElementById('hwStatsModal').style.display = 'none'; }
+
+function openParentLoginModal() {
+    const container = document.getElementById('parentLoginClassContainer');
+    container.innerHTML = '';
+    
+    let classesList = Object.keys(globalClassParentLoginStats);
+    if(classesList.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">لا توجد بيانات تسجيل دخول حالياً.</div>';
+    } else {
+        classesList.sort((a, b) => {
+            let pA = globalClassParentLoginStats[a].total > 0 ? (globalClassParentLoginStats[a].loggedIn / globalClassParentLoginStats[a].total) : 0;
+            let pB = globalClassParentLoginStats[b].total > 0 ? (globalClassParentLoginStats[b].loggedIn / globalClassParentLoginStats[b].total) : 0;
+            return pB - pA;
+        });
+
+        classesList.forEach(cName => {
+            let stats = globalClassParentLoginStats[cName];
+            let percent = stats.total > 0 ? Math.round((stats.loggedIn / stats.total) * 100) : 0;
+            let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+            if (percent >= 50) barColor = "linear-gradient(90deg, #0284c7, #3b82f6)"; 
+            if (percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)";
+
+            container.innerHTML += `
+                <div class="energy-card" style="cursor:default;">
+                    <div class="energy-header">
+                        <span>🏫 ${cName}</span><span style="color:var(--dark); font-weight:900;">${percent}%</span>
+                    </div>
+                    <div class="energy-bar-bg"><div class="energy-bar-fill" style="width: ${percent}%; background: ${barColor};"></div></div>
+                    <div class="energy-details">
+                        <span>🔑 سجلوا الدخول: ${stats.loggedIn}</span><span>⏳ لم يسجلوا: ${stats.total - stats.loggedIn}</span>
+                        <span>👥 إجمالي الفصل: ${stats.total}</span>
+                    </div>
+                </div>`;
+        });
+    }
+    document.getElementById('parentLoginModal').style.display = 'flex';
+}
+function closeParentLoginModal() { document.getElementById('parentLoginModal').style.display = 'none'; }
+
+function openTeacherStatsModal() {
+    const container = document.getElementById('teacherStatsContainer');
+    container.innerHTML = '';
+    if(!globalTeacherStats || globalTeacherStats.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">لا يوجد معلمين مضافين حالياً.</div>';
+    } else {
+        let sorted = [...globalTeacherStats].sort((a, b) => b.percent - a.percent);
+        sorted.forEach(t => {
+            let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+            if (t.percent >= 50) barColor = "linear-gradient(90deg, #8b5cf6, #6366f1)"; 
+            if (t.percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)";
+
+            container.innerHTML += `
+                <div class="energy-card" style="cursor:default;">
+                    <div class="energy-header">
+                        <span>👨‍🏫 ${t.name} <small style="font-size:12px; color:var(--muted);">(${t.subject})</small></span>
+                        <span style="color:var(--dark); font-weight:900;">${t.percent}%</span>
+                    </div>
+                    <div class="energy-bar-bg"><div class="energy-bar-fill" style="width: ${t.percent}%; background: ${barColor};"></div></div>
+                    <div class="energy-details">
+                        <span>🎯 واجبات مكتملة: ${t.count}</span><span>📋 هدف الواجبات: ${t.target}</span>
+                    </div>
+                </div>`;
+        });
+    }
+    document.getElementById('teacherStatsModal').style.display = 'flex';
+}
+function closeTeacherStatsModal() { document.getElementById('teacherStatsModal').style.display = 'none'; }
+
+function openDailyInteractionModal() {
+    const container = document.getElementById('dailyInteractionContainer');
+    container.innerHTML = '';
+    if(!globalDailyInteractionStats || globalDailyInteractionStats.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px;">لا توجد بيانات تفاعل حالية.</div>';
+    } else {
+        globalDailyInteractionStats.forEach(dayItem => {
+            let percent = dayItem.percent;
+            let barColor = "linear-gradient(90deg, #ef4444, #f59e0b)"; 
+            if (percent >= 50) barColor = "linear-gradient(90deg, #3b82f6, #0284c7)"; 
+            if (percent >= 80) barColor = "linear-gradient(90deg, #22c55e, #10b981)";
+
+            container.innerHTML += `
+                <div class="energy-card" style="cursor:default;">
+                    <div class="energy-header">
+                        <span>📅 ${dayItem.dateLabel} ${dayItem.isToday ? '<span class="badge" style="background:#dcfce7; color:#166534;">اليوم</span>' : ''}</span>
+                        <span style="color:var(--dark); font-weight:900;">${percent}%</span>
+                    </div>
+                    <div class="energy-bar-bg"><div class="energy-bar-fill" style="width: ${percent}%; background: ${barColor};"></div></div>
+                    <div class="energy-details">
+                        <span>⚡ تقييمات وواجبات: ${dayItem.count}</span><span>🔑 عمليات الدخول: ${dayItem.logins}</span>
+                        <span>📊 إجمالي النشاط: ${dayItem.totalActivity}</span>
+                    </div>
+                </div>`;
+        });
+    }
+    document.getElementById('dailyInteractionModal').style.display = 'flex';
+}
+function closeDailyInteractionModal() { document.getElementById('dailyInteractionModal').style.display = 'none'; }
 
 function createSchoolClass() {
     if(!activeSchoolId) return;
@@ -1247,70 +1800,59 @@ function createSchoolClass() {
 }
 
 function deleteSchoolClass(clsName) {
-    if(!confirm(`⚠️ تحذير نهائي:\nهل أنت متأكد من حذف الفصل (${clsName}) نهائياً؟\nسيتم حذف سجل الفصل بالكامل من القاعدة ولوحة الشرف وتقييمات المعلمين.`)) return;
+    if(!confirm(`⚠️ تحذير نهائي:\nهل أنت متأكد من حذف الفصل (${clsName}) نهائياً؟\nسيتم حذف سجل الفصل بالكامل.`)) return;
     
-    database.ref('classes/' + activeSchoolId).once('value').then(snapshot => {
-        snapshot.forEach(child => {
-            if(child.val().className === clsName) {
-                database.ref('classes/' + activeSchoolId + '/' + child.key).remove();
-            }
-        });
-    });
+    for(let key in localData.classes) {
+        if(localData.classes[key].className === clsName) {
+            database.ref('classes/' + activeSchoolId + '/' + key).remove();
+        }
+    }
 
     database.ref('evaluations/' + clsName).remove();
 
-    database.ref('assignments').once('value').then(snapshot => {
-        snapshot.forEach(child => {
-            let item = child.val();
-            if(item.schoolId === activeSchoolId && item.className) {
-                let updatedClasses = item.className.split(',').map(c => c.trim()).filter(c => c !== clsName).join(', ');
-                database.ref('assignments/' + child.key).update({ className: updatedClasses });
-            }
-        });
-    });
-
-    database.ref('students').once('value').then(snapshot => {
-        snapshot.forEach(child => {
-            let item = child.val();
-            if(item.schoolId === activeSchoolId && item.className === clsName) {
-                database.ref('students/' + child.key).remove();
-            }
-        });
-    }).then(() => {
-        showNotification("تم حذف الفصل وجميع بياناته نهائياً ✓");
-        if (selectedClassFilter === clsName) {
-            selectedClassFilter = null;
-            document.getElementById('classSheetCard').style.display = 'none';
+    for(let key in localData.assignments) {
+        let item = localData.assignments[key];
+        if(item.className) {
+            let updatedClasses = item.className.split(',').map(c => c.trim()).filter(c => c !== clsName).join(', ');
+            database.ref('assignments/' + key).update({ className: updatedClasses });
         }
-        syncClassesLayout();
-        loadAdminStatsAndRankings();
-    });
+    }
+
+    for(let key in localData.students) {
+        if(localData.students[key].schoolId === activeSchoolId && localData.students[key].className === clsName) {
+            database.ref('students/' + key).remove();
+        }
+    }
+    
+    showNotification("تم حذف الفصل وجميع بياناته نهائياً ✓");
+    if (selectedClassFilter === clsName) {
+        selectedClassFilter = null;
+        document.getElementById('classSheetCard').style.display = 'none';
+    }
 }
 
 function syncClassesLayout() {
     if(!activeSchoolId) return;
-    database.ref('classes/' + activeSchoolId).once('value').then(snapshot => {
-        const classesData = snapshot.val() || {};
-        const container = document.getElementById('classesContainerBox');
-        const selectDropdown = document.getElementById('stClassSelect');
-        const existTeacherGrid = document.getElementById('existTeacherClassesGrid');
-        
-        container.innerHTML = ''; selectDropdown.innerHTML = '<option value="">-- اختر الفصل --</option>';
-        existTeacherGrid.innerHTML = '';
+    const classesData = localData.classes || {};
+    const container = document.getElementById('classesContainerBox');
+    const selectDropdown = document.getElementById('stClassSelect');
+    const existTeacherGrid = document.getElementById('existTeacherClassesGrid');
+    
+    container.innerHTML = ''; selectDropdown.innerHTML = '<option value="">-- اختر الفصل --</option>';
+    existTeacherGrid.innerHTML = '';
 
-        for(let key in classesData) {
-            let clsName = classesData[key].className;
-            selectDropdown.innerHTML += `<option value="${clsName}">${clsName}</option>`;
-            existTeacherGrid.innerHTML += `<label class="chk-label"><input type="checkbox" name="existTeacherSelectedClass" value="${clsName}"> ${clsName}</label>`;
+    for(let key in classesData) {
+        let clsName = classesData[key].className;
+        selectDropdown.innerHTML += `<option value="${clsName}">${clsName}</option>`;
+        existTeacherGrid.innerHTML += `<label class="chk-label"><input type="checkbox" name="existTeacherSelectedClass" value="${clsName}"> ${clsName}</label>`;
 
-            let isSelected = (selectedClassFilter === clsName) ? 'selected' : '';
-            container.innerHTML += `
-                <div class="class-bubble ${isSelected}">
-                    <span onclick="selectClassForSheet('${clsName}')">🏫 ${clsName}</span>
-                    <span class="del-icon" onclick="deleteSchoolClass('${clsName}')" title="حذف نهائي للفصل">✖</span>
-                </div>`;
-        }
-    });
+        let isSelected = (selectedClassFilter === clsName) ? 'selected' : '';
+        container.innerHTML += `
+            <div class="class-bubble ${isSelected}">
+                <span onclick="selectClassForSheet('${clsName}')">🏫 ${clsName}</span>
+                <span class="del-icon" onclick="deleteSchoolClass('${clsName}')" title="حذف نهائي للفصل">✖</span>
+            </div>`;
+    }
 }
 
 function selectClassForSheet(clsName) {
@@ -1318,35 +1860,38 @@ function selectClassForSheet(clsName) {
     syncClassesLayout(); 
     document.getElementById('classSheetCard').style.display = 'block';
     document.getElementById('classSheetTitle').innerHTML = `📋 طلاب الصف: <span style="color:var(--primary)">${clsName}</span>`;
+    
+    // عند النقر يتم فتح التبويب الثالث (السجلات والكشوفات) تلقائياً إذا كان مغلقاً
+    const sheetSection = document.getElementById('classSheetCard').closest('.major-section');
+    if(!sheetSection.classList.contains('active')) {
+        sheetSection.classList.add('active');
+    }
+    
     buildStudentsGrid(clsName);
 }
 
 function populateExistingTeachersDropdown() {
-    database.ref('assignments').once('value').then(snapshot => {
-        const data = snapshot.val() || {};
-        const select = document.getElementById('existTeacherSelect');
-        select.innerHTML = '<option value="">-- حدد المعلم من القائمة لتعديل جداوله --</option>';
-        for(let key in data) {
-            if(data[key].schoolId === activeSchoolId) {
-                select.innerHTML += `<option value="${key}">${data[key].teacherName} [مادة: ${data[key].subject}]</option>`;
-            }
+    const data = localData.assignments || {};
+    const select = document.getElementById('existTeacherSelect');
+    select.innerHTML = '<option value="">-- حدد المعلم من القائمة لتعديل جداوله --</option>';
+    for(let key in data) {
+        if(data[key].schoolId === activeSchoolId) {
+            select.innerHTML += `<option value="${key}">${data[key].teacherName} [مادة: ${data[key].subject}]</option>`;
         }
-    });
+    }
 }
 
 function loadExistingTeacherClasses() {
     const tKey = document.getElementById('existTeacherSelect').value;
     document.querySelectorAll('input[name="existTeacherSelectedClass"]').forEach(cb => cb.checked = false);
     if(!tKey) return;
-    database.ref('assignments/' + tKey).once('value').then(snapshot => {
-        const tData = snapshot.val();
-        if(tData && tData.className) {
-            const assigned = tData.className.split(',').map(s => s.trim());
-            document.querySelectorAll('input[name="existTeacherSelectedClass"]').forEach(cb => {
-                if(assigned.includes(cb.value)) cb.checked = true;
-            });
-        }
-    });
+    const tData = localData.assignments[tKey];
+    if(tData && tData.className) {
+        const assigned = tData.className.split(',').map(s => s.trim());
+        document.querySelectorAll('input[name="existTeacherSelectedClass"]').forEach(cb => {
+            if(assigned.includes(cb.value)) cb.checked = true;
+        });
+    }
 }
 
 function updateExistTeacherAssignment() {
@@ -1355,7 +1900,7 @@ function updateExistTeacherAssignment() {
     let checkedBoxes = document.querySelectorAll('input[name="existTeacherSelectedClass"]:checked');
     let selectedClassesArray = Array.from(checkedBoxes).map(cb => cb.value);
     database.ref('assignments/' + tKey).update({ className: selectedClassesArray.join(', ') }).then(() => {
-        showNotification("تم تحديث الفصول ✓"); buildTeachersGrid();
+        showNotification("تم تحديث الفصول ✓");
     });
 }
 
@@ -1384,61 +1929,60 @@ function removeTeacherClass(tKey, currentClasses, classToRemove) {
     if(confirm(`هل أنت متأكد من إلغاء إسناد فصل (${classToRemove})؟`)) {
         let classesArray = currentClasses.split(',').map(c => c.trim()).filter(c => c !== classToRemove && c !== '');
         database.ref('assignments/' + tKey).update({ className: classesArray.join(', ') }).then(() => {
-            showNotification("تم إزالة الفصل من المعلم ✓"); buildTeachersGrid();
+            showNotification("تم إزالة الفصل من المعلم ✓");
         });
     }
 }
 
 function buildTeachersGrid() {
     if(!activeSchoolId) return;
-    database.ref('assignments').once('value').then(snapshot => {
-        const data = snapshot.val() || {};
-        const tbody = document.getElementById('schoolTeachersTableBody');
-        tbody.innerHTML = '';
+    const data = localData.assignments || {};
+    const tbody = document.getElementById('schoolTeachersTableBody');
+    tbody.innerHTML = '';
+    let count = 0;
 
-        for(let key in data) {
-            let item = data[key];
-            if(item.schoolId === activeSchoolId) {
-                let visualBadges = '';
-                if(item.className) {
-                    let legacyClasses = item.className.split(',');
-                    legacyClasses.forEach(c => { 
-                        if(c.trim()) {
-                            visualBadges += `<span class="inline-badge">🏫 ${c.trim()} <span class="del-icon" onclick="removeTeacherClass('${key}', '${item.className}', '${c.trim()}')" title="حذف هذا الفصل">✖</span></span>`; 
-                        }
-                    });
-                } else {
-                    visualBadges = `<span style="color:var(--muted); font-size:12px;">لا يوجد فصول</span>`;
+    for(let key in data) {
+        if(data[key].schoolId !== activeSchoolId) continue;
+        count++;
+        let item = data[key];
+        let visualBadges = '';
+        if(item.className) {
+            let legacyClasses = item.className.split(',');
+            legacyClasses.forEach(c => { 
+                if(c.trim()) {
+                    visualBadges += `<span class="inline-badge">🏫 ${c.trim()} <span class="del-icon" onclick="removeTeacherClass('${key}', '${item.className}', '${c.trim()}')" title="حذف هذا الفصل">✖</span></span>`; 
                 }
-                
-                let subjectBadge = item.subject ? `<span class="badge">${item.subject}</span>` : '<span class="badge" style="background:#f1f5f9; color:#94a3b8;">بدون مادة</span>';
-
-                const waLink = item.teacherPhone ? getWhatsAppLink(item.teacherPhone, item.teacherName, item.teacherUser, `معلم`) : '#';
-                const waDisplay = item.teacherPhone ? `<a href="${waLink}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="margin-bottom:4px;">💬 بطاقة الدخول</a>` : '';
-
-                const waReminderLink = item.teacherPhone ? getWhatsAppReminderLink(item.teacherPhone, item.teacherName, `معلم`) : '#';
-                const waReminderDisplay = (item.teacherPhone && !item.lastLogin) ? `<a href="${waReminderLink}" target="_blank" class="btn-whatsapp-send" style="background:#f59e0b;" onclick="markAsSent(this)">🔔 تنبيه تفعيل</a>` : '';
-                const loginStatusDisplay = getLoginStatusHtml(item.lastLogin);
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td><a class="clickable-name" onclick="openCardModal('${item.teacherName}', 'معلم تخصص: ${item.subject}', '${item.teacherUser}', '${item.teacherPhone}')">👤 ${item.teacherName} 🪪</a></td>
-                        <td>
-                            <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
-                                <input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; width:100px;" value="${item.teacherPhone || ''}" onchange="updateField('assignments', '${key}', 'teacherPhone', this.value)">
-                                <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">${waDisplay} ${waReminderDisplay}</div>
-                            </div>
-                        </td>
-                        <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${item.teacherUser}" onchange="updateField('assignments', '${key}', 'teacherUser', this.value); updateField('assignments', '${key}', 'teacherPass', this.value)"></td>
-                        <td>${subjectBadge}</td>
-                        <td><div style="display:flex; flex-wrap:wrap; gap:4px;">${visualBadges}</div></td>
-                        <td><button onclick="openTeacherLogModal('${item.teacherName.replace(/'/g, "\\'")}')" style="background:var(--secondary); color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700; width:100%;">سجل المعلم 🔍</button></td>
-                        <td>${loginStatusDisplay}</td>
-                        <td><button onclick="removeAccount('assignments', '${key}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف بالكامل</button></td>
-                    </tr>`;
-                }
+            });
+        } else {
+            visualBadges = `<span style="color:var(--muted); font-size:12px;">لا يوجد فصول</span>`;
         }
-    });
+        
+        let subjectBadge = item.subject ? `<span class="badge">${item.subject}</span>` : '<span class="badge" style="background:#f1f5f9; color:#94a3b8;">بدون مادة</span>';
+        const waLink = item.teacherPhone ? getWhatsAppLink(item.teacherPhone, item.teacherName, item.teacherUser, `معلم`) : '#';
+        const waDisplay = item.teacherPhone ? `<a href="${waLink}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="margin-bottom:4px;">💬 بطاقة الدخول</a>` : '';
+        const waReminderLink = item.teacherPhone ? getWhatsAppReminderLink(item.teacherPhone, item.teacherName, `معلم`) : '#';
+        const waReminderDisplay = (item.teacherPhone && getValidLoginTime(item) === 0) ? `<a href="${waReminderLink}" target="_blank" class="btn-whatsapp-send" style="background:#f59e0b;" onclick="markAsSent(this)">🔔 تنبيه تفعيل</a>` : '';
+        const loginStatusDisplay = getLoginStatusHtml(item);
+
+        tbody.innerHTML += `
+            <tr>
+                <td><a class="clickable-name" onclick="openCardModal('${item.teacherName.replace(/'/g, "\\'")}', 'معلم تخصص: ${item.subject}', '${item.teacherUser}', '${item.teacherPhone}')">👤 ${item.teacherName} 🪪</a></td>
+                <td>
+                    <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
+                        <input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; width:100px;" value="${item.teacherPhone || ''}" onchange="updateField('assignments', '${key}', 'teacherPhone', this.value)">
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">${waDisplay} ${waReminderDisplay}</div>
+                    </div>
+                </td>
+                <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${item.teacherUser}" onchange="updateField('assignments', '${key}', 'teacherUser', this.value); updateField('assignments', '${key}', 'teacherPass', this.value)"></td>
+                <td>${subjectBadge}</td>
+                <td><div style="display:flex; flex-wrap:wrap; gap:4px;">${visualBadges}</div></td>
+                <td><button onclick="openTeacherLogModal('${item.teacherName.replace(/'/g, "\\'")}')" style="background:var(--secondary); color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700; width:100%;">سجل المعلم 🔍</button></td>
+                <td>${loginStatusDisplay}</td>
+                <td><button onclick="removeAccount('assignments', '${key}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف بالكامل</button></td>
+            </tr>`;
+    }
+    
+    if(count === 0) tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted);">لا يوجد معلمين مضافين حالياً.</td></tr>';
 }
 
 function addStudentAccount() {
@@ -1460,238 +2004,111 @@ function addStudentAccount() {
         showNotification("تم إضافة الطالب ✓");
         document.getElementById('stName').value = ''; document.getElementById('stPhone').value = ''; 
         document.getElementById('stUser').value = '';
-        if(selectedClassFilter === sClass) buildStudentsGrid(sClass);
     });
 }
 
 function buildStudentsGrid(clsName) {
     if(!activeSchoolId) return;
 
-    database.ref('evaluations/' + clsName).once('value').then(evalSnap => {
-        const classEvals = evalSnap.val() || {};
+    const classEvals = localData.evaluations[clsName] || {};
+    const data = localData.students || {};
+    const tbody = document.getElementById('currentClassStudentsTableBody');
+    tbody.innerHTML = '';
+    let count = 0;
 
-        database.ref('students').once('value').then(snapshot => {
-            const data = snapshot.val() || {};
-            const tbody = document.getElementById('currentClassStudentsTableBody');
-            tbody.innerHTML = '';
-            let count = 0;
+    for(let key in data) {
+        let item = data[key];
+        if(item.schoolId === activeSchoolId && item.className === clsName) {
+            count++;
+            
+            let pPoints = 0;
+            let pExc = 0, pCreative = 0, pGold = 0, pSilver = 0, pBronze = 0, pWeak = 0, pWarn = 0, pVg = 0, pFa = 0, pAbsent = 0;
 
-            for(let key in data) {
-                let item = data[key];
-                if(item.schoolId === activeSchoolId && item.className === clsName) {
-                    count++;
-                    
-                    let pPoints = 0;
-                    let pExc = 0, pCreative = 0, pGold = 0, pSilver = 0, pBronze = 0, pWeak = 0, pWarn = 0, pVg = 0, pFa = 0;
-
-                    if(classEvals[key]) {
-                        let stEvals = classEvals[key];
-                        for(let evKey in stEvals) {
-                            let ev = stEvals[evKey];
-                            if (ev.level === 'exc') { pExc++; pPoints += 2; }
-                            if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') { pCreative++; pPoints += 4; }
-                            if (ev.award === 'gold') { pGold++; pPoints += 5; }
-                            if (ev.award === 'silver') { pSilver++; pPoints += 3; }
-                            if (ev.award === 'bronze') { pBronze++; pPoints += 1; }
-                            if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) { pWeak++; pPoints -= 2; }
-                            if (ev.warning) { pWarn++; pPoints -= 3; }
-                            if (ev.level === 'vg') { pVg++; pPoints += 1; }
-                            if (ev.level === 'fa') { pFa++; }
-                        }
-                    }
-
-                    const waLink = item.studentPhone ? getWhatsAppLink(item.studentPhone, item.studentName, item.studentUser, `الفصل ${item.className}`) : '#';
-                    const waDisplay = item.studentPhone ? `<a href="${waLink}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="margin-bottom:4px;">💬 بطاقة الدخول</a>` : '';
-
-                    const waReminderLink = item.studentPhone ? getWhatsAppReminderLink(item.studentPhone, item.studentName, `طالب`) : '#';
-                    const waReminderDisplay = (item.studentPhone && !item.lastLogin) ? `<a href="${waReminderLink}" target="_blank" class="btn-whatsapp-send" style="background:#f59e0b;" onclick="markAsSent(this)">🔔 تنبيه تفعيل</a>` : '';
-                    const loginStatusDisplay = getLoginStatusHtml(item.lastLogin);
-
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><a class="clickable-name" onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')">👶 ${item.studentName} 📜</a></td>
-                            <td><span class="badge" style="background:#f1f5f9; color:#475569;">${item.className}</span></td>
-                            <td>
-                                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
-                                    <input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; width:100px;" value="${item.studentPhone || ''}" onchange="updateField('students', '${key}', 'studentPhone', this.value)">
-                                    <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">${waDisplay} ${waReminderDisplay}</div>
-                                </div>
-                            </td>
-                            <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${item.studentUser}" onchange="updateField('students', '${key}', 'studentUser', this.value); updateField('students', '${key}', 'studentPass', this.value)"></td>
-                            
-                            <td>
-                                <span style="font-size:16px; font-weight:900; color:${pPoints < 0 ? '#ef4444' : 'var(--success)'};">${pPoints} نقطة</span>
-                            </td>
-
-                            <td>
-                                <div style="font-size:11px; display:flex; flex-wrap:wrap; gap:4px;">
-                                    ${pExc > 0 ? `<span class="badge" style="background:#e0e7ff; color:#3730a3;">✨ ${pExc}</span>` : ''}
-                                    ${pCreative > 0 ? `<span class="badge" style="background:#fef08a; color:#854d0e;">💡 ${pCreative}</span>` : ''}
-                                    ${pVg > 0 ? `<span class="badge" style="background:#bbf7d0; color:#166534;">🌟 ${pVg}</span>` : ''}
-                                    ${pFa > 0 ? `<span class="badge" style="background:#e5e7eb; color:#374151;">👍 ${pFa}</span>` : ''}
-                                    ${pGold > 0 ? `<span class="badge" style="background:#fef3c7; color:#d97706;">🥇 ${pGold}</span>` : ''}
-                                    ${pSilver > 0 ? `<span class="badge" style="background:#f1f5f9; color:#475569;">🥈 ${pSilver}</span>` : ''}
-                                    ${pBronze > 0 ? `<span class="badge" style="background:#ffedd5; color:#c2410c;">🥉 ${pBronze}</span>` : ''}
-                                    ${pWeak > 0 ? `<span class="badge" style="background:#fca5a5; color:#7f1d1d;">📉 ${pWeak}</span>` : ''}
-                                    ${pWarn > 0 ? `<span class="badge" style="background:#fee2e2; color:#b91c1c;">⚠️ ${pWarn}</span>` : ''}
-                                    ${(pExc === 0 && pCreative === 0 && pGold === 0 && pSilver === 0 && pBronze === 0 && pWeak === 0 && pWarn === 0 && pVg === 0 && pFa === 0) ? '<span style="color:var(--muted); font-size:11px;">لا توجد تقييمات</span>' : ''}
-                                </div>
-                            </td>
-
-                            <td>
-                                <button onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; width:100%;">🔍 تقارير الطالب</button>
-                            </td>
-
-                            <td>${loginStatusDisplay}</td>
-                            <td><button onclick="removeAccount('students', '${key}', '${item.className}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف الطالب</button></td>
-                        </tr>`;
+            if(classEvals[key]) {
+                let stEvals = classEvals[key];
+                for(let evKey in stEvals) {
+                    let ev = stEvals[evKey];
+                    if (ev.level === 'exc') { pExc++; pPoints += 2; }
+                    if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') { pCreative++; pPoints += 4; }
+                    if (ev.award === 'gold') { pGold++; pPoints += 5; }
+                    if (ev.award === 'silver') { pSilver++; pPoints += 3; }
+                    if (ev.award === 'bronze') { pBronze++; pPoints += 1; }
+                    if (ev.warning) { pWarn++; pPoints -= 3; }
+                    if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) { pWeak++; pPoints -= 2; }
+                    if (ev.level === 'absent' || ev.absence) { pAbsent++; }
+                    if (ev.level === 'vg') { pVg++; pPoints += 1; }
+                    if (ev.level === 'fa') { pFa++; }
                 }
             }
-            if(count === 0) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">لا يوجد طلاب.</td></tr>`;
-        });
-    });
-}
 
-function updateField(path, key, field, value) {
-    let updateData = {}; updateData[field] = value;
-    database.ref(path + '/' + key).update(updateData).then(() => {
-        showNotification("تم التحديث ✓");
-        if(path === 'assignments') buildTeachersGrid();
-        if(path === 'students' && selectedClassFilter) buildStudentsGrid(selectedClassFilter);
-    });
-}
+            let badgesHtml = '';
+            if(pExc > 0) badgesHtml += `<span class="badge" style="background:#e0e7ff; color:#3730a3;">تميز ✨ ${pExc}</span> `;
+            if(pCreative > 0) badgesHtml += `<span class="badge" style="background:#fef08a; color:#854d0e;">مبدع 💡 ${pCreative}</span> `;
+            if(pGold > 0) badgesHtml += `<span class="badge" style="background:#fef3c7; color:#d97706;">ذهبي 🥇 ${pGold}</span> `;
+            if(pSilver > 0) badgesHtml += `<span class="badge" style="background:#f1f5f9; color:#475569;">فضي 🥈 ${pSilver}</span> `;
+            if(pBronze > 0) badgesHtml += `<span class="badge" style="background:#ffedd5; color:#c2410c;">برونزي 🥉 ${pBronze}</span> `;
+            if(pWeak > 0) badgesHtml += `<span class="badge" style="background:#fca5a5; color:#7f1d1d;">ضعيف 📉 ${pWeak}</span> `;
+            if(pWarn > 0) badgesHtml += `<span class="badge" style="background:#fee2e2; color:#b91c1c;">إنذار ⚠️ ${pWarn}</span> `;
+            if(pAbsent > 0) badgesHtml += `<span class="badge" style="background:#fecdd3; color:#be123c;">غياب 🚫 ${pAbsent}</span> `;
+            if(!badgesHtml) badgesHtml = '<span class="badge" style="background:#f1f5f9; color:#94a3b8;">بدون تقييم</span>';
 
-function removeAccount(path, key, clsName) {
-    if(confirm("تأكيد الحذف؟")) {
-        database.ref(path + '/' + key).remove().then(() => {
-            showNotification("تم الإزالة.");
-            if(path === 'assignments') buildTeachersGrid();
-            if(path === 'students') buildStudentsGrid(clsName);
-        });
-    }
-}
+            const waLink = item.studentPhone ? getWhatsAppLink(item.studentPhone, item.studentName, item.studentUser, `طالب صف: ${clsName}`) : '#';
+            const waDisplay = item.studentPhone ? `<a href="${waLink}" target="_blank" class="btn-whatsapp-send" onclick="markAsSent(this)" style="margin-bottom:4px;">💬 بطاقة الدخول</a>` : '';
+            const waReminderLink = item.studentPhone ? getWhatsAppReminderLink(item.studentPhone, item.studentName, `طالب`) : '#';
+            const waReminderDisplay = (item.studentPhone && getValidLoginTime(item) === 0) ? `<a href="${waReminderLink}" target="_blank" class="btn-whatsapp-send" style="background:#f59e0b;" onclick="markAsSent(this)">🔔 تنبيه تفعيل</a>` : '';
+            const loginStatusDisplay = getLoginStatusHtml(item);
 
-function downloadTeacherTemplate() {
-    const ws = XLSX.utils.json_to_sheet([{ "اسم المعلم": "", "رقم الجوال": "", "التخصص": "", "كلمة المرور": "" }]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "المعلمين");
-    XLSX.writeFile(wb, "قالب_رفع_المعلمين.xlsx");
-}
-
-function downloadStudentTemplate() {
-    const ws = XLSX.utils.json_to_sheet([{ "اسم الطالب": "", "رقم الجوال": "", "كلمة المرور": "" }]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "الطلاب");
-    XLSX.writeFile(wb, "قالب_رفع_الطلاب.xlsx");
-}
-
-function importTeachersExcel(event) {
-    const file = event.target.files[0];
-    if(!file || !activeSchoolId) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, {type: 'array'});
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-        jsonData.forEach(row => {
-            let u = cleanString(row['كلمة المرور'] || row['اسم المستخدم'] || ('user' + Math.floor(Math.random()*100000)));
-            const tData = {
-                teacherName: row['اسم المعلم'] || row['الاسم'] || 'معلم مستورد',
-                teacherPhone: row['رقم الجوال'] || row['الجوال'] || '',
-                subject: row['التخصص'] || row['المادة'] || 'عام',
-                teacherUser: u, teacherPass: u,
-                className: '', schoolId: activeSchoolId
-            };
-            database.ref('assignments').push(tData);
-        });
-        showNotification("تم استيراد المعلمين بنجاح ✓"); buildTeachersGrid(); event.target.value = ''; 
-    };
-    reader.readAsArrayBuffer(file);
-}
-
-function importStudentsExcel(event) {
-    const file = event.target.files[0];
-    if(!file || !activeSchoolId) return;
-    
-    const selectedClassForImport = document.getElementById('stClassSelect').value;
-    if(!selectedClassForImport) {
-        alert("تنبيه هام: يجب عليك اختيار الفصل من القائمة المنسدلة أولاً قبل اختيار ملف الإكسل.");
-        event.target.value = '';
-        return;
+            tbody.innerHTML += `
+                <tr>
+                    <td>
+                        <a class="clickable-name" onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')">📜 ${item.studentName}</a>
+                        <br><small><a class="clickable-name" style="font-size:11px; color:var(--muted);" onclick="openCardModal('${item.studentName.replace(/'/g, "\\'")}', 'طالب - فصل: ${clsName}', '${item.studentUser}', '${item.studentPhone}')">🪪 بطاقة الدخول</a></small>
+                    </td>
+                    <td><span class="badge">${clsName}</span></td>
+                    <td>
+                        <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px;">
+                            <input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; width:100px;" value="${item.studentPhone || ''}" onchange="updateField('students', '${key}', 'studentPhone', this.value)">
+                            <div style="display:flex; flex-direction:column; gap:4px; margin-top:2px;">${waDisplay} ${waReminderDisplay}</div>
+                        </div>
+                    </td>
+                    <td><input type="text" class="inp" style="padding:6px; margin:0; font-size:13px; font-family:monospace;" value="${item.studentUser}" onchange="updateField('students', '${key}', 'studentUser', this.value); updateField('students', '${key}', 'studentPass', this.value)"></td>
+                    <td><b style="color:${pPoints < 0 ? '#ef4444' : 'var(--success)'}; font-size:16px;">${pPoints}</b></td>
+                    <td>${badgesHtml}</td>
+                    <td><button onclick="openEvalHistoryModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}', '${item.studentPhone || ''}')" style="background:var(--primary); color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">عرض التقرير 📜</button></td>
+                    <td>${loginStatusDisplay}</td>
+                    <td>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                            <button onclick="openMoveModal('${key}', '${item.studentName.replace(/'/g, "\\'")}', '${clsName}')" style="background:#0284c7; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">🔄 نقل / تكرار</button>
+                            <button onclick="removeAccount('students', '${key}')" style="background:#ef4444; color:white; border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:700;">حذف</button>
+                        </div>
+                    </td>
+                </tr>`;
+        }
     }
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, {type: 'array'});
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-        jsonData.forEach(row => {
-            let u = cleanString(row['كلمة المرور'] || row['اسم المستخدم'] || ('std' + Math.floor(Math.random()*100000)));
-            const stData = {
-                studentName: row['اسم الطالب'] || row['الاسم'] || 'طالب مستورد',
-                studentPhone: row['رقم الجوال'] || row['الجوال'] || '',
-                className: selectedClassForImport, 
-                studentUser: u, studentPass: u, schoolId: activeSchoolId
-            };
-            database.ref('students').push(stData);
-        });
-        showNotification("تم إضافة الطلاب للفصل بنجاح ✓"); 
-        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter); event.target.value = ''; 
-    };
-    reader.readAsArrayBuffer(file);
+    if(count === 0) tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--muted);">لا يوجد طلاب مسجلين في هذا الفصل حتى الآن.</td></tr>';
 }
 
-function logoutSchoolAdmin() {
-    activeSchoolId = null; activeSchoolName = null; selectedClassFilter = null; currentTeacherLogName = '';
-    document.getElementById('schoolDashboardContent').style.display = 'none';
-    document.getElementById('classSheetCard').style.display = 'none';
-    document.getElementById('schoolAuthBox').style.display = 'block';
-}
-
-function showNotification(msg) {
-    const n = document.getElementById('notify');
-    n.innerText = msg; n.style.display = 'block'; setTimeout(() => n.style.display = 'none', 3500);
-}
-
-function printHonorRoll(divId, className) {
-    let printContents = document.getElementById(divId).innerHTML;
-    let printWindow = window.open('', '', 'height=600,width=800');
-    
+function printHonorRoll(elementId, titleName) {
+    let printContents = document.getElementById(elementId).innerHTML;
+    let printWindow = window.open('', '', 'height=700,width=900');
     printWindow.document.write(`
-        <html lang="ar" dir="rtl">
-        <head>
-            <title>طباعة تقرير لوحة الشرف - ${className}</title>
-            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-            <style>
-                body { font-family: 'Cairo', sans-serif; padding: 20px; color: #0f172a; }
-                h4 { text-align: center; font-size: 24px; color: #4f46e5; margin-bottom: 20px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: right; font-size: 14px; }
-                th { background-color: #f1f5f9; color: #1e293b; font-weight: bold; }
-                .hide-on-print, button { display: none !important; }
-                .admin-table tr:nth-child(even) { background-color: #f8fafc; }
-            </style>
-        </head>
-        <body>
-            ${printContents}
-            <div style="text-align:center; margin-top:30px; font-size:12px; color:#64748b;">
-                تم استخراج هذا التقرير من منصة سجل الواجبات الإلكتروني
-            </div>
-            <script>
-                setTimeout(function() {
-                    window.print();
-                    window.close();
-                }, 500);
-            <\/script>
-        </body>
-        </html>
-    `);
+        <html lang="ar" dir="rtl"><head><title>طباعة تقرير ${titleName}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+        <style>
+            body { font-family: 'Cairo', sans-serif; padding: 25px; color: #0f172a; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; }
+            th, td { border: 1px solid #cbd5e1; padding: 10px 12px; font-size: 13px; }
+            th { background-color: #4f46e5; color: white; }
+            .hide-on-print { display: none !important; }
+            .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; background: #e0e7ff; color: #3730a3; }
+            h4 { font-size: 20px; color: #4f46e5; margin-bottom: 10px; }
+        </style></head><body>
+        ${printContents}
+        <script>setTimeout(function(){ window.print(); window.close(); }, 500);<\/script></body></html>`);
     printWindow.document.close();
 }
+
 </script>
 </body>
 </html>
