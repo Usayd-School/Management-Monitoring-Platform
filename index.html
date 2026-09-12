@@ -263,6 +263,26 @@
     </div>
 </div>
 
+<div id="onlineUsersModal" class="modal" onclick="closeOnlineUsersModal()">
+    <div class="card" style="width: 550px; max-width: 95%; background: #ffffff; padding: 25px;" onclick="event.stopPropagation()">
+        <h2 style="color: #166534; border-bottom: none; margin-bottom: 5px;">🟢 سجل آخر المتواجدين (المتصلون)</h2>
+        <p style="color: var(--muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">تعرض هذه القائمة أحدث عمليات الدخول للنظام من المعلمين والطلاب مرتبة حسب الوقت.</p>
+        <div class="modal-body-scroll">
+            <table class="accounts-table">
+                <thead>
+                    <tr>
+                        <th>النوع</th>
+                        <th>الاسم (الفصل / التخصص)</th>
+                        <th>تاريخ ووقت الدخول</th>
+                    </tr>
+                </thead>
+                <tbody id="onlineUsersTableBody"></tbody>
+            </table>
+        </div>
+        <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeOnlineUsersModal()">إغلاق النافذة</button>
+    </div>
+</div>
+
 <div id="moveStudentModal" class="modal" onclick="closeMoveStudentModal()">
     <div class="card" style="width: 400px;" onclick="event.stopPropagation()">
         <h2 style="padding-right:0;">🔄 نقل أو تكرار الطالب</h2>
@@ -337,12 +357,23 @@
         
         <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px dashed #cbd5e1; margin-bottom: 15px;">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <p style="margin:0; font-size:13px; color:var(--dark);">حدد الملاحظات غير المكتملة وانقر للحذف ليتم مسحها من سجل جميع الطلاب.</p>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <select id="tLogTypeFilter" class="inp" style="width:auto; padding:6px 10px; font-size:12px; margin:0;" onchange="renderTeacherLog()">
+                        <option value="all">الكل (الواجبات والملاحظات)</option>
+                        <option value="hw">الواجبات فقط 📝</option>
+                        <option value="note">الملاحظات فقط 💬</option>
+                        <option value="eval">تقييمات وأوسمة فقط 🏅</option>
+                    </select>
+                    <select id="tLogSortFilter" class="inp" style="width:auto; padding:6px 10px; font-size:12px; margin:0;" onchange="renderTeacherLog()">
+                        <option value="newest">الأحدث أولاً 🔽</option>
+                        <option value="oldest">الأقدم أولاً 🔼</option>
+                    </select>
+                </div>
                 <div style="display:flex; gap:15px; align-items:center;">
-                    <label style="display:flex; align-items:center; cursor:pointer; font-weight:bold; color:var(--primary);">
-                        <input type="checkbox" id="selectAllTLogs" onchange="toggleAllTLogs(this)" style="margin-left:5px; width:18px; height:18px;"> تحديد الكل
+                    <label style="display:flex; align-items:center; cursor:pointer; font-weight:bold; color:var(--primary); font-size:13px;">
+                        <input type="checkbox" id="selectAllTLogs" onchange="toggleAllTLogs(this)" style="margin-left:5px; width:16px; height:16px;"> تحديد الكل
                     </label>
-                    <button class="btn-submit" style="background:#ef4444; width:auto; margin:0; padding:8px 15px; font-size:13px;" onclick="deleteSelectedTeacherLogs()">🗑️ حذف السجلات</button>
+                    <button class="btn-submit" style="background:#ef4444; width:auto; margin:0; padding:6px 15px; font-size:12px;" onclick="deleteSelectedTeacherLogs()">🗑️ حذف المحدد</button>
                 </div>
             </div>
         </div>
@@ -352,9 +383,9 @@
                 <thead>
                     <tr>
                         <th>تحديد</th>
-                        <th>اسم الطالب (الفصل)</th>
+                        <th>المستلمون (حالة الإرسال)</th>
                         <th>تفاصيل التقييم / الواجب</th>
-                        <th>التاريخ</th>
+                        <th>التاريخ والوقت</th>
                         <th>إجراء</th>
                     </tr>
                 </thead>
@@ -457,7 +488,7 @@
                         <div class="admin-stat-card" style="border:1px solid #fecaca; background:#fef2f2;">
                             <h4 style="color:#ef4444;">غياب 🚫</h4><p id="admin-tot-absent" style="color:#ef4444;">0</p>
                         </div>
-                        <div class="admin-stat-card" style="border:1px solid #bbf7d0; background:#f0fdf4; cursor:pointer;" onclick="openDailyInteractionModal()" title="انقر لعرض نسبة التفاعل لكل يوم (آخر 15 يوم)">
+                        <div class="admin-stat-card" style="border:1px solid #bbf7d0; background:#f0fdf4; cursor:pointer;" onclick="openOnlineUsersModal()" title="انقر لعرض سجل آخر المتواجدين">
                             <h4 style="color:#166534;">المتصلون الآن 🟢</h4><p id="admin-tot-online" style="color:#166534; font-size:18px; line-height: 1.2;">0</p>
                         </div>
                         <div class="admin-stat-card" style="border:1px solid #bae6fd; background:#f0f9ff; cursor:pointer;" onclick="openDailyInteractionModal()" title="انقر لعرض نسبة التفاعل لكل يوم (آخر 15 يوم)">
@@ -707,11 +738,11 @@ if (!firebase.apps.length) {
 }
 const database = firebase.database();
 
-// متغيرات الذاكرة المحلية (Local State) لتقليل الاتصال بقاعدة البيانات وتسريع التطبيق
+// متغيرات الذاكرة المحلية
 let localData = {
     students: {},
     classes: {},
-    assignments: {}, // المعلمين
+    assignments: {}, 
     evaluations: {}
 };
 
@@ -719,17 +750,19 @@ let activeSchoolId = null;
 let activeSchoolName = null;
 let selectedClassFilter = null;
 let currentTeacherLogName = ''; 
+let currentTeacherRecords = []; 
 let currentMoveStudentKey = '';
 let currentMoveStudentClass = '';
 
 let globalClassHwStats = {};
-let globalClassParentLoginStats = {}; // تم تغييرها إلى مؤشر الدخول
+let globalClassParentLoginStats = {}; 
 let globalTeacherStats = [];
 let globalDailyInteractionStats = [];
+let globalRecentLogins = []; 
 
 let activeListeners = [];
+let classEvalListenersDict = {};
 
-// التحكم في طي وتكبير الأقسام الكبرى
 function toggleMajorSection(headerElement) {
     const parentSection = headerElement.parentElement;
     parentSection.classList.toggle('active');
@@ -738,10 +771,15 @@ function toggleMajorSection(headerElement) {
 function detachAllListeners() {
     activeListeners.forEach(item => {
         if(item.ref && item.event) {
-            item.ref.off(item.event);
+            if(item.callback) {
+                item.ref.off(item.event, item.callback);
+            } else {
+                item.ref.off(item.event);
+            }
         }
     });
     activeListeners = [];
+    classEvalListenersDict = {};
 }
 
 function showNotification(msg) {
@@ -832,7 +870,6 @@ function formatBeautifulDate(dateInput) {
     return `<span style="color: var(--primary); font-weight: 700;">📅 ${date.toLocaleDateString('ar-SA', options)}</span>`;
 }
 
-// دالة ذكية للبحث عن أي صيغة لتاريخ الدخول في الكائن
 function getValidLoginTime(obj) {
     let t = obj.lastLogin || obj.last_login || obj.loginTime || obj.timestamp;
     if (!t) return 0;
@@ -849,6 +886,18 @@ function getLoginStatusHtml(obj) {
     const date = new Date(loginTime);
     const dateString = date.toLocaleDateString('ar-SA') + ' ' + date.toLocaleTimeString('ar-SA');
     return `<span class="badge" style="background:#dcfce3; color:#166534;">نشط ✅</span><br><small style="color:var(--muted); font-size:10px; display:block; margin-top:4px;">آخر دخول:<br>${dateString}</small>`;
+}
+
+// دالة ذكية محدثة لقراءة الملاحظة سواء كانت محفوظة باسم note أو message
+function extractEvalDetails(ev) {
+    let hw = "", nt = "";
+    if (typeof ev === 'string') {
+        nt = ev;
+    } else {
+        hw = ev.assignmentName || ev.assignment || ev.homework || ev.homeworkTitle || ev.task || ev.title || "";
+        nt = ev.message || ev.note || ev.notes || ev.details || ev.comment || ev.msg || ev.reason || ev.description || ev.evalNote || ev.text || ev.content || "";
+    }
+    return { hw, nt };
 }
 
 function autoGenerateUser(userFieldId) {
@@ -972,81 +1021,215 @@ function executeMoveOrDuplicate() {
     }
 }
 
+// ---------------- نافذة آخر المتصلين (سجل المتواجدين) ----------------
+function openOnlineUsersModal() {
+    const tbody = document.getElementById('onlineUsersTableBody');
+    tbody.innerHTML = '';
+    
+    if (globalRecentLogins.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 20px; color:var(--muted);">لا يوجد أي متصلين أو سجلات دخول حالية.</td></tr>';
+    } else {
+        // نعرض أحدث 100 عملية دخول لعدم إرهاق الواجهة
+        let displayList = globalRecentLogins.slice(0, 100);
+        let now = Date.now();
+        let thirtyMins = 30 * 60 * 1000;
+        
+        displayList.forEach(user => {
+            let isOnlineNow = (now - user.time) <= thirtyMins;
+            let statusBadge = isOnlineNow ? '<span class="badge" style="background:#dcfce7; color:#166534;">متصل الآن 🟢</span>' : '<span class="badge" style="background:#f1f5f9; color:#475569;">سابق 🕒</span>';
+            let typeIcon = user.type === 'معلم' ? '👨‍🏫' : '🎓';
+            let dateStr = formatBeautifulDate(user.time);
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><span style="font-weight:bold; font-size:12px; color:var(--dark);">${typeIcon} ${user.type}</span></td>
+                    <td>
+                        <strong style="color:var(--primary); font-size:14px;">${user.name}</strong><br>
+                        <small style="color:var(--muted); font-weight:bold;">${user.info}</small>
+                    </td>
+                    <td>${statusBadge}<br><div style="margin-top:5px;">${dateStr}</div></td>
+                </tr>
+            `;
+        });
+    }
+    document.getElementById('onlineUsersModal').style.display = 'flex';
+}
+function closeOnlineUsersModal() { document.getElementById('onlineUsersModal').style.display = 'none'; }
+
+
+// ---------------- تحديث سجل المعلم (التجميع والفلترة) ----------------
 function openTeacherLogModal(teacherName) {
     currentTeacherLogName = teacherName;
     document.getElementById('teacherLogTitle').innerText = `باسم المعلم: ${teacherName}`;
-    const tbody = document.getElementById('teacherLogTableBody');
-    tbody.innerHTML = '';
     document.getElementById('teacherLogModal').style.display = 'flex';
     document.getElementById('selectAllTLogs').checked = false;
 
     let activeClassNames = Object.values(localData.classes || {}).map(c => c.className);
-    let count = 0;
-    let records = [];
+    currentTeacherRecords = [];
 
     activeClassNames.forEach(cName => {
         let cEvals = localData.evaluations[cName] || {};
         for (let sKey in cEvals) {
-            let sName = (localData.students[sKey] && localData.students[sKey].studentName) ? localData.students[sKey].studentName : 'طالب محذوف من النظام';
+            let sName = (localData.students[sKey] && localData.students[sKey].studentName) ? localData.students[sKey].studentName : 'طالب محذوف';
             for (let eKey in cEvals[sKey]) {
                 let ev = cEvals[sKey][eKey];
                 let tName = ev.teacherName || ev.teacher || ev.author || '';
                 
                 if (tName === teacherName) {
-                    records.push({ cName, sKey, sName, eKey, ev });
+                    let evTimestamp = ev.timestamp || ev.date || ev.createdAt || extractTimeFromKey(eKey);
+                    let timeNum = typeof evTimestamp === 'number' ? evTimestamp : (new Date(evTimestamp)).getTime() || 0;
+                    if(isNaN(timeNum) || timeNum === 0) {
+                        let extracted = extractTimeFromKey(eKey);
+                        timeNum = extracted || 0;
+                    }
+                    currentTeacherRecords.push({ cName, sKey, sName, eKey, ev, timeNum });
                 }
             }
         }
     });
 
-    records.sort((a, b) => {
-        let tA = extractTimeFromKey(a.eKey) || 0;
-        let tB = extractTimeFromKey(b.eKey) || 0;
-        return tB - tA;
+    document.getElementById('tLogTypeFilter').value = 'all';
+    document.getElementById('tLogSortFilter').value = 'newest';
+
+    renderTeacherLog();
+}
+
+function renderTeacherLog() {
+    const typeFilter = document.getElementById('tLogTypeFilter').value;
+    const sortFilter = document.getElementById('tLogSortFilter').value;
+    const tbody = document.getElementById('teacherLogTableBody');
+    tbody.innerHTML = '';
+    document.getElementById('selectAllTLogs').checked = false;
+
+    // 1. فلترة البيانات بدقة بناءً على الملاحظات والواجبات
+    let filteredRecords = currentTeacherRecords.filter(rec => {
+        let { hw, nt } = extractEvalDetails(rec.ev);
+        
+        if (typeFilter === 'hw') return !!hw;
+        if (typeFilter === 'note') return !hw && !!nt;
+        if (typeFilter === 'eval') return !hw && !nt;
+        return true; 
     });
 
-    records.forEach(rec => {
+    // 2. تجميع البيانات (Grouping)
+    let groupedObj = {};
+    filteredRecords.forEach(rec => {
+        let { hw, nt } = extractEvalDetails(rec.ev);
+        
+        let dateStr = new Date(rec.timeNum).toLocaleDateString('en-CA'); // YYYY-MM-DD
+        let gKey;
+
+        // دمج الواجبات الجماعية فقط، وترك الملاحظات/التقييمات مفرقة بشكل فردي
+        if (hw) {
+            gKey = `HW|${rec.cName}|${dateStr}|${hw}`;
+        } else {
+            gKey = `IND|${rec.eKey}|${rec.sKey}`;
+        }
+
+        if (!groupedObj[gKey]) {
+            groupedObj[gKey] = {
+                cName: rec.cName,
+                dateStr: dateStr,
+                maxTime: rec.timeNum,
+                hw: hw,
+                nt: nt,
+                ev: rec.ev,
+                records: [],
+                isGrouped: !!hw
+            };
+        }
+        groupedObj[gKey].records.push(rec);
+        if (rec.timeNum > groupedObj[gKey].maxTime) groupedObj[gKey].maxTime = rec.timeNum;
+    });
+
+    let groupedArr = Object.values(groupedObj);
+
+    // 3. ترتيب البيانات
+    groupedArr.sort((a, b) => {
+        if (sortFilter === 'newest') return b.maxTime - a.maxTime;
+        return a.maxTime - b.maxTime;
+    });
+
+    // 4. بناء الجدول
+    let count = 0;
+    groupedArr.forEach(group => {
         count++;
-        let dateStr = formatBeautifulDate(rec.ev.timestamp || rec.ev.date || rec.ev.createdAt || extractTimeFromKey(rec.eKey));
+        let dateFormatted = formatBeautifulDate(group.maxTime);
+        let recipientsHtml = '';
+
+        if (group.isGrouped) {
+            let classStudents = [];
+            for(let key in localData.students) {
+                if(localData.students[key].className === group.cName) classStudents.push(localData.students[key].studentName);
+            }
+            
+            let totalInClass = classStudents.length;
+            let receivedCount = group.records.length;
+            let receivedNames = group.records.map(r => r.sName);
+            let missingNames = classStudents.filter(n => !receivedNames.includes(n));
+
+            if (receivedCount === totalInClass && totalInClass > 0) {
+                recipientsHtml = `<span style="color:var(--success); font-weight:bold;">👥 إرسال جماعي: جميع طلاب الفصل (${group.cName})</span>`;
+            } else if (missingNames.length > 0 && missingNames.length <= 4 && totalInClass > 0) {
+                recipientsHtml = `<span style="color:var(--primary); font-weight:bold;">👥 إرسال شبه جماعي: طلاب الفصل (${group.cName}) ما عدا (${missingNames.join('، ')})</span>`;
+            } else if (receivedCount <= 5) {
+                recipientsHtml = `<span style="color:var(--dark); font-weight:bold;">👤 تخصيص: ${receivedNames.join('، ')} <small style="color:var(--muted)">(${group.cName})</small></span>`;
+            } else {
+                recipientsHtml = `<span style="color:var(--dark); font-weight:bold;">👥 تخصيص لعدد (${receivedCount}) طلاب من فصل (${group.cName})</span> <br><small style="color:var(--muted)">الطلاب: ${receivedNames.join('، ')}</small>`;
+            }
+        } else {
+            // عرض فردي للملاحظات
+            recipientsHtml = `<span style="color:var(--dark); font-weight:bold;">👤 ${group.records[0].sName} <small style="color:var(--muted)">(${group.cName})</small></span>`;
+        }
+
+        let groupEKeys = group.records.map(r => `${r.cName}|${r.sKey}|${r.eKey}`).join(',');
+
         let plainBadges = [];
-        if (rec.ev.level === 'exc') plainBadges.push('تميز ✨');
-        if (rec.ev.level === 'cre' || rec.ev.level === 'creative' || rec.ev.award === 'creative') plainBadges.push('مبدع 💡');
-        if (rec.ev.award === 'gold') plainBadges.push('وسام ذهبي 🥇');
-        if (rec.ev.award === 'silver') plainBadges.push('وسام فضي 🥈');
-        if (rec.ev.award === 'bronze') plainBadges.push('وسام برونزي 🥉');
-        if (rec.ev.warning) plainBadges.push('إنذار ⚠️');
-        if (rec.ev.level === 'we' || rec.ev.level === 'weak' || rec.ev.award === 'weak' || rec.ev.weak) plainBadges.push('ضعيف 📉');
-        if (rec.ev.level === 'absent' || rec.ev.absence) plainBadges.push('غياب 🚫');
-        if (rec.ev.level === 'vg') plainBadges.push('جيد جداً 🌟');
-        if (rec.ev.level === 'fa') plainBadges.push('مقبول 👍');
+        let ev = group.ev;
+        
+        if (typeof ev !== 'string') {
+            if (ev.level === 'exc') plainBadges.push('تميز ✨');
+            if (ev.level === 'cre' || ev.level === 'creative' || ev.award === 'creative') plainBadges.push('مبدع 💡');
+            if (ev.award === 'gold') plainBadges.push('وسام ذهبي 🥇');
+            if (ev.award === 'silver') plainBadges.push('وسام فضي 🥈');
+            if (ev.award === 'bronze') plainBadges.push('وسام برونزي 🥉');
+            if (ev.warning) plainBadges.push('إنذار ⚠️');
+            if (ev.level === 'we' || ev.level === 'weak' || ev.award === 'weak' || ev.weak) plainBadges.push('ضعيف 📉');
+            if (ev.level === 'absent' || ev.absence) plainBadges.push('غياب 🚫');
+            if (ev.level === 'vg') plainBadges.push('جيد جداً 🌟');
+            if (ev.level === 'fa') plainBadges.push('مقبول 👍');
+        }
         
         let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
-        let homeworkText = rec.ev.assignmentName || rec.ev.assignment || rec.ev.homework || rec.ev.homeworkTitle || rec.ev.task || rec.ev.title || "";
-        let noteText = rec.ev.note || rec.ev.notes || rec.ev.details || rec.ev.comment || rec.ev.msg || rec.ev.reason || rec.ev.description || rec.ev.evalNote || "";
         
         let combinedDetails = "";
-        if (typeof rec.ev === 'string') combinedDetails = rec.ev; 
-        else if (homeworkText && noteText) combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
-        else if (homeworkText) combinedDetails = `الواجب: ${homeworkText}`; 
-        else if (noteText) combinedDetails = `الملاحظة: ${noteText}`; 
-        else combinedDetails = '<span style="color:#ef4444; font-weight:bold;">رصد متابعة: (بدون محتوى نصي / نقاط فقط)</span>'; 
+        if (typeof ev === 'string') combinedDetails = `<span style="color:var(--dark); font-size:13px; font-weight:700;">الملاحظة: ${ev}</span>`;
+        else if (group.hw && group.nt) combinedDetails = `الواجب: ${group.hw} <br><span style="color:var(--muted); font-size:12px;">الملاحظة: ${group.nt}</span>`; 
+        else if (group.hw) combinedDetails = `الواجب: ${group.hw}`; 
+        else if (group.nt) combinedDetails = `<span style="color:var(--dark); font-size:13px; font-weight:700;">الملاحظة: ${group.nt}</span>`; 
+        else combinedDetails = '<span style="color:#ef4444; font-weight:bold; font-size: 12px;">رصد متابعة: (بدون محتوى نصي / نقاط فقط)</span>'; 
 
         tbody.innerHTML += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
-                <td style="text-align:center;"><input type="checkbox" class="t-log-cb" style="width:16px; height:16px; cursor:pointer;" data-c="${rec.cName}" data-s="${rec.sKey}" data-e="${rec.eKey}"></td>
-                <td><b>${rec.sName}</b> <br><small style="color:var(--muted)">(${rec.cName})</small></td>
+                <td style="text-align:center;">
+                    <input type="checkbox" class="t-log-cb" style="width:16px; height:16px; cursor:pointer;" data-keys="${groupEKeys}">
+                </td>
+                <td>
+                    <div style="margin-bottom:5px;">${recipientsHtml}</div>
+                    ${group.isGrouped ? `<div style="font-size:11px; color:var(--muted); background:#f1f5f9; padding:2px 6px; border-radius:4px; display:inline-block; font-weight:bold;">إجمالي المستلمين: ${group.records.length}</div>` : ''}
+                </td>
                 <td>
                     <div style="font-size:12px; font-weight:bold; color:var(--primary); margin-bottom:4px;">${evalBadgeText}</div>
-                    <div style="font-size:13px; color:var(--dark);">${combinedDetails}</div>
+                    <div style="font-size:13px; color:var(--dark); font-weight:bold;">${combinedDetails}</div>
                 </td>
-                <td>${dateStr}</td>
+                <td>${dateFormatted}</td>
                 <td>
-                    <button onclick="deleteSingleTeacherLog('${rec.cName}', '${rec.sKey}', '${rec.eKey}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold;">حذف نهائي</button>
+                    <button onclick="deleteGroupedTeacherLog('${groupEKeys}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:bold; white-space:nowrap;">حذف نهائي 🗑️</button>
                 </td>
             </tr>`;
     });
 
-    if (count === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted);">لا توجد سجلات أو إرساليات مسجلة لهذا المعلم.</td></tr>';
+    if (count === 0) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px; color:var(--muted);">لا توجد سجلات مطابقة لخيارات الفلترة الحالية.</td></tr>';
 }
 
 function closeTeacherLogModal() { document.getElementById('teacherLogModal').style.display = 'none'; }
@@ -1056,10 +1239,15 @@ function toggleAllTLogs(source) {
     for(let i=0; i<checkboxes.length; i++) checkboxes[i].checked = source.checked;
 }
 
-function deleteSingleTeacherLog(cName, sKey, eKey) {
-    if(!confirm("⚠️ هل أنت متأكد من حذف هذا السجل نهائياً للطلاب المحددين؟")) return;
-    database.ref('evaluations/' + cName + '/' + sKey + '/' + eKey).remove().then(() => {
-        showNotification("تم حذف السجل بنجاح ✓");
+function deleteGroupedTeacherLog(keysStr) {
+    if(!confirm("⚠️ هل أنت متأكد من حذف هذا السجل نهائياً لجميع الطلاب المرتبطين به في هذا الصف؟")) return;
+    let keysArr = keysStr.split(',');
+    let promises = keysArr.map(k => {
+        let [c, s, e] = k.split('|');
+        return database.ref('evaluations/' + c + '/' + s + '/' + e).remove();
+    });
+    Promise.all(promises).then(() => {
+        showNotification("تم الحذف بنجاح ✓");
         openTeacherLogModal(currentTeacherLogName); 
     }).catch(err => alert("حدث خطأ أثناء الحذف: " + err.message));
 }
@@ -1067,19 +1255,23 @@ function deleteSingleTeacherLog(cName, sKey, eKey) {
 function deleteSelectedTeacherLogs() {
     const checkboxes = document.querySelectorAll('.t-log-cb:checked');
     if(checkboxes.length === 0) { alert("الرجاء تحديد سجل واحد على الأقل للحذف."); return; }
-    if(!confirm(`⚠️ هل أنت متأكد من حذف (${checkboxes.length}) سجل محدد نهائياً؟`)) return;
+    if(!confirm(`⚠️ هل أنت متأكد من حذف (${checkboxes.length}) صف محدد نهائياً؟`)) return;
 
-    let deletePromises = [];
+    let promises = [];
     checkboxes.forEach(cb => {
-        let c = cb.getAttribute('data-c'), s = cb.getAttribute('data-s'), e = cb.getAttribute('data-e');
-        deletePromises.push(database.ref('evaluations/' + c + '/' + s + '/' + e).remove());
+        let keysArr = cb.getAttribute('data-keys').split(',');
+        keysArr.forEach(k => {
+            let [c, s, e] = k.split('|');
+            promises.push(database.ref('evaluations/' + c + '/' + s + '/' + e).remove());
+        });
     });
 
-    Promise.all(deletePromises).then(() => {
+    Promise.all(promises).then(() => {
         showNotification("تم الحذف المتعدد بنجاح ✓");
         openTeacherLogModal(currentTeacherLogName); 
     }).catch(err => alert("حدث خطأ أثناء الحذف المجمع: " + err.message));
 }
+// ---------------- انتهاء تحديث سجل المعلم ----------------
 
 function openEvalHistoryModal(studentKey, studentName, className, studentPhone) {
     document.getElementById('evalHistoryStudentTitle').innerText = `الطالب: ${studentName} - فصل (${className})`;
@@ -1124,14 +1316,13 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
         
         if (plainBadges.length === 0) detailsHtml += '<span class="badge" style="background:#f1f5f9; color:#475569;">متابعة بدون تقييم 📌</span> ';
 
-        let homeworkText = ev.assignmentName || ev.assignment || ev.homework || ev.title || "";
-        let noteText = ev.note || ev.notes || ev.details || ev.comment || ev.msg || "";
+        let { hw: homeworkText, nt: noteText } = extractEvalDetails(ev);
         let combinedDetails = "";
         
-        if (typeof ev === 'string') combinedDetails = ev; 
+        if (typeof ev === 'string') combinedDetails = `<span style="color:var(--dark); font-size:13px; font-weight:700;">الملاحظة: ${ev}</span>`;
         else if (homeworkText && noteText) combinedDetails = `الواجب: ${homeworkText} | الملاحظة: ${noteText}`; 
         else if (homeworkText) combinedDetails = `الواجب: ${homeworkText}`; 
-        else if (noteText) combinedDetails = `الملاحظة: ${noteText}`; 
+        else if (noteText) combinedDetails = `<span style="color:var(--dark); font-size:13px; font-weight:700;">الملاحظة: ${noteText}</span>`; 
         else combinedDetails = 'رصد متابعة (بدون محتوى / نقاط فقط)';
 
         detailsHtml += `<div style="margin-top:10px; padding:8px 12px; background:#f8fafc; border-radius:10px; border:1px dashed #94a3b8; font-size:13px;">
@@ -1150,7 +1341,7 @@ function openEvalHistoryModal(studentKey, studentName, className, studentPhone) 
             </tr>`;
 
         let evalBadgeText = plainBadges.length > 0 ? plainBadges.join(' - ') : 'متابعة بدون تقييم 📌';
-        reportText += `👨‍🏫 المعلم: ${displayTeacher}\n📅 التاريخ: ${simpleDateStr}\n🎖️ التقييم: ${evalBadgeText}\n📝 التفاصيل: ${combinedDetails}\n\n`;
+        reportText += `👨‍🏫 المعلم: ${displayTeacher}\n📅 التاريخ: ${simpleDateStr}\n🎖️ التقييم: ${evalBadgeText}\n📝 التفاصيل: ${combinedDetails.replace(/<[^>]*>?/gm, '')}\n\n`;
     }
 
     if (count === 0) {
@@ -1239,37 +1430,58 @@ function initSchoolDashboard() {
     
     showNotification("جاري تحميل بيانات المدرسة وتهيئة السجلات الذكية...");
 
-    const studentsRef = database.ref('students');
-    studentsRef.on('value', snap => {
+    const studentsRef = database.ref('students').orderByChild('schoolId').equalTo(activeSchoolId);
+    let studentsCallback = studentsRef.on('value', snap => {
         localData.students = snap.val() || {};
         loadAdminStatsAndRankings(); 
         if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
     });
-    activeListeners.push({ ref: studentsRef, event: 'value' });
+    activeListeners.push({ ref: studentsRef, event: 'value', callback: studentsCallback });
 
-    const assignmentsRef = database.ref('assignments');
-    assignmentsRef.on('value', snap => {
+    const assignmentsRef = database.ref('assignments').orderByChild('schoolId').equalTo(activeSchoolId);
+    let assignmentsCallback = assignmentsRef.on('value', snap => {
         localData.assignments = snap.val() || {};
         buildTeachersGrid();
         loadAdminStatsAndRankings();
     });
-    activeListeners.push({ ref: assignmentsRef, event: 'value' });
-
-    const evalsRef = database.ref('evaluations');
-    evalsRef.on('value', snap => {
-        localData.evaluations = snap.val() || {};
-        loadAdminStatsAndRankings();
-        if(selectedClassFilter) buildStudentsGrid(selectedClassFilter);
-    });
-    activeListeners.push({ ref: evalsRef, event: 'value' });
+    activeListeners.push({ ref: assignmentsRef, event: 'value', callback: assignmentsCallback });
 
     const classesRef = database.ref('classes/' + activeSchoolId);
-    classesRef.on('value', snapshot => { 
+    let classesCallback = classesRef.on('value', snapshot => { 
         localData.classes = snapshot.val() || {};
+        const activeClassNames = Object.values(localData.classes).map(c => c.className);
+        
+        activeClassNames.forEach(className => {
+            if (!classEvalListenersDict[className]) {
+                let classEvalRef = database.ref('evaluations/' + className);
+                let evalCallback = classEvalRef.on('value', snap => {
+                    if(snap.exists()) {
+                        localData.evaluations[className] = snap.val();
+                    } else {
+                        delete localData.evaluations[className];
+                    }
+                    loadAdminStatsAndRankings();
+                    if(selectedClassFilter === className) buildStudentsGrid(selectedClassFilter);
+                });
+                
+                classEvalListenersDict[className] = { ref: classEvalRef, callback: evalCallback };
+                activeListeners.push({ ref: classEvalRef, event: 'value', callback: evalCallback });
+            }
+        });
+
+        for (let oldClassName in classEvalListenersDict) {
+            if (!activeClassNames.includes(oldClassName)) {
+                let listenerObj = classEvalListenersDict[oldClassName];
+                listenerObj.ref.off('value', listenerObj.callback);
+                delete classEvalListenersDict[oldClassName];
+                delete localData.evaluations[oldClassName];
+            }
+        }
+
         syncClassesLayout(); 
         loadAdminStatsAndRankings();
     });
-    activeListeners.push({ ref: classesRef, event: 'value' });
+    activeListeners.push({ ref: classesRef, event: 'value', callback: classesCallback });
 
     populateExistingTeachersDropdown(); 
     buildDeputiesGrid();
@@ -1281,18 +1493,8 @@ function loadAdminStatsAndRankings() {
     const validClassesData = localData.classes || {};
     const activeClassNames = Object.values(validClassesData).map(c => c.className);
     
-    const studentsData = {};
-    for(let key in localData.students) {
-        if(localData.students[key].schoolId === activeSchoolId) {
-            studentsData[key] = localData.students[key];
-        }
-    }
-    const allAssignments = {};
-    for(let key in localData.assignments) {
-        if(localData.assignments[key].schoolId === activeSchoolId) {
-            allAssignments[key] = localData.assignments[key];
-        }
-    }
+    const studentsData = localData.students || {};
+    const allAssignments = localData.assignments || {};
     const evalsData = localData.evaluations || {};
 
     let totals = { exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, absent: 0 };
@@ -1302,9 +1504,10 @@ function loadAdminStatsAndRankings() {
     let totalSchoolHw = 0;
     let totalSchoolDoneHw = 0;
     globalClassHwStats = {}; 
-    globalClassParentLoginStats = {}; // نسبة دخول أولياء الأمور
+    globalClassParentLoginStats = {}; 
     globalTeacherStats = [];
     globalDailyInteractionStats = [];
+    globalRecentLogins = []; 
 
     let now = Date.now();
     let thirtyMinsTime = now - (30 * 60 * 1000); 
@@ -1325,7 +1528,6 @@ function loadAdminStatsAndRankings() {
         };
     }
 
-    // --- حساب الطلاب ودخول أولياء الأمور (مؤشر قوي وثابت) ---
     for (let sKey in studentsData) {
         let s = studentsData[sKey];
         totalStudentsCount++;
@@ -1339,6 +1541,13 @@ function loadAdminStatsAndRankings() {
             
             let loginDateKey = new Date(loginTime).toISOString().split('T')[0];
             if (last15DaysMap[loginDateKey]) last15DaysMap[loginDateKey].logins++;
+            
+            globalRecentLogins.push({
+                type: 'طالب',
+                name: s.studentName,
+                info: s.className || '',
+                time: loginTime
+            });
         }
         
         if (s.className && activeClassNames.includes(s.className)) {
@@ -1348,7 +1557,6 @@ function loadAdminStatsAndRankings() {
         }
     }
 
-    // --- حساب المعلمين ---
     let totalTeachersCount = 0;
     for (let tKey in allAssignments) {
         totalTeachersCount++;
@@ -1356,7 +1564,16 @@ function loadAdminStatsAndRankings() {
         let tName = tObj.teacherName;
         
         let tLoginTime = getValidLoginTime(tObj);
-        if (tLoginTime >= thirtyMinsTime) onlineTeachersCount++;
+        if (tLoginTime > 0) {
+            if (tLoginTime >= thirtyMinsTime) onlineTeachersCount++;
+            
+            globalRecentLogins.push({
+                type: 'معلم',
+                name: tName,
+                info: tObj.subject || 'عام',
+                time: tLoginTime
+            });
+        }
         
         let assignedClassesList = tObj.className ? tObj.className.split(',').map(x => x.trim()).filter(x => x) : [];
         teacherActivity[tName] = { 
@@ -1365,13 +1582,14 @@ function loadAdminStatsAndRankings() {
             exc: 0, gold: 0, silver: 0, bronze: 0, warn: 0, creative: 0, weak: 0, vg: 0, fa: 0, absent: 0
         };
     }
+    
+    globalRecentLogins.sort((a, b) => b.time - a.time);
 
     activeClassNames.forEach(cName => {
         if (!globalClassParentLoginStats[cName]) globalClassParentLoginStats[cName] = { total: 0, loggedIn: 0 };
         if (!globalClassHwStats[cName]) globalClassHwStats[cName] = { total: 0, done: 0 };
     });
 
-    // --- جرد التقييمات ---
     for (let className in evalsData) {
         if (!activeClassNames.includes(className)) continue;
         classRankings[className] = [];
@@ -1441,7 +1659,7 @@ function loadAdminStatsAndRankings() {
     }
 
     updateMainEnergyBar(totalSchoolHw, totalSchoolDoneHw);
-    updateParentLoginBar(totalStudentsCount, loggedInStudentsCount); // دالة التحديث الجديدة
+    updateParentLoginBar(totalStudentsCount, loggedInStudentsCount); 
 
     let validTeachersForHw = 0;
     let accomplishedCount = 0;
@@ -1819,7 +2037,7 @@ function deleteSchoolClass(clsName) {
     }
 
     for(let key in localData.students) {
-        if(localData.students[key].schoolId === activeSchoolId && localData.students[key].className === clsName) {
+        if(localData.students[key].className === clsName) {
             database.ref('students/' + key).remove();
         }
     }
@@ -1861,7 +2079,6 @@ function selectClassForSheet(clsName) {
     document.getElementById('classSheetCard').style.display = 'block';
     document.getElementById('classSheetTitle').innerHTML = `📋 طلاب الصف: <span style="color:var(--primary)">${clsName}</span>`;
     
-    // عند النقر يتم فتح التبويب الثالث (السجلات والكشوفات) تلقائياً إذا كان مغلقاً
     const sheetSection = document.getElementById('classSheetCard').closest('.major-section');
     if(!sheetSection.classList.contains('active')) {
         sheetSection.classList.add('active');
@@ -1875,9 +2092,7 @@ function populateExistingTeachersDropdown() {
     const select = document.getElementById('existTeacherSelect');
     select.innerHTML = '<option value="">-- حدد المعلم من القائمة لتعديل جداوله --</option>';
     for(let key in data) {
-        if(data[key].schoolId === activeSchoolId) {
-            select.innerHTML += `<option value="${key}">${data[key].teacherName} [مادة: ${data[key].subject}]</option>`;
-        }
+        select.innerHTML += `<option value="${key}">${data[key].teacherName} [مادة: ${data[key].subject}]</option>`;
     }
 }
 
@@ -1942,7 +2157,6 @@ function buildTeachersGrid() {
     let count = 0;
 
     for(let key in data) {
-        if(data[key].schoolId !== activeSchoolId) continue;
         count++;
         let item = data[key];
         let visualBadges = '';
@@ -2018,7 +2232,7 @@ function buildStudentsGrid(clsName) {
 
     for(let key in data) {
         let item = data[key];
-        if(item.schoolId === activeSchoolId && item.className === clsName) {
+        if(item.className === clsName) {
             count++;
             
             let pPoints = 0;
@@ -2108,7 +2322,6 @@ function printHonorRoll(elementId, titleName) {
         <script>setTimeout(function(){ window.print(); window.close(); }, 500);<\/script></body></html>`);
     printWindow.document.close();
 }
-
 </script>
 </body>
 </html>
